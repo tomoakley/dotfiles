@@ -32,11 +32,16 @@ Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
 Plug 'tpope/vim-fugitive'
 Plug 'eslint/eslint'
-Plug 'lifepillar/vim-solarized8'
+"Plug 'lifepillar/vim-solarized8'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'ap/vim-css-color'
 Plug 'rhysd/devdocs.vim'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-rhubarb'
+Plug 'leafgarland/typescript-vim'
+Plug 'arcticicestudio/nord-vim'
+Plug 'liuchengxu/vista.vim'
+Plug 'nathanaelkane/vim-indent-guides'
 call plug#end()
 
 " Syntax highlighting
@@ -50,8 +55,8 @@ set t_Co=256
 set termguicolors
 " Dark solarized scheme
 set background=dark
-colorscheme solarized8
-let g:airline_theme='solarized'
+colorscheme nord
+let g:airline_theme='nord'
 let g:airline_solarized_bg='dark'
 
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -162,8 +167,8 @@ set guioptions=-L
 set guioptions=-l
 " seems to remove scrollbars for NerdTree
 set guioptions=
-" set font to Inconsolata-dz:h14
-set guifont=inconsolata-dz:h14
+" set guifont=inconsolata-dz:h14
+set guifont=Fira\ Code:h14
 
 " save on loosing focus
 au FocusLost * silent! update
@@ -250,27 +255,6 @@ noremap <C-x> <C-o><C-x><cr>
 
 nmap K <Plug>(devdocs-under-cursor)
 
-" for syntastic
-"set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 0
-"let g:syntastic_check_on_open = 0
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_javascript_checkers = ['eslint']
-
-"let g:syntastic_error_symbol = '•'
-"let g:syntastic_style_error_symbol = '◦'
-"let g:syntastic_warning_symbol = '•'
-"let g:syntastic_style_warning_symbol = '◦'
-
-"highlight SyntasticErrorSign ctermbg=4 guibg=#073642 ctermfg=124 guifg=#af0000
-"highlight SyntasticWarningSign ctermbg=4 guibg=#073642 ctermfg=226 guifg=#ffff00
-"highlight SyntasticStyleErrorSign ctermbg=4 guibg=#073642 ctermfg=124 guifg=#af0000
-"highlight SyntasticStyleWarningSign ctermbg=4 guibg=#073642 ctermfg=226 guifg=#ffff00
-
 " coc
 if expand('$INSTALL_COC_PLUGINS') == 'yes'
   :CocInstall coc-json
@@ -292,5 +276,12 @@ highlight clear SignColumn
 highlight link SignColumn CursorColumn
 
 autocmd BufWritePre * :%s/\s\+$//e " remove trailing spaces on save
+command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
+
+nnoremap <Leader>m :Vista<CR>
+let g:vista#renderer#enable_icon = 0
+let g:vista_default_executive = 'coc'
+
+nnoremap <Leader>gb :CocList branches<CR>
 
 map <C-u> :source $MYVIMRC<CR>
