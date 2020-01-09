@@ -51,6 +51,7 @@ zgen oh-my-zsh plugins/npm
 zgen oh-my-zsh plugins/brew
 zgen oh-my-zsh plugins/docker-compose
 zgen oh-my-zsh plugins/yarn
+zgen oh-my-zsh plugins/tmux
 
 zgen load denysdovhan/spaceship-prompt spaceship
 zgen load zsh-users/zsh-syntax-highlighting
