@@ -5,7 +5,7 @@
 source "${HOME}/.zgen/zgen.zsh"
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/Tom/.oh-my-zsh"
+export ZSH="${HOME}/.oh-my-zsh"
 
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -50,6 +50,7 @@ zgen oh-my-zsh plugins/sudo
 zgen oh-my-zsh plugins/npm
 zgen oh-my-zsh plugins/brew
 zgen oh-my-zsh plugins/docker-compose
+zgen oh-my-zsh plugins/yarn
 
 zgen load denysdovhan/spaceship-prompt spaceship
 zgen load zsh-users/zsh-syntax-highlighting
