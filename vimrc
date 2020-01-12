@@ -284,4 +284,8 @@ let g:vista_default_executive = 'coc'
 
 nnoremap <Leader>gb :CocList branches<CR>
 
+" hide tmux status bar when vim starts, show when vim extts
+autocmd VimEnter * silent !tmux set status off
+autocmd VimLeave * silent !tmux set status on
+
 map <C-u> :source $MYVIMRC<CR>
