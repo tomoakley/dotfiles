@@ -7,6 +7,7 @@ source "${HOME}/.zgen/zgen.zsh"
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
 
+export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
@@ -59,6 +60,20 @@ zgen load zsh-users/zsh-autosuggestions
 zgen load djui/alias-tips
 zgen load softmoth/zsh-vim-mode
 zgen load wfxr/forgit
+
+# custom stuff
+
+alias v="vim"
+alias bt="buku -t" # alias to search buku tags
+alias btf="buku -t favourites" # alias to show buku favourites
+alias ba="buku -a" # alias to add buku bookmark
+
+# if buku bookmarks.db has changed, autocommit
+# credit: https://github.com/jarun/buku/issues/308
+buku() {
+    command buku $@
+    sh -c 'cd ~/.local/share/buku; if git status -s | grep -q -E "^\s+M\s"; then git commit -a -m "autocommit $(date)" 1>/dev/null && echo "committed change"; fi'
+}
 
 source $ZSH/oh-my-zsh.sh
 
