@@ -6,6 +6,10 @@
 # Uncomment this to still load settings configured via autoconfig.yml
 # config.load_autoconfig()
 
+import os
+os.environ['PATH'] = os.pathsep + '/usr/local/bin'
+os.environ['NODE_PATH'] = os.pathsep + '/usr/local/lib/node_modules'
+
 # Enable JavaScript.
 # Type: Bool
 config.set('content.javascript.enabled', True, 'file://*')
@@ -32,7 +36,7 @@ c.downloads.position = 'top'
 # `{line0}`: Same as `{line}`, but starting from index 0. * `{column0}`:
 # Same as `{column}`, but starting from index 0.
 # Type: ShellCommand
-c.editor.command = ['gvim', '-f', '{file}', '-c', 'normal {line}G{column0}l']
+c.editor.command = ['vim', '-f', '{file}', '-c', 'normal {line}G{column0}l']
 
 # Padding (in pixels) around text for tabs.
 # Type: Padding
