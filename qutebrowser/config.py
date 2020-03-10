@@ -374,7 +374,7 @@ c.colors.tabs.pinned.odd.fg = '#fdf6e3'
 
 # Background color of pinned unselected odd tabs.
 # Type: QtColor
-c.colors.tabs.pinned.odd.bg = '#859900'
+c.colors.tabs.pinned.odd.bg = '#2aa198'
 
 # Foreground color of pinned unselected even tabs.
 # Type: QtColor
@@ -386,19 +386,19 @@ c.colors.tabs.pinned.even.bg = '#2aa198'
 
 # Foreground color of pinned selected odd tabs.
 # Type: QtColor
-c.colors.tabs.pinned.selected.odd.fg = '#6c71c4'
+c.colors.tabs.pinned.selected.odd.fg = '#fdf6e3'
 
 # Background color of pinned selected odd tabs.
 # Type: QtColor
-c.colors.tabs.pinned.selected.odd.bg = '#93a1a1'
+c.colors.tabs.pinned.selected.odd.bg = '#859900'
 
 # Foreground color of pinned selected even tabs.
 # Type: QtColor
-c.colors.tabs.pinned.selected.even.fg = '#002b36'
+c.colors.tabs.pinned.selected.even.fg = '#fdf6e3'
 
 # Background color of pinned selected even tabs.
 # Type: QtColor
-c.colors.tabs.pinned.selected.even.bg = '#93a1a1'
+c.colors.tabs.pinned.selected.even.bg = '#859900'
 
 # Default monospace fonts. Whenever "monospace" is used in a font
 # setting, it's replaced with the fonts listed here.

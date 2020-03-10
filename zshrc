@@ -26,20 +26,6 @@ vi() {
   spaceship_vi_mode_enable
 }
 
-fb() {
-    zmodload -ap zsh/mapfile mapfile
-    # save newline separated string into an array
-    mapfile -t website <<< "$(buku -p -f 5 | column -ts$'\t' | fzf --multi)"
-
-
-    # open each website
-    for i in "${website[@]}"; do
-        index="$(echo "$i" | awk '{print $1}')"
-        buku -p "$index"
-        buku -o "$index"
-    done
-}
-
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -64,9 +50,12 @@ zgen load wfxr/forgit
 # custom stuff
 
 alias v="vim"
+
+alias b="buku"
 alias bt="buku -t" # alias to search buku tags
 alias btf="buku -t favourites" # alias to show buku favourites
 alias ba="buku -a" # alias to add buku bookmark
+alias baf='f() { buku -a $1 favourites --title $2 };f'
 
 # if buku bookmarks.db has changed, autocommit
 # credit: https://github.com/jarun/buku/issues/308
