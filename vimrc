@@ -282,6 +282,11 @@ nnoremap <Leader>m :Vista<CR>
 let g:vista#renderer#enable_icon = 0
 let g:vista_default_executive = 'coc'
 
+nnoremap <silent><Leader>t :ter<CR>
+nnoremap <silent><Leader>vt :vert ter<CR>
+tnoremap <Esc> <C-\><C-n>
+tnoremap <silent><Leader>t <C-\><C-n>:bd!<CR>
+
 nnoremap <Leader>gb :CocList branches<CR>
 
 " hide tmux status bar when vim starts, show when vim extts
