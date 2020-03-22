@@ -32,7 +32,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
 Plug 'tpope/vim-fugitive'
 Plug 'eslint/eslint'
-"Plug 'lifepillar/vim-solarized8'
+Plug 'janko/vim-test'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'ap/vim-css-color'
 Plug 'rhysd/devdocs.vim'
@@ -42,6 +42,9 @@ Plug 'leafgarland/typescript-vim'
 Plug 'arcticicestudio/nord-vim'
 Plug 'liuchengxu/vista.vim'
 Plug 'nathanaelkane/vim-indent-guides'
+Plug 'christoomey/vim-system-copy'
+Plug 'christoomey/vim-tmux-runner'
+Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 " Syntax highlighting
@@ -197,12 +200,12 @@ inoremap jj <esc>
 " jk to throw you into normal mode from insert mode
 inoremap jk <esc>
 " Disable arrow keys (hardcore)
-map  <up>    <nop>
-imap <up>    <nop>
-map  <down>  <nop>
-imap <down>  <nop>
-map  <left>  <nop>
-imap <left>  <nop>
+map  <up> <nop>
+imap <up> <nop>
+map  <down> <nop>
+imap <down> <nop>
+map  <left> <nop>
+imap <left> <nop>
 map  <right> <nop>
 imap <right> <nop>
 
@@ -278,6 +281,14 @@ highlight link SignColumn CursorColumn
 autocmd BufWritePre * :%s/\s\+$//e " remove trailing spaces on save
 command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 
+" vim-test config and mappings
+let test#strategy = "vtr"
+nmap <silent> t<C-n> :TestNearest<CR>
+nmap <silent> t<C-f> :TestFile<CR>
+nmap <silent> t<C-s> :TestSuite<CR>
+nmap <silent> t<C-l> :TestLast<CR>
+nmap <silent> t<C-g> :TestVisit<CR>
+
 nnoremap <Leader>m :Vista<CR>
 let g:vista#renderer#enable_icon = 0
 let g:vista_default_executive = 'coc'
@@ -288,6 +299,8 @@ tnoremap <Esc> <C-\><C-n>
 tnoremap <silent><Leader>t <C-\><C-n>:bd!<CR>
 
 nnoremap <Leader>gb :CocList branches<CR>
+
+nnoremap <silent><C-r> :Rg<Cr>
 
 " hide tmux status bar when vim starts, show when vim extts
 autocmd VimEnter * silent !tmux set status off
