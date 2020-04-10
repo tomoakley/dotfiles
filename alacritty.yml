@@ -399,7 +399,7 @@ key_bindings:
   - { key: Paste,                           action: Paste            }
   - { key: Copy,                            action: Copy             }
   - { key: H,        mods: Command,         action: Hide             }
-  - { key: Q,        mods: Command,         action: Qui              }
+  - { key: Q,        mods: Command,         action: Quit             }
   - { key: Key0,     mods: Command,         action: ResetFontSize    }
   - { key: Equals,   mods: Command,         action: IncreaseFontSize }
   - { key: Minus,    mods: Command,         action: DecreaseFontSize }
@@ -410,21 +410,24 @@ key_bindings:
 
   # tmux bindings - \x02 = ctrl-b (tmux prefix)
   # get hex codes by `xxd -psd`
-  - { key: T,     mods: Command,       chars: "\x02\x63" } # ctrl-b c - new tab
-  - { key: W,     mods: Command,       chars: "\x02\x78" } # ctrl-b x - close tab/pane
-  - { key: D,     mods: Command,       chars: "\x02\x7c" } # ctrl-b | - new vertical pane
-  - { key: D,     mods: Command|Shift, chars: "\x02\x22" } # ctrl b " - new horizontal pane
-  - { key: Slash, mods: Command,       chars: "\x02\x74" } # ctrl-b t - toggle status/tab bar
-  - { key: Key0,  mods: Command,       chars: "\x02\x30" } # ctrl-b <number> - switch tab
-  - { key: Key1,  mods: Command,       chars: "\x02\x31" }
-  - { key: Key2,  mods: Command,       chars: "\x02\x32" }
-  - { key: Key3,  mods: Command,       chars: "\x02\x33" }
-  - { key: Key4,  mods: Command,       chars: "\x02\x34" }
-  - { key: Key5,  mods: Command,       chars: "\x02\x35" }
-  - { key: Key6,  mods: Command,       chars: "\x02\x36" }
-  - { key: Key7,  mods: Command,       chars: "\x02\x37" }
-  - { key: Key8,  mods: Command,       chars: "\x02\x38" }
-  - { key: Key9,  mods: Command,       chars: "\x02\x39" }
+  - { key: T,        mods: Command,       chars: "\x02\x63" } # ctrl-b c - new tab
+  - { key: W,        mods: Command,       chars: "\x02\x78" } # ctrl-b x - close tab/pane
+  - { key: D,        mods: Command,       chars: "\x02\x7c" } # ctrl-b | - new vertical pane
+  - { key: D,        mods: Command|Shift, chars: "\x02\x22" } # ctrl b " - new horizontal pane
+  - { key: Slash,    mods: Command,       chars: "\x02\x74" } # ctrl-b t - toggle status/tab bar
+  - { key: Key0,     mods: Command,       chars: "\x02\x30" } # ctrl-b <number> - switch tab
+  - { key: Key1,     mods: Command,       chars: "\x02\x31" }
+  - { key: Key2,     mods: Command,       chars: "\x02\x32" }
+  - { key: Key3,     mods: Command,       chars: "\x02\x33" }
+  - { key: Key4,     mods: Command,       chars: "\x02\x34" }
+  - { key: Key5,     mods: Command,       chars: "\x02\x35" }
+  - { key: Key6,     mods: Command,       chars: "\x02\x36" }
+  - { key: Key7,     mods: Command,       chars: "\x02\x37" }
+  - { key: Key8,     mods: Command,       chars: "\x02\x38" }
+  - { key: Key9,     mods: Command,       chars: "\x02\x39" }
+  - { key: LBracket, mods: Command,       chars: "\x02\x70" } # ctrl-b p - switch to previous tab
+  - { key: RBracket, mods: Command,       chars: "\x02\x6e" } # ctrl-b n - switch to next tab
+  - { key: Escape,   mods: Command,       chars: "\x02\x5b" } # ctrl-b [ - go to command mode
 
 #debug:
   # Display the time it takes to redraw each frame.
