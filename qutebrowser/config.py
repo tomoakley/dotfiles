@@ -403,27 +403,28 @@ c.colors.tabs.pinned.selected.even.bg = '#859900'
 # Default monospace fonts. Whenever "monospace" is used in a font
 # setting, it's replaced with the fonts listed here.
 # Type: Font
-c.fonts.monospace = '"Fira Code", "Inconsolata-g", "xos4 Terminus", Terminus, Monospace, "DejaVu Sans Mono", Monaco, "Bitstream Vera Sans Mono", "Andale Mono", "Courier New", Courier, "Liberation Mono", monospace, Fixed, Consolas, Terminal'
+c.fonts.default_family = ["Fira Code", "monospace"]
+#, 'Inconsolata-g', 'xos4 Terminus', 'Terminus', 'Monospace']
 
 # Font used in the completion widget.
 # Type: Font
-c.fonts.completion.entry = '14pt monospace'
+c.fonts.completion.entry = '14pt default_family'
 
 # Font used in the completion categories.
 # Type: Font
-c.fonts.completion.category = 'bold 14pt monospace'
+c.fonts.completion.category = 'bold 14pt default_family'
 
 # Font used for the hints.
 # Type: Font
-c.fonts.hints = 'bold 14pt monospace'
+c.fonts.hints = 'bold 14pt default_family'
 
 # Font used in the statusbar.
 # Type: Font
-c.fonts.statusbar = '14pt monospace'
+c.fonts.statusbar = '14pt default_family'
 
 # Font used in the tab bar.
 # Type: QtFont
-c.fonts.tabs = '14pt monospace'
+c.fonts.tabs = '14pt default_family'
 
 # Bindings for normal mode
 config.bind('<Ctrl+t>', 'config-cycle tabs.show never always')
