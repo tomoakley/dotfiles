@@ -27,7 +27,8 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'kien/rainbow_parentheses.vim'
 "Plug 'Townk/vim-autoclose'
 Plug 'https://github.com/adelarsq/vim-matchit'
-Plug '/usr/local/opt/fzf'
+"Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
 Plug 'tpope/vim-fugitive'
