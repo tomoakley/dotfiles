@@ -1,3 +1,4 @@
+zmodload zsh/zprof # top of your .zshrc file
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -8,8 +9,8 @@ source "${HOME}/.zgen/zgen.zsh"
 export ZSH="${HOME}/.oh-my-zsh"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -18,6 +19,9 @@ ZSH_THEME="agnoster"
 
 # Set fzf to use ripgrep in vim
 export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'
+
+# lazy load nvm using zsh-nvm
+export NVM_LAZY_LOAD=true
 
 # Set Pass to enable extensions
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
@@ -44,10 +48,6 @@ bindkey '^w' backward-kill-word
 # ctrl-r starts searching history backward
 bindkey '^r' history-incremental-search-backward
 
-# vi() {
-  #spaceship_vi_mode_enable
-#}
-
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -62,16 +62,16 @@ zgen oh-my-zsh plugins/docker-compose
 zgen oh-my-zsh plugins/yarn
 zgen oh-my-zsh plugins/tmux
 
-zgen load denysdovhan/spaceship-prompt spaceship
 zgen load zsh-users/zsh-syntax-highlighting
 zgen load zsh-users/zsh-autosuggestions
 zgen load djui/alias-tips
 zgen load softmoth/zsh-vim-mode
 zgen load wfxr/forgit
+zgen load lukechilds/zsh-nvm
 
 # custom stuff
 
-alias v="vim"
+alias v="nvim"
 
 alias r="ranger"
 
@@ -88,6 +88,16 @@ buku() {
     sh -c 'cd ~/.local/share/buku; if git status -s | grep -q -E "^\s+M\s"; then git commit -a -m "autocommit $(date)" 1>/dev/null && echo "committed change"; fi'
 }
 
+# only check once per day for cached .zcompdump file to see if it must be regenerated
+# https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-2308206
+autoload -Uz compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
+
 source $ZSH/oh-my-zsh.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+#zprof # bottom of .zshrc
