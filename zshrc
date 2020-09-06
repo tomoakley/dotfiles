@@ -71,7 +71,12 @@ zgen load lukechilds/zsh-nvm
 
 # custom stuff
 
-alias v="nvim"
+if type nvim > /dev/null 2>&1; then
+  alias vim='nvim'
+  alias v="nvim"
+else
+  alias v="vim"
+fi
 
 alias r="ranger"
 

@@ -60,3 +60,8 @@ yabai -m rule --add label="mpv" app="^mpv$" manage=off
 yabai -m rule --add label="The Unarchiver" app="^The Unarchiver$" manage=off
 yabai -m rule --add label="Transmission" app="^Transmission$" manage=off
 yabai -m rule --add label="VirtualBox" app="^VirtualBox$" manage=off
+yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^Finder$" title="^.*\.app Info$" manage=off
+yabai -m rule --add app="Simulator" border=off
+yabai -m rule --add app="qemu-system-x86_64" manage=on
+yabai -m rule --add app="1Password 7$" manage=off

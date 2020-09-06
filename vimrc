@@ -60,11 +60,11 @@ syntax enable
 " 256 colours, please
 set t_Co=256
 set termguicolors
+
 " Dark solarized scheme
 set background=dark
 colorscheme nord
 let g:airline_theme='nord'
-let g:airline_solarized_bg='dark'
 
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -245,6 +245,8 @@ tnoremap <C-h> <C-w>h
 tnoremap <C-j> <C-w>j
 tnoremap <C-k> <C-w>k
 
+tnoremap <Esc> <C-\><C-n>
+
 " use tab and shift tab to indent and de-indent code
 nnoremap <Tab>   >>
 nnoremap <S-Tab> <<
@@ -257,6 +259,9 @@ inoremap ∆ <Esc>:m .+1<CR>==gi
 inoremap ˚ <Esc>:m .-2<CR>==gi
 vnoremap ∆ :m '>+1<CR>gv=gv
 vnoremap ˚ :m '<-2<CR>gv=gv
+
+" Switch between last two files
+nnoremap <space><space> <C-^>
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
@@ -322,6 +327,8 @@ nmap <silent> t<C-w> :Jest --watch<CR>
 nnoremap <Leader>m :Vista<CR>
 let g:vista#renderer#enable_icon = 0
 let g:vista_default_executive = 'coc'
+" Fixes error on neovim startup: Error when calling CocActionAsync('documentSymbols')
+" https://github.com/liuchengxu/vista.vim/issues/85
 let g:airline#extensions#vista#enabled = 0
 
 " TERMINAL DRAWER {{{
@@ -343,16 +350,17 @@ let g:airline#extensions#vista#enabled = 0
         "  let g:terminal_drawer.buffer_id = bufnr("%")
         "endif
         botright new
-        if !g:terminal_drawer.buffer_id
-            call termopen($SHELL, {"detach": 0})
-            let g:terminal_drawer.buffer_id = bufnr("")
-        else
+        if g:terminal_drawer.buffer_id && bufexists(str2nr(g:terminal_drawer.buffer_id)) == 1
             exec "buffer" g:terminal_drawer.buffer_id
             call RemoveEmptyBuffers()
+        else
+            call termopen($SHELL, {"detach": 0})
+            let g:terminal_drawer.buffer_id = bufnr("")
         endif
 
         exec "resize" float2nr(&lines * 0.25)
-        setlocal laststatus=0 noshowmode noruler
+        exec 'normal! i'
+        setlocal laststatus=0 noshowmode noruler nonumber norelativenumber
         setlocal nobuflisted
         let g:terminal_drawer.win_id = win_getid()
 
@@ -374,7 +382,7 @@ function! QuickTerminal(cmd) abort
   let l:script = matchstr(a:cmd, '\v([a-z]*)(:)@=')
   let l:command = 'yarn ' . l:script
   echo l:command
-  botright call term_start(l:command)
+  botright call termopen(l:command, {"detach": 0})
   au BufLeave <buffer> wincmd p
   nnoremap <buffer> <Enter> :q<CR>
   redraw
