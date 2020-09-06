@@ -44,6 +44,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'liuchengxu/vista.vim'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'christoomey/vim-system-copy'
+Plug 'unblevable/quick-scope'
 call plug#end()
 
 " vimspector
@@ -179,6 +180,9 @@ set guifont=Fira\ Code:h14
 " save on loosing focus
 au FocusLost * silent! update
 
+" only activate quickscope highlights on t/T/f/F
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
 function! NumberToggle()
   if(&relativenumber == 1)
     set number
@@ -306,7 +310,7 @@ autocmd BufWritePre * :%s/\s\+$//e " remove trailing spaces on save
 command! -nargs=0 Pr :call CocAction('runCommand', 'prettier.formatFile')
 
 " vim-test config and mappings
-let test#strategy = "vimterminal"
+let test#strategy = "neovim"
 let g:test#runner_commands = ['Jest']
 nmap <silent> t<C-n> :TestNearest<CR>
 nmap <silent> t<C-f> :TestFile<CR>
@@ -318,6 +322,7 @@ nmap <silent> t<C-w> :Jest --watch<CR>
 nnoremap <Leader>m :Vista<CR>
 let g:vista#renderer#enable_icon = 0
 let g:vista_default_executive = 'coc'
+let g:airline#extensions#vista#enabled = 0
 
 " TERMINAL DRAWER {{{
     " depends on: CLEAN UI and Terminal Behavior
@@ -330,12 +335,20 @@ let g:vista_default_executive = 'coc'
         hide
         set laststatus=2 showmode ruler
       else
-        if g:terminal_drawer.buffer_id && bufexists(str2nr(g:terminal_drawer.buffer_id)) == 1
-          execute 'botright sbuffer' . g:terminal_drawer.buffer_id
-          exec 'normal! i'
+        "if g:terminal_drawer.buffer_id && bufexists(str2nr(g:terminal_drawer.buffer_id)) == 1
+        "  execute 'botright sbuffer' . g:terminal_drawer.buffer_id
+        "  exec 'normal! i'
+        "else
+        "  botright call term_start($SHELL, {'exit_cb': 'JW_on_term_exit'})
+        "  let g:terminal_drawer.buffer_id = bufnr("%")
+        "endif
+        botright new
+        if !g:terminal_drawer.buffer_id
+            call termopen($SHELL, {"detach": 0})
+            let g:terminal_drawer.buffer_id = bufnr("")
         else
-          botright call term_start($SHELL, {'exit_cb': 'JW_on_term_exit'})
-          let g:terminal_drawer.buffer_id = bufnr("%")
+            exec "buffer" g:terminal_drawer.buffer_id
+            call RemoveEmptyBuffers()
         endif
 
         exec "resize" float2nr(&lines * 0.25)
@@ -348,6 +361,13 @@ let g:vista_default_executive = 'coc'
 
 function! JW_on_term_exit(a, b)
     normal bw!
+endfunction
+
+function! RemoveEmptyBuffers()
+    let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")')
+    if !empty(buffers)
+        silent exe 'bw ' . join(buffers, ' ')
+    endif
 endfunction
 
 function! QuickTerminal(cmd) abort
