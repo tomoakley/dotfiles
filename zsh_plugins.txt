@@ -1,0 +1,17 @@
+# ohmyzsh
+ohmyzsh/ohmyzsh path:plugins/git
+ohmyzsh/ohmyzsh path:plugins/osx
+ohmyzsh/ohmyzsh path:plugins/sudo
+ohmyzsh/ohmyzsh path:plugins/npm
+ohmyzsh/ohmyzsh path:plugins/brew
+ohmyzsh/ohmyzsh path:plugins/docker-compose
+ohmyzsh/ohmyzsh path:plugins/yarn
+ohmyzsh/ohmyzsh path:plugins/tmux
+
+romkatv/powerlevel10k
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-autosuggestions
+djui/alias-tips
+softmoth/zsh-vim-mode
+wfxr/forgit
+lukechilds/zsh-nvm

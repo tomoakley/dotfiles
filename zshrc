@@ -1,9 +1,23 @@
-zmodload zsh/zprof # top of your .zshrc file
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# load zgen
-source "${HOME}/.zgen/zgen.zsh"
+# only check once per day for cached .zcompdump file to see if it must be regenerated
+# https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-2308206
+autoload -Uz compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
+
+# source anitgen plugins
+source ~/.dotfiles/zsh_plugins.sh
 
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
@@ -15,7 +29,7 @@ export NVM_DIR="$HOME/.nvm"
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="agnoster"
+#ZSH_THEME="agnoster"
 
 # Set fzf to use ripgrep in vim
 export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'
@@ -48,29 +62,7 @@ bindkey '^w' backward-kill-word
 # ctrl-r starts searching history backward
 bindkey '^r' history-incremental-search-backward
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-zgen oh-my-zsh
-zgen oh-my-zsh plugins/git
-zgen oh-my-zsh plugins/osx
-zgen oh-my-zsh plugins/sudo
-zgen oh-my-zsh plugins/npm
-zgen oh-my-zsh plugins/brew
-zgen oh-my-zsh plugins/docker-compose
-zgen oh-my-zsh plugins/yarn
-zgen oh-my-zsh plugins/tmux
-
-zgen load zsh-users/zsh-syntax-highlighting
-zgen load zsh-users/zsh-autosuggestions
-zgen load djui/alias-tips
-zgen load softmoth/zsh-vim-mode
-zgen load wfxr/forgit
-zgen load lukechilds/zsh-nvm
-
 # custom stuff
-
 if type nvim > /dev/null 2>&1; then
   alias vim='nvim'
   alias v="nvim"
@@ -86,6 +78,8 @@ alias btf="buku -t favourites" # alias to show buku favourites
 alias ba="buku -a" # alias to add buku bookmark
 alias baf='f() { buku -a $1 favourites --title $2 };f'
 
+alias ab='echo "Refreshing antibody plugins..."; antibody bundle < ~/.dotfiles/zsh_plugins.txt > ~/.dotfiles/zsh_plugins.sh; source ~/.zshrc'
+
 # if buku bookmarks.db has changed, autocommit
 # credit: https://github.com/jarun/buku/issues/308
 buku() {
@@ -93,16 +87,17 @@ buku() {
     sh -c 'cd ~/.local/share/buku; if git status -s | grep -q -E "^\s+M\s"; then git commit -a -m "autocommit $(date)" 1>/dev/null && echo "committed change"; fi'
 }
 
-# only check once per day for cached .zcompdump file to see if it must be regenerated
-# https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-2308206
-autoload -Uz compinit
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-done
-compinit -C
+# Make directory and change into it.
+# https://github.com/thoughtbot/dotfiles/blob/master/zsh/functions/mcd
+function mcd() {
+  mkdir -p "$1" && cd "$1";
+}
 
 source $ZSH/oh-my-zsh.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 #zprof # bottom of .zshrc
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
