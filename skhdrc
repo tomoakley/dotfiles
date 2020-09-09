@@ -1,5 +1,5 @@
 # opens alacritty
-#alt - return : alacritty
+alt - return : open -na /Applications/Alacritty.app
 
 # Navigation
 shift + ctrl- h : yabai -m window --focus west
