@@ -92,6 +92,24 @@ function mcd() {
   mkdir -p "$1" && cd "$1";
 }
 
+function grbom() {
+  BRANCH=$(git branch --show-current)
+  if [ BRANCH=='master' ]; then
+    echo "You're on the master branch, switch to a feature branch."
+    return
+  fi
+  if [ $*=='' ]; then
+    echo "Exiting due to empty commit message. Usage: grbom \"commit message\""
+    return
+  fi
+  COMMIT_NUM=$(git rev-list master.. --count)
+  sh -c "git reset --soft HEAD~$COMMIT_NUM"
+  sh -c "git add ."
+  sh -c "git commit -m \"$*\""
+  sh -c "git fetch origin"
+  sh -c "git rebase origin/master"
+}
+
 source $ZSH/oh-my-zsh.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
