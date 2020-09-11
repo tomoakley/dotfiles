@@ -69,6 +69,16 @@ else
   alias v="vim"
 fi
 
+# Pretty print the path
+# https://github.com/thoughtbot/dotfiles/blob/master/aliases#L15
+alias path='echo $PATH | tr -s ":" "\n"'
+
+# easier navigation
+# https://github.com/davemackintosh/dotfiles/blob/master/shared/aliases.sh#L5
+alias ..='cd ../'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+
 alias r="ranger"
 
 alias b="buku"

@@ -43,7 +43,6 @@ Plug 'leafgarland/typescript-vim'
 Plug 'arcticicestudio/nord-vim'
 Plug 'liuchengxu/vista.vim'
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'christoomey/vim-system-copy'
 Plug 'unblevable/quick-scope'
 call plug#end()
 
