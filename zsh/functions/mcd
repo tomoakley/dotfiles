@@ -1,0 +1,6 @@
+# Make directory and change into it.
+# https://github.com/thoughtbot/dotfiles/blob/master/zsh/functions/mcd
+function mcd() {
+  mkdir -p "$1" && cd "$1";
+}
+

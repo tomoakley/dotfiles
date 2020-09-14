@@ -1,3 +1,3 @@
 .DS_Store
 tags
-zsh_plugins.sh
+zsh/zsh_plugins.sh

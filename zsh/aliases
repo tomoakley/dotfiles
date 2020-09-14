@@ -1,0 +1,27 @@
+# custom stuff
+if type nvim > /dev/null 2>&1; then
+  alias vim='nvim'
+  alias v="nvim"
+else
+  alias v="vim"
+fi
+
+# Pretty print the path
+# https://github.com/thoughtbot/dotfiles/blob/master/aliases#L15
+alias path='echo $PATH | tr -s ":" "\n"'
+
+# easier navigation
+# https://github.com/davemackintosh/dotfiles/blob/master/shared/aliases.sh#L5
+alias ..='cd ../'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+
+alias r="ranger"
+
+alias b="buku"
+alias bt="buku -t" # alias to search buku tags
+alias btf="buku -t favourites" # alias to show buku favourites
+alias ba="buku -a" # alias to add buku bookmark
+alias baf='f() { buku -a $1 favourites --title $2 };f'
+
+alias ab='echo "Refreshing antibody plugins..."; antibody bundle < ~/.zsh/zsh_plugins.txt > ~/.zsh/zsh_plugins.sh; source ~/.zshrc'

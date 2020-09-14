@@ -5,9 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 # only check once per day for cached .zcompdump file to see if it must be regenerated
 # https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-2308206
 autoload -Uz compinit
@@ -17,114 +14,24 @@ done
 compinit -C
 
 # source anitgen plugins
-source ~/.dotfiles/zsh_plugins.sh
+source ~/.zsh/zsh_plugins.sh
 
-# oh-my-zsh settings
-export ZSH_TMUX_AUTOSTART=true
-export ZSH_TMUX_AUTOQUIT=true
-
-# Path to your oh-my-zsh installation.
-export ZSH="${HOME}/.oh-my-zsh"
-
-export NVM_DIR="$HOME/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# Set fzf to use ripgrep in vim
-export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'
-
-# lazy load nvm using zsh-nvm
-export NVM_LAZY_LOAD=true
-
-# Set Pass to enable extensions
-export PASSWORD_STORE_ENABLE_EXTENSIONS=true
-
-# Set Android SDK root and add emulator to $PATH for easy use
-export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
-export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$PATH
-
-bindkey -v
-export KEYTIMEOUT=1 # reduce key delay to 0.1s
-
-# Use vim cli mode
-bindkey '^P' up-history
-bindkey '^N' down-history
-
-# backspace and ^h working even after
-# returning from command mode
-bindkey '^?' backward-delete-char
-bindkey '^h' backward-delete-char
-
-# ctrl-w removed word backwards
-bindkey '^w' backward-kill-word
-
-# ctrl-r starts searching history backward
-bindkey '^r' history-incremental-search-backward
-
-# custom stuff
-if type nvim > /dev/null 2>&1; then
-  alias vim='nvim'
-  alias v="nvim"
-else
-  alias v="vim"
-fi
-
-# Pretty print the path
-# https://github.com/thoughtbot/dotfiles/blob/master/aliases#L15
-alias path='echo $PATH | tr -s ":" "\n"'
-
-# easier navigation
-# https://github.com/davemackintosh/dotfiles/blob/master/shared/aliases.sh#L5
-alias ..='cd ../'
-alias ...='cd ../../'
-alias ....='cd ../../../'
-
-alias r="ranger"
-
-alias b="buku"
-alias bt="buku -t" # alias to search buku tags
-alias btf="buku -t favourites" # alias to show buku favourites
-alias ba="buku -a" # alias to add buku bookmark
-alias baf='f() { buku -a $1 favourites --title $2 };f'
-
-alias ab='echo "Refreshing antibody plugins..."; antibody bundle < ~/.dotfiles/zsh_plugins.txt > ~/.dotfiles/zsh_plugins.sh; source ~/.zshrc'
-
-# if buku bookmarks.db has changed, autocommit
-# credit: https://github.com/jarun/buku/issues/308
-buku() {
-    command buku $@
-    sh -c 'cd ~/.local/share/buku; if git status -s | grep -q -E "^\s+M\s"; then git commit -a -m "autocommit $(date)" 1>/dev/null && echo "committed change"; fi'
-}
-
-# Make directory and change into it.
-# https://github.com/thoughtbot/dotfiles/blob/master/zsh/functions/mcd
-function mcd() {
-  mkdir -p "$1" && cd "$1";
-}
-
-function grbom() {
-  BRANCH=$(git branch --show-current)
-  if [ BRANCH=='master' ]; then
-    echo "You're on the master branch, switch to a feature branch."
-    return
-  fi
-  if [ $*=='' ]; then
-    echo "Exiting due to empty commit message. Usage: grbom \"commit message\""
-    return
-  fi
-  COMMIT_NUM=$(git rev-list master.. --count)
-  sh -c "git reset --soft HEAD~$COMMIT_NUM"
-  sh -c "git add ."
-  sh -c "git commit -m \"$*\""
-  sh -c "git fetch origin"
-  sh -c "git rebase origin/master"
-}
+# load custom executable functions
+for function in ~/.zsh/functions/*; do
+  source $function
+done
 
 source $ZSH/oh-my-zsh.sh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source ~/.zsh/configs/ohmyzsh.zsh
+source ~/.zsh/configs/nvm.zsh
+source ~/.zsh/configs/android.zsh
+source ~/.zsh/configs/keybindings.zsh
+[ -f ~/.zsh/configs/fzf.zsh ] && source ~/.zsh/configs/fzf.zsh
+
+source ~/.zsh/aliases
 
 #zprof # bottom of .zshrc
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# To customize prompt, run `p10k configure` or edit ~/.zsh/p10k.zsh.
+[[ ! -f ~/.zsh/p10k.zsh ]] || source ~/.zsh/p10k.zsh

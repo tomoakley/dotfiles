@@ -1,3 +1,6 @@
+# Set fzf to use ripgrep in vim
+export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'
+
 # Setup fzf
 # ---------
 if [[ ! "$PATH" == */usr/local/opt/fzf/bin* ]]; then
