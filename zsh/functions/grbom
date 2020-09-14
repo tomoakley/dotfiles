@@ -9,7 +9,7 @@ function grbom() {
     echo "Exiting due to empty commit message. Usage: grbom \"commit message\""
     return
   fi
-  COMMIT_NUM=$(git rev-list master.. --count)
+  COMMIT_NUM=$(($(git rev-list origin/master.. --count) - 1))
   sh -c "git reset --soft HEAD~$COMMIT_NUM"
   sh -c "git add ."
   sh -c "git commit -m \"$*\""
