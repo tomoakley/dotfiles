@@ -1,5 +1,3 @@
-stty -ixon
-
 export KEYTIMEOUT=1 # reduce key delay to 0.1s
 
 # Use vim cli mode
