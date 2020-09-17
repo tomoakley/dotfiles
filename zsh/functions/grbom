@@ -9,11 +9,12 @@ function grbom() {
     echo "Exiting due to empty commit message. Usage: grbom \"commit message\""
     return
   fi
-  COMMIT_NUM=$(($(git rev-list origin/master.. --count) - 1))
+  COMMIT_NUM=$(($(git rev-list origin/master.. --count)))
   sh -c "git reset --soft HEAD~$COMMIT_NUM"
   sh -c "git add ."
   sh -c "git commit -m \"$*\""
   sh -c "git fetch origin"
+  sh -c "yarn"
   sh -c "git rebase origin/master"
 }
 

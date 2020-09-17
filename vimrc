@@ -44,6 +44,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'liuchengxu/vista.vim'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'unblevable/quick-scope'
+Plug 'metakirby5/codi.vim'
 call plug#end()
 
 " vimspector
@@ -239,12 +240,13 @@ noremap <C-l> <C-w>l
 noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
-tnoremap <C-l> <C-w>l
-tnoremap <C-h> <C-w>h
-tnoremap <C-j> <C-w>j
-tnoremap <C-k> <C-w>k
+tnoremap <C-l> <C-W>l
+tnoremap <C-h> <C-W>h
+tnoremap <C-j> <C-W>j
+tnoremap <C-k> <C-W>k
 
 tnoremap <Esc> <C-\><C-n>
+tnoremap <Esc><Esc> <C-\><C-n>:bw!<CR>
 
 " use tab and shift tab to indent and de-indent code
 nnoremap <Tab>   >>
