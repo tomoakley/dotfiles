@@ -1,0 +1,4 @@
+tags
+*.swp
+tags.tmp
+.DS_Store
