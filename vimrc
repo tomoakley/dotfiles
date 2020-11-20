@@ -45,6 +45,7 @@ Plug 'liuchengxu/vista.vim'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'unblevable/quick-scope'
 Plug 'metakirby5/codi.vim'
+Plug 'AGhost-7/critiq.vim'
 call plug#end()
 
 " vimspector
@@ -403,3 +404,5 @@ autocmd VimEnter * silent !tmux set status off
 autocmd VimLeave * silent !tmux set status on
 
 map <C-u> :source $MYVIMRC<CR>
+
+let g:codi#rightsplit = 1

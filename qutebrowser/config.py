@@ -7,8 +7,23 @@
 # config.load_autoconfig()
 
 import os
+from qutebrowser.api import interceptor
 os.environ['PATH'] = os.pathsep + '/usr/local/bin'
 os.environ['NODE_PATH'] = os.pathsep + '/usr/local/lib/node_modules'
+
+# ================== Youtube Add Blocking ======================= {{{
+def filter_yt(info: interceptor.Request):
+    """Block the given request if necessary."""
+    url = info.request_url
+    if (
+        url.host() == "www.youtube.com"
+        and url.path() == "/get_video_info"
+        and "&adformat=" in url.query()
+    ):
+        info.block()
+
+
+interceptor.register(filter_yt)
 
 # Enable JavaScript.
 # Type: Bool
@@ -428,6 +443,15 @@ c.fonts.tabs = '14pt default_family'
 
 # Bindings for normal mode
 config.bind('<Ctrl+t>', 'config-cycle tabs.show never always')
+config.bind("<y><o>", "yank inline [{title}]({url})]")
+
+config.bind("<Ctrl-h>", "fake-key <Backspace>", "insert")
+config.bind("<Ctrl-a>", "fake-key <Home>", "insert")
+config.bind("<Ctrl-e>", "fake-key <End>", "insert")
+config.bind("<Ctrl-b>", "fake-key <Left>", "insert")
+config.bind("<Mod1-b>", "fake-key <Ctrl-Left>", "insert") # currently goes to start of line (macOS default)
+config.bind("<Ctrl-f>", "fake-key <Right>", "insert")
+config.bind("<Mod1-f>", "fake-key <Ctrl-Right>", "insert") # currently goes to end of line (macOS default)
 
 # Add Nord theme
 config.source('nord-qutebrowser.py')

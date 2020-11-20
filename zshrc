@@ -16,6 +16,8 @@ compinit -C
 # source anitgen plugins
 source ~/.zsh/zsh_plugins.sh
 
+source ~/.zsh/aliases
+
 # load custom executable functions
 for function in ~/.zsh/functions/*; do
   source $function
@@ -29,7 +31,9 @@ source ~/.zsh/configs/android.zsh
 source ~/.zsh/configs/keybindings.zsh
 [ -f ~/.zsh/configs/fzf.zsh ] && source ~/.zsh/configs/fzf.zsh
 
-source ~/.zsh/aliases
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
 
 #zprof # bottom of .zshrc
 
