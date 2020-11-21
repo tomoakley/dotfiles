@@ -1,3 +1,6 @@
 .DS_Store
 tags
 zsh/zsh_plugins.sh
+
+qutebrowser/bookmarks
+qutebrowser/quickmarks
