@@ -4,3 +4,6 @@ zsh/zsh_plugins.sh
 
 qutebrowser/bookmarks
 qutebrowser/quickmarks
+qutebrowser/readability.html
+
+node_modules

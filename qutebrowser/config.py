@@ -8,8 +8,8 @@
 
 import os
 from qutebrowser.api import interceptor
-os.environ['PATH'] = os.pathsep + '/usr/local/bin'
-os.environ['NODE_PATH'] = os.pathsep + '/usr/local/lib/node_modules'
+#os.environ['PATH'] = os.pathsep + '/usr/local/bin'
+#os.environ['NODE_PATH'] = os.pathsep + '/usr/local/lib/node_modules'
 
 # ================== Youtube Add Blocking ======================= {{{
 def filter_yt(info: interceptor.Request):
@@ -439,7 +439,8 @@ c.fonts.statusbar = '14pt default_family'
 
 # Font used in the tab bar.
 # Type: QtFont
-c.fonts.tabs = '14pt default_family'
+c.fonts.tabs.selected = '14pt default_family'
+c.fonts.tabs.unselected = '14pt default_family'
 
 # Bindings for normal mode
 config.bind('<Ctrl+t>', 'config-cycle tabs.show never always')

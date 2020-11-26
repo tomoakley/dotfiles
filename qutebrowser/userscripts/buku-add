@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+if msg=$(buku -a "${QUTE_URL}" --title="${QUTE_TITLE}" --tag + "$1"); then
+  echo "message-info 'Bookmark created successfully; Title: "$QUTE_TITLE", URL, "$QUTE_URL", Tags: "$1"'" >> "$QUTE_FIFO"
+  echo "spawn --userscript buku-get" >> "$QUTE_FIFO"
+else
+  echo "message-error 'Error creating bookmark'" >> "$QUTE_FIFO"
+fi

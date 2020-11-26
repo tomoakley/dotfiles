@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+BOOKMARKS_PATH="${QUTE_CONFIG_DIR}/bookmarks/urls"
+echo "$BOOKMARKS_PATH"
+if [[ -f "$BOOKMARKS_PATH" ]]; then
+  rm "$BOOKMARKS_PATH"
+  touch "$BOOKMARKS_PATH"
+fi
+
+buku -t favourites --json | tail -n +2 | jq -r '.[] | "\(.uri)\t\t\(.title)"' > "$QUTE_CONFIG_DIR/bookmarks/urls"
+
+sh "$QUTE_DATA_DIR"/userscripts/reload-quickmarks

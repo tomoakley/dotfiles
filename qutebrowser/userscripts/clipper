@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -e
+
+#FILE_TITLE="${QUTE_TITLE// /-}"
+
+#FILE_PATH="~/Desktop/"${FILE_TITLE}".md"
+
+CONTENT=$(readable "$QUTE_HTML" | pandoc -f html -t commonmark-raw_html --wrap none)
+
+#CONTENT=$(cat ${QUTE_HTML} | pandoc -f html -t commonmark-raw_html --wrap none)
+
+if [ $(bear create "$CONTENT" --tag="$1") || true ]; then
+  echo "message-info 'note created successfully'" >> "$QUTE_FIFO"
+else
+  echo "message-error 'something went wrong'" >> "$QUTE_FIFO"
+fi
