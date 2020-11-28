@@ -2,8 +2,8 @@
 tags
 zsh/zsh_plugins.sh
 
-qutebrowser/bookmarks
+qutebrowser/bookmarks/*
 qutebrowser/quickmarks
-qutebrowser/readability.html
+qutebrowser/userscripts/readability.html
 
 node_modules

@@ -454,5 +454,13 @@ config.bind("<Mod1-b>", "fake-key <Ctrl-Left>", "insert") # currently goes to st
 config.bind("<Ctrl-f>", "fake-key <Right>", "insert")
 config.bind("<Mod1-f>", "fake-key <Ctrl-Right>", "insert") # currently goes to end of line (macOS default)
 
+# Userscript bindings
+config.bind(",p", "spawn --userscript 1password")
+config.bind(",b", "spawn --userscript buku-add")
+config.bind(",f", "spawn --userscript buku-add favourites")
+config.bind(",c", "spawn --userscript clipper")
+config.bind(",s", "spawn --userscript safari")
+config.bind(",r", "spawn --userscript readability/readability-js")
+
 # Add Nord theme
 config.source('nord-qutebrowser.py')
