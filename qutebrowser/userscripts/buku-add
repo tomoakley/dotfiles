@@ -2,8 +2,10 @@
 
 set -e
 
-if msg=$(buku -a "${QUTE_URL}" --title="${QUTE_TITLE}" --tag + "$1"); then
-  echo "message-info 'Bookmark created successfully; Title: "$QUTE_TITLE", URL, "$QUTE_URL", Tags: "$1"'" >> "$QUTE_FIFO"
+TAG=$(buku -p --json | tail -n +2 | jq -r '.[].tags' | sort | uniq | choose)
+
+if msg=$(buku -a "${QUTE_URL}" --title="${QUTE_TITLE}" --tag + "$TAG"); then
+  echo "message-info 'Bookmark created successfully; Title: "$QUTE_TITLE", URL, "$QUTE_URL", Tags: "$TAG"'" >> "$QUTE_FIFO"
   echo "spawn --userscript buku-get" >> "$QUTE_FIFO"
 else
   echo "message-error 'Error creating bookmark'" >> "$QUTE_FIFO"
