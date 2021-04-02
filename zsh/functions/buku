@@ -2,6 +2,6 @@
 # credit: https://github.com/jarun/buku/issues/308
 buku() {
     command buku $@
-    sh -c 'cd ~/.local/share/buku; if git status -s | grep -q -E "^\s+M\s"; then git commit -a -m "autocommit $(date)" 1>/dev/null && echo "committed change"; fi'
+    sh -c 'cd ~/.local/share/buku; if git status -s | grep -q -E "^\s+M\s"; then git commit -a -m "autocommit $(date)" && git push &1>/dev/null && echo "committed change"; fi'
 }
 

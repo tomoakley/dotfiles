@@ -16,6 +16,11 @@ set lazyredraw
 set nocursorcolumn
 set noswapfile
 
+" vimspector
+let g:vimspector_enable_mappings = 'HUMAN'
+let g:vimspector_install_gadgets = [ 'chrome', 'vscode-node', 'reactnative' ]
+packadd! vimspector
+
 " Plugins, managed by vim-plug
 call plug#begin('~/.vim/bundle')
 Plug 'maxmellon/vim-jsx-pretty'
@@ -36,7 +41,6 @@ Plug 'eslint/eslint'
 Plug 'janko/vim-test'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'ap/vim-css-color'
-Plug 'rhysd/devdocs.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-rhubarb'
 Plug 'leafgarland/typescript-vim'
@@ -46,11 +50,9 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'unblevable/quick-scope'
 Plug 'metakirby5/codi.vim'
 Plug 'AGhost-7/critiq.vim'
+Plug 'puremourning/vimspector'
+Plug 'sunaku/vim-dasht'
 call plug#end()
-
-" vimspector
-let g:vimspector_enable_mappings = 'HUMAN'
-packadd! vimspector
 
 " Syntax highlighting
 
@@ -287,8 +289,6 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 noremap <C-x> <C-o><C-x><cr>
 
-nmap K <Plug>(devdocs-under-cursor)
-
 " coc
 if expand('$INSTALL_COC_PLUGINS') == 'yes'
   :CocInstall coc-json
@@ -398,6 +398,11 @@ nnoremap <silent><Leader>d :CocList diagnostics<Cr>
 nnoremap <silent><C-r> :Rg<Cr>
 
 nnoremap <silent><Leader>y :CocList -A --normal yank<Cr>
+
+nnoremap <silent> <Leader>K :call Dasht(dasht#cursor_search_terms())<Return>
+let g:dasht_filetype_docsets = {} " filetype => list of docset name regexp
+let g:dasht_filetype_docsets['typescriptreact'] = ['typescript', 'react', 'nodejs']
+let g:dasht_filetype_docsets['javascript'] = ['javascript', 'react', 'nodejs']
 
 " hide tmux status bar when vim starts, show when vim extts
 autocmd VimEnter * silent !tmux set status off

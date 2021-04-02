@@ -13,10 +13,22 @@ for dump in ~/.zcompdump(N.mh+24); do
 done
 compinit -C
 
+# set tmux-spotify to use Apple Music instead of Spotify
+export MUSIC_APP="iTunes"
+
+# set env vars for critiq.vim to be able to talk to GitHub
+export GH_USER=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "GITHUB_USERNAME")
+export GH_PASS=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "GITHUB_TOKEN")
+
 # source anitgen plugins
 source ~/.zsh/zsh_plugins.sh
 
 source ~/.zsh/aliases
+source ~/.zsh/configs/ohmyzsh.zsh
+source ~/.zsh/configs/nvm.zsh
+source ~/.zsh/configs/android.zsh
+source ~/.zsh/configs/keybindings.zsh
+[ -f ~/.zsh/configs/fzf.zsh ] && source ~/.zsh/configs/fzf.zsh
 
 # load custom executable functions
 for function in ~/.zsh/functions/*; do
@@ -25,11 +37,12 @@ done
 
 source $ZSH/oh-my-zsh.sh
 
-source ~/.zsh/configs/ohmyzsh.zsh
-source ~/.zsh/configs/nvm.zsh
-source ~/.zsh/configs/android.zsh
-source ~/.zsh/configs/keybindings.zsh
-[ -f ~/.zsh/configs/fzf.zsh ] && source ~/.zsh/configs/fzf.zsh
+dcleanup() {
+    docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
+    docker rm $(docker ps -a -q)
+    docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
+    docker volume rm $(docker volume ls -qf dangling=true)
+}
 
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
