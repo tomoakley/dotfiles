@@ -19,8 +19,9 @@ export MUSIC_APP="iTunes"
 # set env vars for critiq.vim to be able to talk to GitHub
 export GH_USER=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "GITHUB_USERNAME")
 export GH_PASS=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "GITHUB_TOKEN")
+export GITHUB_TOKEN=$(echo ${GH_PASS})
 
-# source anitgen plugins
+# source antigen plugins
 source ~/.zsh/zsh_plugins.sh
 
 source ~/.zsh/aliases
@@ -52,3 +53,4 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.zsh/p10k.zsh.
 [[ ! -f ~/.zsh/p10k.zsh ]] || source ~/.zsh/p10k.zsh
+if [ -e /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

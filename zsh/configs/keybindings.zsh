@@ -15,7 +15,7 @@ bindkey '^H' backward-delete-char
 bindkey '^w' backward-kill-word
 
 # ctrl-r starts searching history backward
-bindkey '^r' history-incremental-search-backward
+#bindkey '^r' history-incremental-search-backward
 
 bindkey "^A" beginning-of-line
 bindkey "^E" end-of-line
