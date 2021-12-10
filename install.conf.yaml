@@ -6,7 +6,6 @@
 
 - link:
     ~/.tmux.conf: tmux.conf
-    ~/.vim: vim
     ~/.vimrc: vimrc
     ~/.nvim: nvim
     ~/.zshrc: zshrc

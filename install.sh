@@ -17,5 +17,15 @@ nvm install 12
 nvm use 12
 nvm alias default 10
 
+# install tmux-plugin-manager and then install the plugins
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+chmod +x ~/.tmux/plugins/tpm/scripts/update_plugin.sh
+~/.tmux/plugins/tpm/scripts/update_plugin.sh
+
+# install vimplug and then install the plugins
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+vim +'PlugInstall --sync' +qa
+
 ## setup dotfiles correctly
 dotbot -c install.conf.yaml
