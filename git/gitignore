@@ -1,0 +1,40 @@
+# mostly from https://github.com/CodelyTV/dotfiles/blob/master/git/.gitignore_global
+
+############################################
+# IDE generated files
+############################################
+
+.idea/
+*.iml
+*.iws
+.idea-compl
+*.sc
+.vscode/
+tags
+*.swp
+tags.tmp
+
+# From: https://gist.github.com/octocat/9257657
+
+############################################
+# OS generated files
+############################################
+
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+############################################
+# OS generated files
+############################################
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

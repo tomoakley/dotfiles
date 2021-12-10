@@ -1,0 +1,24 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.tmux.conf: tmux.conf
+    ~/.vim: vim
+    ~/.vimrc: vimrc
+    ~/.nvim: nvim
+    ~/.zshrc: zshrc
+    ~/.gitignore_global: git/.gitignore_global
+    ~/.hammerspoon: hammerspoon/
+    ~/.alacritty.yml: alacritty.yml
+    ~/.local/bin: bin
+    ~/.qutebrowser: qutebrowser
+
+- create:
+    - ~/downloads
+    - ~/.vim/undo-history
+
+- shell:
+  - [git submodule update --init --recursive, Installing submodules]
