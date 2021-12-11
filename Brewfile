@@ -20,5 +20,7 @@ brew "weechat"
 brew "neovim"
 brew "tmux"
 brew "dotbot"
-brew "antigen"
+brew "antibody"
+brew "jq"
+brew "zsh"
 

@@ -26,6 +26,9 @@ dotbot -c install.conf.yaml
 # install ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
+# generate antibody zsh plugins shell file
+antibody bundle < ~/.zsh/zsh_plugins.txt > ~/.zsh/zsh_plugins.sh
+
 # install tmux-plugin-manager and then install the plugins
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 chmod +x ~/.tmux/plugins/tpm/scripts/update_plugin.sh
@@ -34,5 +37,18 @@ chmod +x ~/.tmux/plugins/tpm/scripts/update_plugin.sh
 # install vimplug and then install the plugins
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-vim +'PlugInstall --sync' +qa
+nvim +'PlugInstall --sync' +qa
+
+# get Meslo font. These may need installing manually
+cd ~/Library/Fonts && { 
+    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf'
+    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf'
+    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf'
+    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf'
+    cd -; }
+
+mv ~/Library/Fonts/MesloLGS%20NF%20Regular.ttf ~/Library/Fonts/MesloLGS\ NF\ Regular.ttf
+mv ~/Library/Fonts/MesloLGS%20NF%20Bold.ttf ~/Library/Fonts/MesloLGS\ NF\ Bold.ttf
+mv ~/Library/Fonts/MesloLGS%20NF%20Italic.ttf ~/Library/Fonts/MesloLGS\ NF\ Italic.ttf
+mv ~/Library/Fonts/MesloLGS%20NF%20Bold%20Italic.ttf ~/Library/Fonts/MesloLGS\ NF\ Bold\ Italic.ttf
 

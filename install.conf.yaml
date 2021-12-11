@@ -10,6 +10,7 @@
     ~/.nvim: nvim
     ~/.zshrc: zshrc
     ~/.zsh: zsh
+    ~/.fzf.zsh: zsh/configs/fzf.zsh
     ~/.gitignore_global: git/.gitignore_global
     ~/.hammerspoon: hammerspoon/
     ~/.alacritty.yml: alacritty.yml
