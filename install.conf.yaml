@@ -9,6 +9,7 @@
     ~/.vimrc: vimrc
     ~/.nvim: nvim
     ~/.zshrc: zshrc
+    ~/.zsh: zsh
     ~/.gitignore_global: git/.gitignore_global
     ~/.hammerspoon: hammerspoon/
     ~/.alacritty.yml: alacritty.yml
