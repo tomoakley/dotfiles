@@ -6,6 +6,9 @@ sudo chown -R $(whoami):admin /usr/local
 brew doctor
 brew update
 
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/toakley/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 ## Install packages from brewfile
 brew bundle
 
