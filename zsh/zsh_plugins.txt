@@ -1,6 +1,6 @@
 # ohmyzsh
 ohmyzsh/ohmyzsh path:plugins/git
-ohmyzsh/ohmyzsh path:plugins/osx
+ohmyzsh/ohmyzsh path:plugins/macos
 ohmyzsh/ohmyzsh path:plugins/sudo
 ohmyzsh/ohmyzsh path:plugins/npm
 ohmyzsh/ohmyzsh path:plugins/brew

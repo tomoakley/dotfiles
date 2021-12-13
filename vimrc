@@ -22,7 +22,7 @@ let g:vimspector_install_gadgets = [ 'chrome', 'vscode-node', 'reactnative' ]
 packadd! vimspector
 
 " Plugins, managed by vim-plug
-call plug#begin('~/.vim/bundle')
+call plug#begin('~/.config/nvim')
 Plug 'maxmellon/vim-jsx-pretty'
 "Plug 'ap/vim-css-color'
 "Plug 'leafgarland/typescript-vim'
