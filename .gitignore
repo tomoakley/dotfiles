@@ -7,3 +7,8 @@ qutebrowser/quickmarks
 qutebrowser/userscripts/readability.html
 
 node_modules
+
+./weechat/logs/*/**.weechatlog
+./weechat.log
+./urls.log
+
