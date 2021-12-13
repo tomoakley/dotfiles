@@ -16,6 +16,7 @@
     ~/.alacritty.yml: alacritty.yml
     ~/.local/bin: bin
     ~/.qutebrowser: qutebrowser
+    ~/.config/weechat: weechat
 
 - create:
     - ~/downloads

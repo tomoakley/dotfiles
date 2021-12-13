@@ -18,6 +18,7 @@ brew "docker"
 brew "docker-compose"
 brew "nvm"
 brew "yarn"
+brew "watchman"
 
 brew "weechat"
 brew "neovim"
@@ -27,7 +28,6 @@ brew "antibody"
 brew "jq"
 brew "zsh"
 brew "mas"
-brew "watchman"
 
 mas "Meeter for Zoom, Teams & Co", id: 1510445899
 mas "Bear", id: 1091189122
