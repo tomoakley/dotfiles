@@ -35,20 +35,22 @@ chmod +x ~/.tmux/plugins/tpm/scripts/update_plugin.sh
 ~/.tmux/plugins/tpm/scripts/update_plugin.sh
 
 # install vimplug and then install the plugins
-sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+sh -c 'curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 nvim +'PlugInstall --sync' +qa
 
-# get Meslo font. These may need installing manually
-cd ~/Library/Fonts && { 
-    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf'
-    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf'
-    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf'
-    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf'
+# get Meslo font. These need installing manually
+cd ~/Downloads && {
+    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Regular.ttf'
+    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Bold.ttf'
+    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Italic.ttf'
+    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Bold Italic.ttf'
     cd -; }
 
-mv ~/Library/Fonts/MesloLGS%20NF%20Regular.ttf ~/Library/Fonts/MesloLGS\ NF\ Regular.ttf
-mv ~/Library/Fonts/MesloLGS%20NF%20Bold.ttf ~/Library/Fonts/MesloLGS\ NF\ Bold.ttf
-mv ~/Library/Fonts/MesloLGS%20NF%20Italic.ttf ~/Library/Fonts/MesloLGS\ NF\ Italic.ttf
-mv ~/Library/Fonts/MesloLGS%20NF%20Bold%20Italic.ttf ~/Library/Fonts/MesloLGS\ NF\ Bold\ Italic.ttf
+# set some better macos defaults
+curl https://gist.githubusercontent.com/mvanbaak/e98b7b622ea2c8ab626d51cb88e27406/raw/4ceb0e5288c912f9373b4e80673370cd9fc9fe2d/gistfile1.txt >> macos
+chmod +x macos.sh
+./macos.sh
+rm macos.sh
+
 

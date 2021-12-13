@@ -7,7 +7,7 @@
 - link:
     ~/.tmux.conf: tmux.conf
     ~/.vimrc: vimrc
-    ~/.nvim: nvim
+    ~/.config/nvim/init.vim: nvim/init.vim
     ~/.zshrc: zshrc
     ~/.zsh: zsh
     ~/.fzf.zsh: zsh/configs/fzf.zsh
