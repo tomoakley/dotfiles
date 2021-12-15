@@ -56,3 +56,4 @@ fi
 if [ -e /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(pyenv init -)"
