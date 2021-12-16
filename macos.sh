@@ -83,13 +83,14 @@ sudo chflags uchg /private/var/vm/sleepimage
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input #
 ###############################################################
 
-# Disable “natural” (Lion-style) scrolling
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
-
 # Enable tap-clicking
 sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 sudo defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+# Enable drag lock
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -bool true
 
 # Disable "shake to find mouse"
 defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
@@ -210,11 +211,17 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 # Dock, Dashboard, and hot corners #
 ####################################
 
+# Enable dock magnification
+defaults write com.apple.dock magnification -bool true
+
 # Enable highlight hover effect for the grid view of a stack (Dock)
 defaults write com.apple.dock mouse-over-hilite-stack -bool true
 
-# Set the icon size of Dock items to 36 pixels
+# Set the icon size of Dock items to 50 pixels
 defaults write com.apple.dock tilesize -int 50
+
+# Set icon size when magnificed to 60
+defaults write com.apple.dock largesize -int 60
 
 # Change minimize/maximize window effect
 defaults write com.apple.dock mineffect -string "scale"
@@ -463,10 +470,13 @@ defaults write com.apple.messageshelper.MessageController SOInputLineSettings -d
 # Disable continuous spell checking
 defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "continuousSpellCheckingEnabled" -bool false
 
+################
+# Vimac.app #
+################
 
-
-
-
+defaults write dexterleng.vimac ShouldLaunchOnStartupKey -int 1
+defaults write dexterleng.vimac ForceKeyboardLayout -string "com.apple.keylayout.British"
+# WIP: set the keyboard shortcuts here for vimac
 
 ###############################################################################
 # Kill affected applications                                                  #

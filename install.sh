@@ -48,9 +48,12 @@ cd ~/Downloads && {
     cd -; }
 
 # set some better macos defaults
-curl https://gist.githubusercontent.com/mvanbaak/e98b7b622ea2c8ab626d51cb88e27406/raw/4ceb0e5288c912f9373b4e80673370cd9fc9fe2d/gistfile1.txt >> macos
 chmod +x macos.sh
 ./macos.sh
-rm macos.sh
 
+# clone (private) buku bookmarks db
+git clone https://github.com/tomoakley/buku-bookmarks ~/.local/share/buku/
 
+# symlink userscripts to Qutebrowser data directory, run buku-get to import buku bookmarks into qb
+ln -s ~/dotfiles/qutebrowser/userscripts ~/Library/Application\ Support/qutebrowser/userscripts
+~/dotfiles/qutebrowser/userscripts/buku-get
