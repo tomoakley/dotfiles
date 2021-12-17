@@ -19,7 +19,10 @@ set noswapfile
 " vimspector
 let g:vimspector_enable_mappings = 'HUMAN'
 let g:vimspector_install_gadgets = [ 'chrome', 'vscode-node', 'reactnative' ]
-packadd! vimspector
+
+" vim-polyglot
+let g:polyglot_disabled = ['jsx']
+let g:jsx_ext_required = 0
 
 " Plugins, managed by vim-plug
 call plug#begin('~/.config/nvim')
@@ -84,8 +87,6 @@ colorscheme onenord
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
-let g:polyglot_disabled = ['jsx']
-let g:jsx_ext_required = 0
 
 " Set relevant filetypes
 au BufRead,BufNewFile *.scss set filetype=scss

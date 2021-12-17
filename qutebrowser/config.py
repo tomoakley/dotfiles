@@ -464,3 +464,5 @@ config.bind(",r", "spawn --userscript readability/readability-js")
 
 # Add Nord theme
 config.source('nord-qutebrowser.py')
+
+config.load_autoconfig(False)

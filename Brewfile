@@ -40,3 +40,4 @@ brew "mas"
 mas "Meeter for Zoom, Teams & Co", id: 1510445899
 mas "Bear", id: 1091189122
 mas "ToothFairy", id: 1191449274
+mas "Vimari", id: 1480933944
