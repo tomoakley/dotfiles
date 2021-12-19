@@ -4,7 +4,7 @@ tap "homebrew/core"
 tap "homebrew/services"
 
 cask "qutebrowser"
-cask "alacritty"
+# cask "alacritty" # only installs intel binary
 cask "react-native-debugger"
 cask "1password"
 cask "1password-cli"

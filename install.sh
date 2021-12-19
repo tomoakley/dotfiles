@@ -9,6 +9,23 @@ brew update
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# install rust compiler so I can build Apple Silicon version of Alacritty
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh && \
+  source $HOME/.cargo/env
+
+# Clone alacritty repo, build Apple Silicon binary, move to /Applications, resign the app to fix permissions errors
+git clone git@github.com:alacritty/alacritty.git && \
+cd alacritty && \
+rustup update && \
+rustup target add x86_64-apple-darwin && \
+rustup target add aarch64-apple-darwin && \
+cargo check --target=x86_64-apple-darwin && \
+cargo check --target=aarch64-apple-darwin && \
+make dmg-universal && \
+cp -r target/release/osx/Alacritty.app /Applications/Alacritty.app && \
+codesign --remove-signature /Applications/Alacritty.app && \
+sudo codesign --force --deep --sign - /Applications/Alacritty.app
+
 ## Install packages from brewfile
 brew bundle
 
