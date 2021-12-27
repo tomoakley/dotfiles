@@ -46,7 +46,12 @@ dcleanup() {
 }
 
 if command -v pyenv 1>/dev/null 2>&1; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
+  eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
 fi
 
 #zprof # bottom of .zshrc
@@ -56,4 +61,3 @@ fi
 if [ -e /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-eval "$(pyenv init -)"

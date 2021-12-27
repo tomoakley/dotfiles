@@ -37,6 +37,7 @@ brew "jq"
 brew "zsh"
 brew "mas"
 brew "ripgrep"
+brew "choose-gui"
 
 mas "Meeter for Zoom, Teams & Co", id: 1510445899
 mas "Bear", id: 1091189122

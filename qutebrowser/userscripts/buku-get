@@ -9,6 +9,16 @@ if [[ -f "$BOOKMARKS_PATH" ]]; then
   touch "$BOOKMARKS_PATH"
 fi
 
-buku -t favourites --json | tail -n +2 | jq -r '.[] | "\(.uri)\t\t\(.title)"' > "$QUTE_CONFIG_DIR/bookmarks/urls"
+AM_I_WORKING=$(sh ~/Desktop/bookmarks.sh)
+TAGS=
+if [[ $AM_I_WORKING -eq "true" ]]; then
+  TAGS="favourites + personal"
+else
+  TAGS="favourites + work"
+fi
+BOOKMARKS=$(buku --nostdin -t $TAGS --json)
+echo $BOOKMARKS
+echo $BOOKMARKS | jq -r '.[] | "\(.uri)\t\t\(.title)"' > "$QUTE_CONFIG_DIR/bookmarks/urls"
 
 sh "$QUTE_DATA_DIR"/userscripts/reload-quickmarks
+
