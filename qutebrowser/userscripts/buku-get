@@ -12,9 +12,9 @@ fi
 AM_I_WORKING=$(sh ~/Desktop/bookmarks.sh)
 TAGS=
 if [[ $AM_I_WORKING -eq "true" ]]; then
-  TAGS="favourites + personal"
-else
   TAGS="favourites + work"
+else
+  TAGS="favourites + personal"
 fi
 BOOKMARKS=$(buku --nostdin -t $TAGS --json)
 echo $BOOKMARKS

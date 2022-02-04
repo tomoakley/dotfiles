@@ -37,6 +37,11 @@ nvm install 12
 nvm use 12
 nvm alias default 10
 
+# install global npm packages
+npm install -g typescript-language-server
+npm install -g readability-cli
+npm install --global @sloansparger/bear
+
 ## setup dotfiles correctly
 dotbot -c install.conf.yaml
 

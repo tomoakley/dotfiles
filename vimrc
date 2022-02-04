@@ -68,6 +68,7 @@ Plug 'puremourning/vimspector'
 Plug 'sunaku/vim-dasht'
 Plug 'shuber/vim-promiscuous'
 Plug 'sheerun/vim-polyglot'
+Plug 'rescript-lang/vim-rescript'
 call plug#end()
 
 " Syntax highlighting
@@ -207,6 +208,9 @@ nnoremap ; :
 " shortcut to switch between relative line numbers
 "nnoremap <silent><C-n> :NvimTreeToggle<CR>
 
+" enable GBrowse without netrw
+command -nargs=1 Browse silent exe '!xdg-open ' . "<args>"
+
 " reslect text that was just pasted
 nnoremap <leader>v V`]
 
@@ -222,10 +226,10 @@ noremap <C-l> <C-w>l
 noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
-tnoremap <C-l> <C-W>l
-tnoremap <C-h> <C-W>h
-tnoremap <C-j> <C-W>j
-tnoremap <C-k> <C-W>k
+tnoremap <C-l> <Esc><C-W>l
+tnoremap <C-h> <Esc><C-W>h
+tnoremap <C-j> <Esc><C-W>j
+tnoremap <C-k> <Esc><C-W>k
 
 tnoremap <Esc> <C-\><C-n>
 tnoremap <Esc><Esc> <C-\><C-n>:bw!<CR>
@@ -272,7 +276,7 @@ nnoremap <leader>gs <cmd>lua require('telescope.builtin').grep_string()<cr>
 nnoremap <C-n> <cmd>lua require('telescope.builtin').file_browser()<cr>
 vnoremap <leader>gs "zy <cmd>Telescope live_grep default_text=<C-r>z<cr>
 
-let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+"let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git"'
 
 "let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
@@ -295,7 +299,7 @@ function! JestStrategy(cmd)
     let [all, testName, end; tail] = results
     let options.TestName = testName
   end
-  call vimspector#LaunchWithSettings(options)
+  "call vimspector#LaunchWithSettings(options)
 endfunction
 
 let g:test#custom_strategies = {'jest': function('JestStrategy')}
@@ -372,6 +376,7 @@ command! -nargs=0 Scripts :call fzf#run(fzf#wrap({'source': 'cat ./package.json 
 
 lua << EOF
 local lspconfig = require("lspconfig")
+local configs = require('lspconfig.configs')
 local cmp = require("cmp")
 local lspkind = require('lspkind')
 
@@ -379,9 +384,11 @@ require('lualine').setup({
   options = { theme = 'nord' }
 })
 require('nvim-tree').setup()
-require('telescope').setup()
+require('telescope').setup({
+  defaults = { file_ignore_patterns = {"ios/Pods", ".yarn/", ".git"} }
+})
+require('telescope').load_extension('fzf')
 
-require("telescope").load_extension("git_worktree")
 
 local buf_map = function(bufnr, mode, lhs, rhs, opts)
     vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts or {
@@ -438,6 +445,26 @@ lspconfig.tsserver.setup({
         on_attach(client, bufnr)
     end,
 })
+
+local rescriptLspPath = '/Users/toakley/.config/nvim/vim-rescript/server/out/server.js'
+if not configs.rescriptlsp then
+  configs.rescriptlsp = {
+    default_config = {
+      cmd = {'node', rescriptLspPath, '--stdio'};
+      filetypes = {"rescript", "res"};
+      root_dir = lspconfig.util.root_pattern('bsconfig.json');
+      settings = {};
+    };
+  }
+end
+lspconfig.rescriptlsp.setup{
+  cmd = {
+    'node',
+    '/Users/woonki/.local/share/nvim/plugged/vim-rescript/server/out/server.js',
+    '--stdio'
+  }
+}
+
 require("null-ls").config({})
 lspconfig["null-ls"].setup({ on_attach = on_attach })
 
