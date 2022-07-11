@@ -11,6 +11,7 @@ if [[ -z $selected ]]; then
 fi
 
 selected_name=$(basename "$selected" | tr . _)
+#tmux display-message "You choose $selected_name"
 tmux_running=$(pgrep tmux)
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
@@ -18,8 +19,9 @@ if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
     exit 0
 fi
 
-if ! tmux has-session -t $selected_name 2> /dev/null; then
+if ! tmux has-session -t=$selected_name 2> /dev/null; then
+    tmux display-message "Creating session with $selected_name..."
     tmux new-session -ds $selected_name -c $selected
 fi
 
-tmux switch-client -t $selected_name
+tmux switch-client -t=$selected_name
