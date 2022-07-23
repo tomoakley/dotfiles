@@ -13,6 +13,9 @@ cask "hammerspoon"
 cask "alfred"
 cask "google-chrome"
 cask "steermouse"
+cask "sequel-pro"
+cask "db-browser-for-sqlite"
+cask "openscad"
 
 brew "docker"
 brew "docker-compose"
@@ -26,6 +29,7 @@ brew "readline"
 brew "sqlite3"
 brew "xz"
 brew "zlib"
+brew "leiningen"
 
 brew "weechat"
 brew "neovim"
@@ -39,6 +43,8 @@ brew "mas"
 brew "ripgrep"
 brew "choose-gui"
 brew "pandoc"
+brew "gh"
+brew "scrcpy"
 
 mas "Meeter for Zoom, Teams & Co", id: 1510445899
 mas "Bear", id: 1091189122

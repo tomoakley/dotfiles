@@ -26,10 +26,11 @@ source ~/.zsh/zsh_plugins.sh
 
 source ~/.zsh/aliases
 source ~/.zsh/configs/ohmyzsh.zsh
-source ~/.zsh/configs/nvm.zsh
+#source ~/.zsh/configs/nvm.zsh
 source ~/.zsh/configs/android.zsh
 source ~/.zsh/configs/keybindings.zsh
 [ -f ~/.zsh/configs/fzf.zsh ] && source ~/.zsh/configs/fzf.zsh
+eval "$(fnm env --use-on-cd)"
 
 # load custom executable functions
 for function in ~/.zsh/functions/*; do
@@ -61,3 +62,4 @@ fi
 if [ -e /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="/opt/homebrew/opt/libressl/bin:$PATH"

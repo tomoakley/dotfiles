@@ -14,4 +14,4 @@ zsh-users/zsh-autosuggestions
 djui/alias-tips
 softmoth/zsh-vim-mode
 wfxr/forgit
-lukechilds/zsh-nvm
+#lukechilds/zsh-nvm

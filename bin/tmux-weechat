@@ -9,7 +9,7 @@ fi
 # check weechat is running, if not, start it
 if [ -z "$(tmux list-panes -a -F "#{pane_current_command}" | grep weechat)" ]; then
   tmux display-message 'Starting new weechat instance....'
-  tmux send-keys -t $session.1 "weechat" ENTER
+  tmux send-keys -t $session.1 "export WEECHAT_HOME=~/.weechat/; export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES; weechat" ENTER
   sleep 2
 fi
 
