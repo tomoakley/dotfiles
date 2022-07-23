@@ -16,10 +16,6 @@ set lazyredraw
 set nocursorcolumn
 set noswapfile
 
-" vimspector
-let g:vimspector_enable_mappings = 'HUMAN'
-let g:vimspector_install_gadgets = [ 'chrome', 'vscode-node', 'reactnative' ]
-
 " vim-polyglot
 let g:polyglot_disabled = ['jsx']
 let g:jsx_ext_required = 0
@@ -29,7 +25,7 @@ call plug#begin('~/.config/nvim')
 Plug 'maxmellon/vim-jsx-pretty'
 "Plug 'ap/vim-css-color'
 "Plug 'leafgarland/typescript-vim'
-Plug 'kyazdani42/nvim-tree.lua'
+"Plug 'kyazdani42/nvim-tree.lua'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kien/rainbow_parentheses.vim'
@@ -39,11 +35,12 @@ Plug 'https://github.com/adelarsq/vim-matchit'
 "Plug 'junegunn/fzf.vim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make', 'branch': 'main'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'glepnir/lspsaga.nvim', {'branch': 'main'}
-Plug 'jose-elias-alvarez/null-ls.nvim', {'branch': 'main'}
+"Plug 'jose-elias-alvarez/null-ls.nvim', {'branch': 'main'}
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils', {'branch': 'main'}
 Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
@@ -56,6 +53,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'ThePrimeagen/git-worktree.nvim'
 Plug 'eslint/eslint'
 Plug 'janko/vim-test'
+"Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-rhubarb'
@@ -64,11 +62,15 @@ Plug 'liuchengxu/vista.vim'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'unblevable/quick-scope'
 Plug 'metakirby5/codi.vim'
-Plug 'puremourning/vimspector'
 Plug 'sunaku/vim-dasht'
 Plug 'shuber/vim-promiscuous'
 Plug 'sheerun/vim-polyglot'
 Plug 'rescript-lang/vim-rescript'
+Plug 'pwntester/octo.nvim'
+Plug 'mfussenegger/nvim-dap'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'nvim-orgmode/orgmode'
+"Plug 'David-Kunz/jester'
 call plug#end()
 
 " Syntax highlighting
@@ -273,7 +275,6 @@ map <silent><C-p> <cmd>lua require('telescope.builtin').find_files({ hidden = tr
 nnoremap <Leader>b <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>gg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>gs <cmd>lua require('telescope.builtin').grep_string()<cr>
-nnoremap <C-n> <cmd>lua require('telescope.builtin').file_browser()<cr>
 vnoremap <leader>gs "zy <cmd>Telescope live_grep default_text=<C-r>z<cr>
 
 "let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git"'
@@ -288,29 +289,29 @@ highlight link SignColumn CursorColumn
 
 autocmd BufWritePre * :%s/\s\+$//e " remove trailing spaces on save
 
+" jester mappings
+"nmap <silent> t<C-n> <cmd>lua require"jester".run({ cmd = 'npx jest -t \'$result\' -- $file', path_to_jest = './node_modules/.bin/jest' })<CR><esc>
+"nmap <silent> t<C-f> <cmd>lua require"jester".run_file({ cmd = 'npx jest -- $file', path_to_jest = './node_modules/.bin/jest' })<CR><esc>
+"nmap <silent> t<C-l> <cmd>lua require"jester".run_last({ cmd = 'npx jest -t \'$result\' -- $file', path_to_jest = './node_modules/.bin/jest' })<CR><esc>
+"nmap <silent> t<C-w> :Jest --watch<CR>
+
 " vim-test config and mappings
 let test#strategy = "neovim"
+let test#neovim#term_position = "vert botright 30"
 let g:test#runner_commands = ['Jest']
-
-function! JestStrategy(cmd)
-  let options = {'configuration': 'jest', 'TestName': ''}
-  let results = matchlist(a:cmd, '\v -t ''(.*)''')
-  if !empty(results)
-    let [all, testName, end; tail] = results
-    let options.TestName = testName
-  end
-  "call vimspector#LaunchWithSettings(options)
-endfunction
-
-let g:test#custom_strategies = {'jest': function('JestStrategy')}
-
-nmap <silent> t<C-r> :
-nmap <silent> t<C-n> :TestNearest -strategy=jest<CR>
-nmap <silent> t<C-f> :TestFile -strategy=jest<CR>
-nmap <silent> t<C-s> :TestSuite -strategy=jest<CR>
-nmap <silent> t<C-l> :TestLast -strategy=jest<CR>
-nmap <silent> t<C-g> :TestVisit -strategy=jest<CR>
+nmap <silent> t<C-n> :TestNearest<CR>
+nmap <silent> t<C-f> :TestFile <CR>
+nmap <silent> t<C-s> :TestSuite<CR>
+nmap <silent> t<C-l> :TestLast<CR>
+nmap <silent> t<C-g> :TestVisit<CR>
 nmap <silent> t<C-w> :Jest --watch<CR>
+
+let test#javascript#jest#options = "--color=always --watchAll=false"
+let g:asyncrun_open = 1
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
+nnoremap [Q :cfirst<CR>
+nnoremap ]Q :clast<CR>
 
 nnoremap <Leader>m :Vista<CR>
 let g:vista#renderer#enable_icon = 0
@@ -383,51 +384,64 @@ local lspkind = require('lspkind')
 require('lualine').setup({
   options = { theme = 'nord' }
 })
-require('nvim-tree').setup()
 require('telescope').setup({
-  defaults = { file_ignore_patterns = {"ios/Pods", ".yarn/", ".git"} }
+  extensions = {
+    file_browser = {
+      theme = "ivy",
+      -- disables netrw and use telescope-file-browser in its place
+      hijack_netrw = true,
+    },
+  },
+  defaults = {
+    file_ignore_patterns = {"ios/Pods", ".yarn/", ".git"},
+    dynamic_preview_title = true,
+    path_display = {"truncate"}
+  }
 })
 require('telescope').load_extension('fzf')
+require("telescope").load_extension("file_browser")
+vim.api.nvim_set_keymap(
+  "n",
+  "<C-n>",
+  ":Telescope file_browser",
+  { noremap = true }
+)
 
-
-local buf_map = function(bufnr, mode, lhs, rhs, opts)
-    vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts or {
-        silent = true,
-    })
-end
 local on_attach = function(client, bufnr)
+    local bufopts = { noremap=true, silent=true, buffer=bufnr }
     vim.cmd("command! LspDef lua vim.lsp.buf.definition()")
     vim.cmd("command! LspDec lua vim.lsp.buf.declaration()")
     vim.cmd("command! LspFormatting lua vim.lsp.buf.formatting()")
     vim.cmd("command! LspCodeAction lua vim.lsp.buf.code_action()")
     vim.cmd("command! LspHover lua vim.lsp.buf.hover()")
     vim.cmd("command! LspRename lua vim.lsp.buf.rename()")
-    vim.cmd("command! LspRefs lua vim.lsp.buf.references()")
+    vim.cmd("command! LspRefs lua require('telescope.builtin').lsp_references()")
     vim.cmd("command! LspTypeDef lua vim.lsp.buf.type_definition()")
     vim.cmd("command! LspImplementation lua vim.lsp.buf.implementation()")
     vim.cmd("command! LspDiagPrev lua vim.lsp.diagnostic.goto_prev()")
     vim.cmd("command! LspDiagNext lua vim.lsp.diagnostic.goto_next()")
     vim.cmd("command! LspDiagLine lua vim.lsp.diagnostic.show_line_diagnostics()")
     vim.cmd("command! LspSignatureHelp lua vim.lsp.buf.signature_help()")
-    buf_map(bufnr, "n", "gd", ":LspDef<CR>")
-    buf_map(bufnr, 'n', 'gD', ':LspDec<CR>')
-    buf_map(bufnr, "n", "gi", ':LspImplementation<CR>')
-    buf_map(bufnr, "n", 'gr', ':LspRefs<CR>')
-    buf_map(bufnr, "n", "gR", ":LspRename<CR>")
-    buf_map(bufnr, "n", "gy", ":LspTypeDef<CR>")
-    buf_map(bufnr, "n", "K", ":LspHover<CR>")
-    buf_map(bufnr, "n", "[a", ":LspDiagPrev<CR>")
-    buf_map(bufnr, "n", "]a", ":LspDiagNext<CR>")
-    buf_map(bufnr, "n", "ga", ":LspCodeAction<CR>")
-    buf_map(bufnr, "n", "<Leader>a", ":LspDiagLine<CR>")
-    buf_map(bufnr, "i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>")
-    buf_map(bufnr, "n", "<space>pr", ":LspFormatting<CR>")
+    vim.keymap.set("n", "gd", ":LspDef<CR>", bufopts)
+    vim.keymap.set('n', 'gD', ':LspDec<CR>', bufopts)
+    vim.keymap.set("n", "gi", ':LspImplementation<CR>', bufopts)
+    vim.keymap.set("n", 'gr', ':LspRefs<CR>', bufopts)
+    vim.keymap.set("n", "gR", ":LspRename<CR>", bufopts)
+    vim.keymap.set("n", "gy", ":LspTypeDef<CR>", bufopts)
+    vim.keymap.set("n", "K", ":LspHover<CR>", bufopts)
+    vim.keymap.set("n", "[a", ":LspDiagPrev<CR>", bufopts)
+    vim.keymap.set("n", "]a", ":LspDiagNext<CR>", bufopts)
+    vim.keymap.set("n", "ga", ":LspCodeAction<CR>", bufopts)
+    vim.keymap.set("n", "<Leader>a", ":LspDiagLine<CR>", bufopts)
+    vim.keymap.set("i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>", bufopts)
+    vim.keymap.set("n", "<space>pr", ":LspFormatting<CR>", bufopts)
     if client.resolved_capabilities.document_formatting then
         vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)")
     end
 end
 lspconfig.tsserver.setup({
     on_attach = function(client, bufnr)
+        local bufopts = { noremap=true, silent=true, buffer=bufnr }
         client.resolved_capabilities.document_formatting = false
         client.resolved_capabilities.document_range_formatting = false
         local ts_utils = require("nvim-lsp-ts-utils")
@@ -439,12 +453,13 @@ lspconfig.tsserver.setup({
             formatter = "prettierd",
         })
         ts_utils.setup_client(client)
-        buf_map(bufnr, "n", "gs", ":TSLspOrganize<CR>")
-        buf_map(bufnr, "n", "gi", ":TSLspRenameFile<CR>")
-        buf_map(bufnr, "n", "go", ":TSLspImportAll<CR>")
+        vim.keymap.set("n", "gs", ":TSLspOrganize<CR>", bufopts)
+        vim.keymap.set("n", "gi", ":TSLspRenameFile<CR>", bufopts)
+        vim.keymap.set("n", "go", ":TSLspImportAll<CR>", bufopts)
         on_attach(client, bufnr)
     end,
 })
+lspconfig.sourcekit.setup{}
 
 local rescriptLspPath = '/Users/toakley/.config/nvim/vim-rescript/server/out/server.js'
 if not configs.rescriptlsp then
@@ -465,8 +480,8 @@ lspconfig.rescriptlsp.setup{
   }
 }
 
-require("null-ls").config({})
-lspconfig["null-ls"].setup({ on_attach = on_attach })
+--require("null-ls").setup({})
+--lspconfig["null-ls"].setup({ on_attach = on_attach })
 
 cmp.setup {
      snippet = {
@@ -511,15 +526,47 @@ cmp.setup {
       }
 }
 
+require('orgmode').setup_ts_grammar()
 require'nvim-treesitter.configs'.setup {
     highlight = {
-        enable = true
+        enable = true,
+        additional_vim_regex_highlighting = {'org'},
     },
     incremental_selection = {
         enable = false,
     },
-    ensure_installed = {'javascript'}
+    ensure_installed = {'javascript', 'typescript', 'tsx', 'org'}
   }
+
+local dap = require('dap')
+dap.adapters.node2 = {
+  type = "executable",
+  command = "node",
+  args = { os.getenv('HOME') .. "./code/vscode-node-debug2/out/src/nodeDebug.js" },
+}
+dap.configurations.javascriptreact = {
+  {
+    type = "node2",
+    request = "attach",
+    program = "${file}",
+    cwd = vim.fn.getcwd(),
+    sourceMaps = true,
+    protocol = "inspector",
+    console = "integratedTerminal",
+    port = 35000
+  },
+}
+
+config = function ()
+  require"octo".setup()
+end
+
+require('orgmode').setup{
+  org_agenda_files = {'~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/*'},
+  org_default_notes_file = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/inbox.org'
+}
+vim.keymap.set("n", "<Leader>gh", ":Octo pr list mediaingenuity/Account.NativeApp<CR>")
+
 EOF
 
 nnoremap <silent>K :Lspsaga hover_doc<CR>
