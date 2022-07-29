@@ -8,31 +8,17 @@ set nocompatible
 set encoding=utf-8
 set modelines=0
 
-set ruler
-set cursorline
-"set number
-syntax on
 set lazyredraw
 set nocursorcolumn
 set noswapfile
 
-" vim-polyglot
-let g:polyglot_disabled = ['jsx']
-let g:jsx_ext_required = 0
-
 " Plugins, managed by vim-plug
 call plug#begin('~/.config/nvim')
-Plug 'maxmellon/vim-jsx-pretty'
-"Plug 'ap/vim-css-color'
-"Plug 'leafgarland/typescript-vim'
-"Plug 'kyazdani42/nvim-tree.lua'
+"Plug 'maxmellon/vim-jsx-pretty'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kien/rainbow_parentheses.vim'
-"Plug 'Townk/vim-autoclose'
-Plug 'https://github.com/adelarsq/vim-matchit'
-"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-"Plug 'junegunn/fzf.vim'
+Plug 'adelarsq/vim-matchit'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
@@ -40,85 +26,55 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make', 'branch': 'main
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'glepnir/lspsaga.nvim', {'branch': 'main'}
-"Plug 'jose-elias-alvarez/null-ls.nvim', {'branch': 'main'}
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils', {'branch': 'main'}
 Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
 Plug 'hrsh7th/nvim-cmp', {'branch': 'main'}
-Plug 'hrsh7th/cmp-vsnip', {'branch': 'main'}
-Plug 'hrsh7th/vim-vsnip'
-Plug 'rafamadriz/friendly-snippets', {'branch': 'main'}
 Plug 'onsails/lspkind-nvim'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 Plug 'ThePrimeagen/git-worktree.nvim'
 Plug 'eslint/eslint'
 Plug 'janko/vim-test'
-"Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
-Plug 'ludovicchabant/vim-gutentags'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-rhubarb'
 Plug 'rmehri01/onenord.nvim', { 'branch': 'main' }
-Plug 'liuchengxu/vista.vim'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'unblevable/quick-scope'
 Plug 'metakirby5/codi.vim'
 Plug 'sunaku/vim-dasht'
-Plug 'shuber/vim-promiscuous'
-Plug 'sheerun/vim-polyglot'
-Plug 'rescript-lang/vim-rescript'
-Plug 'pwntester/octo.nvim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'nvim-orgmode/orgmode'
-"Plug 'David-Kunz/jester'
 call plug#end()
 
-" Syntax highlighting
+" Enable Syntax highlighting
+syntax on
+syntax enable
+set termguicolors
 
 " Detect filetype
 filetype plugin on
-" Enable syntax highighting
-syntax enable
-" 256 colours, please
-set t_Co=256
-set termguicolors
-
-" Dark solarized scheme
-set background=dark
-colorscheme onenord
-
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-
 
 " Set relevant filetypes
 au BufRead,BufNewFile *.scss set filetype=scss
 au BufRead,BufNewFile *.md set filetype=markdown
 
 " set wildignore values (mainly for Command-T)
-set wildignore=*.o,*.obj,node_modules/**
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,solr/**,log/**,*.psd,*.PSD,.git/**,.gitkeep,.gems/**
-set wildignore+=*.ico,*.ICO,backup/**,*.sql,*.dump,*.tmp,*.min.js,Gemfile.lock
-set wildignore+=*.png,*.PNG,*.JPG,*.jpg,*.JPEG,*.jpeg,*.GIF,*.gif,*.pdf,*.PDF
-set wildignore+=vendor/**,coverage/**,tmp/**,rdoc/**,*.BACKUP.*,*.BASE.*,*.LOCAL.*,*.REMOTE.*,.sass-cache/**
+"set wildignore=*.o,*.obj,node_modules/**
+"set wildignore+=*/tmp/*,*.so,*.swp,*.zip,solr/**,log/**,*.psd,*.PSD,.git/**,.gitkeep,.gems/**
+"set wildignore+=*.ico,*.ICO,backup/**,*.sql,*.dump,*.tmp,*.min.js,Gemfile.lock
+"set wildignore+=*.png,*.PNG,*.JPG,*.jpg,*.JPEG,*.jpeg,*.GIF,*.gif,*.pdf,*.PDF
+"set wildignore+=vendor/**,coverage/**,tmp/**,rdoc/**,*.BACKUP.*,*.BASE.*,*.LOCAL.*,*.REMOTE.*,.sass-cache/**
 
 " Tabs, indentation and lines
-
 filetype plugin indent on
 " 2 spaces please
 set expandtab
 set shiftwidth=2
-"set tabstop=4
 set softtabstop=2
-" Round indent to nearest multiple of 4
-"set shiftround
 
 let g:indentLine_char = '┊'
-nnoremap <leader>il :IndentLinesToggle
-
-" Plug config
-
-" Interactions
+nnoremap <leader>il :IndentGuidesToggle<CR>
 
 " Start scrolling slightly before the cursor reaches an edge
 set scrolloff=3
@@ -130,8 +86,6 @@ set backspace=indent,eol,start
 set whichwrap=h,l,b,<,>,~,[,]
 " Underscores denote words
 set iskeyword-=_
-
-" Visual decorations
 
 " Show status line
 set laststatus=2
@@ -145,6 +99,7 @@ set modeline
 set ruler
 " Show file title in terminal tab
 set title
+
 " Set relative line numbers if we can...
 if exists("+relativenumber")
     " Due to a problem with relative line numbers not persisting across new
@@ -152,10 +107,11 @@ if exists("+relativenumber")
     set nonumber
     " ..then set relative ones.
     set relativenumber
-" ...otherwise let’s just have regular ones.
-else
-    set number
 endif
+" ...otherwise let’s just have regular ones.
+" Also sets current line to absolute in relative mode
+set number
+
 " Limit line-length to 80 columns by highlighting col 81 onward
 "if exists("+colorcolumn")
    " set colorcolumn=81
@@ -170,11 +126,6 @@ set incsearch
 set ignorecase
 " ...except if we input a capital letter
 set smartcase
-" remove scrollbars (MacVim)
-set guioptions=-r
-set guioptions=-R
-set guioptions=-L
-set guioptions=-l
 " set guifont=inconsolata-dz:h14
 set guifont=Fira\ Code:h16
 
@@ -183,8 +134,6 @@ au FocusLost * silent! update
 
 " only activate quickscope highlights on t/T/f/F
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
-set number
 
 au VimEnter * RainbowParenthesesToggle
 
@@ -206,12 +155,6 @@ imap <right> <nop>
 
 " map ; to : for rapid commands etc
 nnoremap ; :
-
-" shortcut to switch between relative line numbers
-"nnoremap <silent><C-n> :NvimTreeToggle<CR>
-
-" enable GBrowse without netrw
-command -nargs=1 Browse silent exe '!xdg-open ' . "<args>"
 
 " reslect text that was just pasted
 nnoremap <leader>v V`]
@@ -265,11 +208,6 @@ if !has('nvim')
   set ttymouse=xterm2
 endif
 
-" for Fzf
-"map <silent><C-p> :Files<CR>
-"nnoremap <Leader>b :Buffers<CR>
-"nnoremap <Leader>h :History<CR>
-
 " telescope
 map <silent><C-p> <cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>
 nnoremap <Leader>b <cmd>lua require('telescope.builtin').buffers()<cr>
@@ -277,23 +215,10 @@ nnoremap <leader>gg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>gs <cmd>lua require('telescope.builtin').grep_string()<cr>
 vnoremap <leader>gs "zy <cmd>Telescope live_grep default_text=<C-r>z<cr>
 
-"let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git"'
-
-"let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
-
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-noremap <C-x> <C-o><C-x><cr>
-
 highlight clear SignColumn
 highlight link SignColumn CursorColumn
 
 autocmd BufWritePre * :%s/\s\+$//e " remove trailing spaces on save
-
-" jester mappings
-"nmap <silent> t<C-n> <cmd>lua require"jester".run({ cmd = 'npx jest -t \'$result\' -- $file', path_to_jest = './node_modules/.bin/jest' })<CR><esc>
-"nmap <silent> t<C-f> <cmd>lua require"jester".run_file({ cmd = 'npx jest -- $file', path_to_jest = './node_modules/.bin/jest' })<CR><esc>
-"nmap <silent> t<C-l> <cmd>lua require"jester".run_last({ cmd = 'npx jest -t \'$result\' -- $file', path_to_jest = './node_modules/.bin/jest' })<CR><esc>
-"nmap <silent> t<C-w> :Jest --watch<CR>
 
 " vim-test config and mappings
 let test#strategy = "neovim"
@@ -381,8 +306,12 @@ local configs = require('lspconfig.configs')
 local cmp = require("cmp")
 local lspkind = require('lspkind')
 
+require('onenord').setup({
+  borders = false, -- Split window borders
+  fade_nc = true -- fade non-active split
+})
 require('lualine').setup({
-  options = { theme = 'nord' }
+  options = { theme = 'onenord' }
 })
 require('telescope').setup({
   extensions = {
@@ -484,12 +413,6 @@ lspconfig.rescriptlsp.setup{
 --lspconfig["null-ls"].setup({ on_attach = on_attach })
 
 cmp.setup {
-     snippet = {
-       expand = function(args)
-         vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-       end,
-     },
-
       mapping = {
          ["<C-d>"] = cmp.mapping.scroll_docs(-4),
          ["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -499,10 +422,7 @@ cmp.setup {
             select = true,
          },
          ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
-         ['<CR>'] = cmp.mapping({
-            i = cmp.mapping.confirm({ select = true }),
-            c = cmp.mapping.confirm({ select = false }),
-          })
+         ['<CR>'] = cmp.mapping.confirm({ select = true })
       },
       formatting = {
          format = lspkind.cmp_format {
@@ -519,7 +439,6 @@ cmp.setup {
          { name = "nvim_lsp"},
          { name = "path" },
          { name = "buffer" , keyword_length = 5},
-         { name = 'vsnip' }
       },
       experimental = {
          ghost_text = true
@@ -557,21 +476,14 @@ dap.configurations.javascriptreact = {
   },
 }
 
-config = function ()
-  require"octo".setup()
-end
-
 require('orgmode').setup{
   org_agenda_files = {'~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/*'},
   org_default_notes_file = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/inbox.org'
 }
-vim.keymap.set("n", "<Leader>gh", ":Octo pr list mediaingenuity/Account.NativeApp<CR>")
+
+vim.keymap.set("n", "K", require("lspsaga.hover").render_hover_doc, { silent = true })
 
 EOF
-
-nnoremap <silent>K :Lspsaga hover_doc<CR>
-
-"nnoremap <silent><C-r> :Rg<Cr>
 
 nnoremap <silent> <Leader>K :call Dasht(dasht#cursor_search_terms())<Return>
 let g:dasht_filetype_docsets = {} " filetype => list of docset name regexp
