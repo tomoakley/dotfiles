@@ -27,15 +27,18 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make', 'branch': 'main
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'glepnir/lspsaga.nvim', {'branch': 'main'}
-Plug 'jose-elias-alvarez/nvim-lsp-ts-utils', {'branch': 'main'}
+"Plug 'jose-elias-alvarez/nvim-lsp-ts-utils', {'branch': 'main'}
 Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
 Plug 'hrsh7th/nvim-cmp', {'branch': 'main'}
+Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
+Plug 'hrsh7th/cmp-path', {'branch': 'main'}
+Plug 'hrsh7th/cmp-cmdline', {'branch': 'main'}
 Plug 'onsails/lspkind-nvim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'ThePrimeagen/git-worktree.nvim'
-Plug 'eslint/eslint'
+"Plug 'eslint/eslint'
 Plug 'tpope/vim-surround'
 Plug 'rmehri01/onenord.nvim', { 'branch': 'main' }
 Plug 'nathanaelkane/vim-indent-guides'
@@ -384,7 +387,7 @@ lspconfig.tsserver.setup({
         local bufopts = { noremap=true, silent=true, buffer=bufnr }
         client.resolved_capabilities.document_formatting = false
         client.resolved_capabilities.document_range_formatting = false
-        local ts_utils = require("nvim-lsp-ts-utils")
+        --[[local ts_utils = require("nvim-lsp-ts-utils")
         ts_utils.setup({
             eslint_bin = "eslint_d",
             eslint_enable_diagnostics = true,
@@ -392,7 +395,7 @@ lspconfig.tsserver.setup({
             enable_formatting = true,
             formatter = "prettierd",
         })
-        ts_utils.setup_client(client)
+        ts_utils.setup_client(client)]]--
         vim.keymap.set("n", "gs", ":TSLspOrganize<CR>", bufopts)
         vim.keymap.set("n", "gi", ":TSLspRenameFile<CR>", bufopts)
         vim.keymap.set("n", "go", ":TSLspImportAll<CR>", bufopts)
@@ -400,6 +403,7 @@ lspconfig.tsserver.setup({
     end,
 })
 lspconfig.eslint.setup({})
+vim.cmd("autocmd BufWritePre *.ts,*.tsx,*.js,*.jsx EslintFixAll")
 lspconfig.sourcekit.setup{}
 
 local rescriptLspPath = '/Users/toakley/.config/nvim/vim-rescript/server/out/server.js'
@@ -419,6 +423,29 @@ lspconfig.rescriptlsp.setup{
     '/Users/toakley/.local/share/nvim/plugged/vim-rescript/server/out/server.js',
     '--stdio'
   }
+}
+
+lspconfig.sumneko_lua.setup {
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
 }
 
 --require("null-ls").setup({})
@@ -455,6 +482,37 @@ cmp.setup {
       experimental = {
          ghost_text = true
       }
+}
+-- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline({
+    ['<C-y>'] = cmp.mapping(cmp.mapping.confirm { select = true }, { 'i', 'c' }),
+  }),
+  sources = {
+    { name = 'buffer' }
+  },
+  view = {
+    entries = {name = 'wildmenu', separator = '|' }
+  },
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
+-- Setup lspconfig.
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+require('lspconfig')['tsserver'].setup {
+  capabilities = capabilities
+}
+require('lspconfig')['sumneko_lua'].setup {
+  capabilities = capabilities
 }
 
 require('orgmode').setup_ts_grammar()
