@@ -19,6 +19,7 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'adelarsq/vim-matchit'
+Plug 'skywind3000/asyncrun.vim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
@@ -35,16 +36,19 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'ThePrimeagen/git-worktree.nvim'
 Plug 'eslint/eslint'
-Plug 'janko/vim-test'
 Plug 'tpope/vim-surround'
 Plug 'rmehri01/onenord.nvim', { 'branch': 'main' }
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'unblevable/quick-scope'
-Plug 'metakirby5/codi.vim'
+
+" can be lazy-loaded
 Plug 'sunaku/vim-dasht'
+Plug 'janko/vim-test'
+Plug 'metakirby5/codi.vim'
 Plug 'mfussenegger/nvim-dap'
-Plug 'skywind3000/asyncrun.vim'
 Plug 'nvim-orgmode/orgmode'
+Plug 'ldelossa/gh.nvim'
+"Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
 call plug#end()
 
 " Enable Syntax highlighting
@@ -238,9 +242,6 @@ nnoremap ]q :cnext<CR>
 nnoremap [Q :cfirst<CR>
 nnoremap ]Q :clast<CR>
 
-nnoremap <Leader>m :Vista<CR>
-let g:vista#renderer#enable_icon = 0
-
 " TERMINAL DRAWER {{{
     " depends on: CLEAN UI and Terminal Behavior
     nnoremap <silent><leader>/           :call ToggleTerminalDrawer()<CR>
@@ -298,13 +299,14 @@ function! QuickTerminal(cmd) abort
   redraw
   echo "Press <Enter> to exit terminal (<Ctrl-C> first if command is still running)"
 endfunction
-command! -nargs=0 Scripts :call fzf#run(fzf#wrap({'source': 'cat ./package.json | jq ".scripts"', 'sink*': function('QuickTerminal')}))<CR>
 
 lua << EOF
 local lspconfig = require("lspconfig")
-local configs = require('lspconfig.configs')
+local configs = require("lspconfig.configs")
 local cmp = require("cmp")
 local lspkind = require('lspkind')
+
+--require("toggleterm").setup{}
 
 require('onenord').setup({
   borders = false, -- Split window borders
@@ -320,6 +322,13 @@ require('telescope').setup({
       -- disables netrw and use telescope-file-browser in its place
       hijack_netrw = true,
     },
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    }
   },
   defaults = {
     file_ignore_patterns = {"ios/Pods", ".yarn/", ".git"},
@@ -345,10 +354,11 @@ local on_attach = function(client, bufnr)
     vim.cmd("command! LspHover lua vim.lsp.buf.hover()")
     vim.cmd("command! LspRename lua vim.lsp.buf.rename()")
     vim.cmd("command! LspRefs lua require('telescope.builtin').lsp_references()")
+    vim.cmd("command! LspDiags lua require('telescope.builtin').diagnostics()")
     vim.cmd("command! LspTypeDef lua vim.lsp.buf.type_definition()")
     vim.cmd("command! LspImplementation lua vim.lsp.buf.implementation()")
-    vim.cmd("command! LspDiagPrev lua vim.lsp.diagnostic.goto_prev()")
-    vim.cmd("command! LspDiagNext lua vim.lsp.diagnostic.goto_next()")
+    vim.cmd("command! LspDiagPrev lua vim.diagnostic.goto_prev()")
+    vim.cmd("command! LspDiagNext lua vim.diagnostic.goto_next()")
     vim.cmd("command! LspDiagLine lua vim.lsp.diagnostic.show_line_diagnostics()")
     vim.cmd("command! LspSignatureHelp lua vim.lsp.buf.signature_help()")
     vim.keymap.set("n", "gd", ":LspDef<CR>", bufopts)
@@ -361,6 +371,7 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "[a", ":LspDiagPrev<CR>", bufopts)
     vim.keymap.set("n", "]a", ":LspDiagNext<CR>", bufopts)
     vim.keymap.set("n", "ga", ":LspCodeAction<CR>", bufopts)
+    vim.keymap.set("n", "<Leader>da", ":LspDiags<CR>", bufopts)
     vim.keymap.set("n", "<Leader>a", ":LspDiagLine<CR>", bufopts)
     vim.keymap.set("i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>", bufopts)
     vim.keymap.set("n", "<space>pr", ":LspFormatting<CR>", bufopts)
@@ -388,6 +399,7 @@ lspconfig.tsserver.setup({
         on_attach(client, bufnr)
     end,
 })
+lspconfig.eslint.setup({})
 lspconfig.sourcekit.setup{}
 
 local rescriptLspPath = '/Users/toakley/.config/nvim/vim-rescript/server/out/server.js'
@@ -404,7 +416,7 @@ end
 lspconfig.rescriptlsp.setup{
   cmd = {
     'node',
-    '/Users/woonki/.local/share/nvim/plugged/vim-rescript/server/out/server.js',
+    '/Users/toakley/.local/share/nvim/plugged/vim-rescript/server/out/server.js',
     '--stdio'
   }
 }
