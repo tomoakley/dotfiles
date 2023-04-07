@@ -38,9 +38,10 @@ nvm use 12
 nvm alias default 10
 
 # install global npm packages
-npm install -g typescript typescript-language-server
-npm install -g readability-cli
-npm install --global @sloansparger/bear
+npm i -g typescript typescript-language-server
+npm i -g readability-cli
+npm i -g @sloansparger/bear
+npm i -g vscode-langservers-extracted
 
 ## setup dotfiles correctly
 dotbot -c install.conf.yaml

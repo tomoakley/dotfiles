@@ -25,6 +25,7 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make', 'branch': 'main'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-context'
 Plug 'neovim/nvim-lspconfig'
 Plug 'glepnir/lspsaga.nvim', {'branch': 'main'}
 "Plug 'jose-elias-alvarez/nvim-lsp-ts-utils', {'branch': 'main'}
@@ -34,24 +35,38 @@ Plug 'hrsh7th/nvim-cmp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-path', {'branch': 'main'}
 Plug 'hrsh7th/cmp-cmdline', {'branch': 'main'}
+Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*', 'do': 'make install_jsregexp'}
 Plug 'onsails/lspkind-nvim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
+Plug 'axelvc/template-string.nvim'
 Plug 'ThePrimeagen/git-worktree.nvim'
 "Plug 'eslint/eslint'
 Plug 'tpope/vim-surround'
 Plug 'rmehri01/onenord.nvim', { 'branch': 'main' }
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'unblevable/quick-scope'
-
+Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'm4xshen/autoclose.nvim'
+Plug 'numToStr/Comment.nvim'
 " can be lazy-loaded
+Plug 'nvim-neotest/neotest'
+Plug 'haydenmeade/neotest-jest'
+"Plug 'voldikss/vim-floaterm'
 Plug 'sunaku/vim-dasht'
 Plug 'janko/vim-test'
 Plug 'metakirby5/codi.vim'
 Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'mxsdev/nvim-dap-vscode-js'
 Plug 'nvim-orgmode/orgmode'
+Plug 'ldelossa/litee.nvim'
 Plug 'ldelossa/gh.nvim'
-"Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
+Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
+Plug 'bennypowers/nvim-regexplainer/'
+Plug 'yardnsm/vim-import-cost', { 'do': 'npm install --production' }
+Plug 'nvim-treesitter/playground'
+Plug '~/code/nvim-circleci'
 call plug#end()
 
 " Enable Syntax highlighting
@@ -82,6 +97,8 @@ set softtabstop=2
 
 let g:indentLine_char = '┊'
 nnoremap <leader>il :IndentGuidesToggle<CR>
+
+set mouse=
 
 " Start scrolling slightly before the cursor reaches an edge
 set scrolloff=3
@@ -134,7 +151,8 @@ set ignorecase
 " ...except if we input a capital letter
 set smartcase
 " set guifont=inconsolata-dz:h14
-set guifont=Fira\ Code:h16
+"set guifont=Fira\ Code:h16
+set guifont=FuraCode\ Nerd\ Font:h16
 
 " save on loosing focus
 au FocusLost * silent! update
@@ -142,7 +160,7 @@ au FocusLost * silent! update
 " only activate quickscope highlights on t/T/f/F
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
-au VimEnter * RainbowParenthesesToggle
+""au VimEnter * RainbowParenthesesToggle
 
 " Key mappings
 
@@ -215,13 +233,6 @@ if !has('nvim')
   set ttymouse=xterm2
 endif
 
-" telescope
-map <silent><C-p> <cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>
-nnoremap <Leader>b <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>gg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>gs <cmd>lua require('telescope.builtin').grep_string()<cr>
-vnoremap <leader>gs "zy <cmd>Telescope live_grep default_text=<C-r>z<cr>
-
 highlight clear SignColumn
 highlight link SignColumn CursorColumn
 
@@ -231,12 +242,13 @@ autocmd BufWritePre * :%s/\s\+$//e " remove trailing spaces on save
 let test#strategy = "neovim"
 let test#neovim#term_position = "vert botright 30"
 let g:test#runner_commands = ['Jest']
-nmap <silent> t<C-n> :TestNearest<CR>
-nmap <silent> t<C-f> :TestFile <CR>
-nmap <silent> t<C-s> :TestSuite<CR>
-nmap <silent> t<C-l> :TestLast<CR>
-nmap <silent> t<C-g> :TestVisit<CR>
-nmap <silent> t<C-w> :Jest --watch<CR>
+" mappings replaced by neotest
+"nmap <silent> t<C-n> :TestNearest<CR>
+"nmap <silent> t<C-f> :TestFile <CR>
+"nmap <silent> t<C-s> :TestSuite<CR>
+"nmap <silent> t<C-l> :TestLast<CR>
+"nmap <silent> t<C-g> :TestVisit<CR>
+"nmap <silent> t<C-w> :Jest --watch<CR>
 
 let test#javascript#jest#options = "--color=always --watchAll=false"
 let g:asyncrun_open = 1
@@ -247,15 +259,15 @@ nnoremap ]Q :clast<CR>
 
 " TERMINAL DRAWER {{{
     " depends on: CLEAN UI and Terminal Behavior
-    nnoremap <silent><leader>/           :call ToggleTerminalDrawer()<CR>
-    tnoremap <silent><leader>/ <C-\><C-n>:call ToggleTerminalDrawer()<CR>
+    " nnoremap <silent><leader>/           :call ToggleTerminalDrawer()<CR>
+    " tnoremap <silent><leader>/ <C-\><C-n>:call ToggleTerminalDrawer()<CR>
 
-    let g:terminal_drawer = { 'win_id': v:null, 'buffer_id': v:null }
-    function! ToggleTerminalDrawer() abort
-      if win_gotoid(g:terminal_drawer.win_id)
-        hide
-        set laststatus=2 showmode ruler
-      else
+    " let g:terminal_drawer = { 'win_id': v:null, 'buffer_id': v:null }
+    " function! ToggleTerminalDrawer() abort
+      " if win_gotoid(g:terminal_drawer.win_id)
+        " hide
+        " set laststatus=2 showmode ruler
+      " else
         "if g:terminal_drawer.buffer_id && bufexists(str2nr(g:terminal_drawer.buffer_id)) == 1
         "  execute 'botright sbuffer' . g:terminal_drawer.buffer_id
         "  exec 'normal! i'
@@ -263,34 +275,34 @@ nnoremap ]Q :clast<CR>
         "  botright call term_start($SHELL, {'exit_cb': 'JW_on_term_exit'})
         "  let g:terminal_drawer.buffer_id = bufnr("%")
         "endif
-        botright new
-        if g:terminal_drawer.buffer_id && bufexists(str2nr(g:terminal_drawer.buffer_id)) == 1
-            exec "buffer" g:terminal_drawer.buffer_id
-            call RemoveEmptyBuffers()
-        else
-            call termopen($SHELL, {"detach": 0})
-            let g:terminal_drawer.buffer_id = bufnr("")
-        endif
+       " botright new
+        " if g:terminal_drawer.buffer_id && bufexists(str2nr(g:terminal_drawer.buffer_id)) == 1
+            " exec "buffer" g:terminal_drawer.buffer_id
+            " call RemoveEmptyBuffers()
+        " else
+            " call termopen($SHELL, {"detach": 0})
+            " let g:terminal_drawer.buffer_id = bufnr("")
+        " endif
 
-        exec "resize" float2nr(&lines * 0.25)
-        exec 'normal! i'
-        setlocal laststatus=0 noshowmode noruler nonumber norelativenumber
-        setlocal nobuflisted
-        let g:terminal_drawer.win_id = win_getid()
+        " exec "resize" float2nr(&lines * 0.25)
+        " exec 'normal! i'
+        " setlocal laststatus=0 noshowmode noruler nonumber norelativenumber
+        " setlocal nobuflisted
+        " let g:terminal_drawer.win_id = win_getid()
 
-      endif
-    endfunction
+      " endif
+    " endfunction
 
-function! JW_on_term_exit(a, b)
-    normal bw!
-endfunction
+" function! JW_on_term_exit(a, b)
+    " normal bw!
+" endfunction
 
-function! RemoveEmptyBuffers()
-    let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")')
-    if !empty(buffers)
-        silent exe 'bw ' . join(buffers, ' ')
-    endif
-endfunction
+" function! RemoveEmptyBuffers()
+    " let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")')
+    " if !empty(buffers)
+        " silent exe 'bw ' . join(buffers, ' ')
+    " endif
+" endfunction
 
 function! QuickTerminal(cmd) abort
   let l:script = matchstr(a:cmd, '\v([a-z]*)(:)@=')
@@ -303,13 +315,40 @@ function! QuickTerminal(cmd) abort
   echo "Press <Enter> to exit terminal (<Ctrl-C> first if command is still running)"
 endfunction
 
+set nofoldenable
+
 lua << EOF
 local lspconfig = require("lspconfig")
 local configs = require("lspconfig.configs")
 local cmp = require("cmp")
 local lspkind = require('lspkind')
+local circleci = require('nvim-circleci')
 
---require("toggleterm").setup{}
+circleci.setup{
+  project_slug = 'gh/mediaingenuity/Account.NativeApp'
+}
+
+require("toggleterm").setup{
+  open_mapping = '<leader>/',
+  terminal_mappings = true,
+  shade_terminals = true,
+  shading_factor = 5,
+  Normal = {
+    guibg = 'NONE',
+    ctermbg ="NONE"
+  },
+  direction = 'horizontal',
+  persist_mode = false,
+  highlights = {
+    Normal = {
+      link = "Normal",
+    }
+  }
+}
+
+-- local opts = {buffer = 0, silent = true}
+-- vim.keymap.set('n', '<leader>/', ':ToggleTermToggleAll<CR>', opts)
+-- vim.keymap.set('t', '<leader>/', ':ToggleTermToggleAll<CR>', opts)
 
 require('onenord').setup({
   borders = false, -- Split window borders
@@ -319,6 +358,18 @@ require('lualine').setup({
   options = { theme = 'onenord' }
 })
 require('telescope').setup({
+  pickers = {
+    buffers = {
+      mappings = {
+        n = {
+          ["<C-r>"] = require('telescope.actions').delete_buffer,
+        },
+        i = {
+          ["<C-r>"] = require('telescope.actions').delete_buffer,
+        }
+      }
+    }
+  },
   extensions = {
     file_browser = {
       theme = "ivy",
@@ -337,15 +388,44 @@ require('telescope').setup({
     file_ignore_patterns = {"ios/Pods", ".yarn/", ".git"},
     dynamic_preview_title = true,
     path_display = {"truncate"}
-  }
+  },
 })
 require('telescope').load_extension('fzf')
 require("telescope").load_extension("file_browser")
+require("telescope").load_extension("git_worktree")
+require("telescope").load_extension("circleci")
+--vnoremap <leader>gs "zy <cmd>Telescope live_grep default_text=<C-r>z<cr>
+
+local telescopeBuiltIn = require('telescope.builtin')
+vim.keymap.set('n', '<C-p>', function()
+  telescopeBuiltIn.find_files({ hidden = true })
+end, {})
+vim.keymap.set('n', '<leader>b', telescopeBuiltIn.buffers, {})
+vim.keymap.set('n', '<leader>gg', telescopeBuiltIn.live_grep, {})
+vim.keymap.set('n', '<leader>gs', function()
+  telescopeBuiltIn.grep_string(require('telescope.themes').get_cursor())
+end, {})
+--vim.keymap.set('n', '<C-p>', telescopeBuiltIn.git_files, {})
+vim.keymap.set('n', '<leader>ps', function()
+  telescopeBuiltIn.grep_string({ search = vim.fn.input("Grep > ") })
+end)
 vim.api.nvim_set_keymap(
   "n",
   "<C-n>",
-  ":Telescope file_browser",
-  { noremap = true }
+  ":Telescope file_browser<CR>",
+  { noremap = true, silent = true }
+)
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>gw",
+  ":lua require('telescope').extensions.git_worktree.git_worktrees()<CR>",
+  { noremap = true, silent = true }
+)
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>gwc",
+  ":lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>",
+  { noremap = true, silent = true }
 )
 
 local on_attach = function(client, bufnr)
@@ -362,7 +442,7 @@ local on_attach = function(client, bufnr)
     vim.cmd("command! LspImplementation lua vim.lsp.buf.implementation()")
     vim.cmd("command! LspDiagPrev lua vim.diagnostic.goto_prev()")
     vim.cmd("command! LspDiagNext lua vim.diagnostic.goto_next()")
-    vim.cmd("command! LspDiagLine lua vim.lsp.diagnostic.show_line_diagnostics()")
+    vim.cmd("command! LspDiagLine lua vim.diagnostic.open_float(nil, { focus = false })")
     vim.cmd("command! LspSignatureHelp lua vim.lsp.buf.signature_help()")
     vim.keymap.set("n", "gd", ":LspDef<CR>", bufopts)
     vim.keymap.set('n', 'gD', ':LspDec<CR>', bufopts)
@@ -378,15 +458,111 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "<Leader>a", ":LspDiagLine<CR>", bufopts)
     vim.keymap.set("i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>", bufopts)
     vim.keymap.set("n", "<space>pr", ":LspFormatting<CR>", bufopts)
-    if client.resolved_capabilities.document_formatting then
+    if client.server_capabilities.document_formatting then
         vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)")
     end
 end
+
+local has_words_before = function()
+  unpack = unpack or table.unpack
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
+end
+
+cmp.setup {
+  snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end
+  },
+  mapping = {
+    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-e>"] = cmp.mapping.close(),
+    ['<C-y>'] = cmp.mapping(cmp.mapping.confirm { select = true }, { 'i', 'c' }),
+    --['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
+    ['<C-Space>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    },
+
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if not cmp.select_next_item() then
+        if vim.bo.buftype ~= 'prompt' and has_words_before() then
+          cmp.complete()
+        else
+          fallback()
+        end
+      end
+      end, {"i","s","c",}),
+
+    ['<S-Tab>'] = function(fallback)
+      if not cmp.select_prev_item() then
+        if vim.bo.buftype ~= 'prompt' and has_words_before() then
+          cmp.complete()
+        else
+          fallback()
+        end
+      end
+    end,
+  },
+  formatting = {
+     format = lspkind.cmp_format {
+        with_text = true,
+        menu = {
+           buffer   = "[buf]",
+           nvim_lsp = "[LSP]",
+           path     = "[path]",
+        },
+     },
+  },
+
+  sources = {
+     { name = "nvim_lsp"},
+     { name = "path" },
+     { name = "buffer" , keyword_length = 5},
+     { name = "luasnip" }
+  },
+  experimental = {
+     ghost_text = true
+  }
+}
+local vim = vim
+local opt = vim.opt
+
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline({
+  }),
+  sources = {
+    { name = 'buffer' }
+  },
+  view = {
+    entries = {name = 'wildmenu', separator = '|' }
+  },
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
+-- Setup lspconfig.
+-- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
 lspconfig.tsserver.setup({
     on_attach = function(client, bufnr)
         local bufopts = { noremap=true, silent=true, buffer=bufnr }
-        client.resolved_capabilities.document_formatting = false
-        client.resolved_capabilities.document_range_formatting = false
+        client.server_capabilities.document_formatting = false
+        client.server_capabilities.document_range_formatting = false
         --[[local ts_utils = require("nvim-lsp-ts-utils")
         ts_utils.setup({
             eslint_bin = "eslint_d",
@@ -401,10 +577,27 @@ lspconfig.tsserver.setup({
         vim.keymap.set("n", "go", ":TSLspImportAll<CR>", bufopts)
         on_attach(client, bufnr)
     end,
+    capabilites = capabilites
 })
 lspconfig.eslint.setup({})
 vim.cmd("autocmd BufWritePre *.ts,*.tsx,*.js,*.jsx EslintFixAll")
 lspconfig.sourcekit.setup{}
+
+local circleciYamlPath = '/Users/toakley/Downloads/circleci-yamlls'
+if not configs.circleciYamlls then
+  configs.circleciYamlls = {
+    default_config = {
+      cmd = { circleciYamlPath };
+      filetypes = { "yaml", "yml"};
+    }
+  }
+end
+
+lspconfig.circleciYamlls.setup({
+  cmd = {
+    circleciYamlPath
+  },
+})
 
 local rescriptLspPath = '/Users/toakley/.config/nvim/vim-rescript/server/out/server.js'
 if not configs.rescriptlsp then
@@ -422,7 +615,8 @@ lspconfig.rescriptlsp.setup{
     'node',
     '/Users/toakley/.local/share/nvim/plugged/vim-rescript/server/out/server.js',
     '--stdio'
-  }
+  },
+  capabilites = capabilites
 }
 
 lspconfig.sumneko_lua.setup {
@@ -446,74 +640,11 @@ lspconfig.sumneko_lua.setup {
       },
     },
   },
+  capabilites = capabilites
 }
 
 --require("null-ls").setup({})
 --lspconfig["null-ls"].setup({ on_attach = on_attach })
-
-cmp.setup {
-      mapping = {
-         ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-         ["<C-f>"] = cmp.mapping.scroll_docs(4),
-         ["<C-e>"] = cmp.mapping.close(),
-         ["<C-y>"] = cmp.mapping.confirm {
-            behavior = cmp.ConfirmBehavior.Insert,
-            select = true,
-         },
-         ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
-         ['<CR>'] = cmp.mapping.confirm({ select = true })
-      },
-      formatting = {
-         format = lspkind.cmp_format {
-            with_text = true,
-            menu = {
-               buffer   = "[buf]",
-               nvim_lsp = "[LSP]",
-               path     = "[path]",
-            },
-         },
-      },
-
-      sources = {
-         { name = "nvim_lsp"},
-         { name = "path" },
-         { name = "buffer" , keyword_length = 5},
-      },
-      experimental = {
-         ghost_text = true
-      }
-}
--- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline('/', {
-  mapping = cmp.mapping.preset.cmdline({
-    ['<C-y>'] = cmp.mapping(cmp.mapping.confirm { select = true }, { 'i', 'c' }),
-  }),
-  sources = {
-    { name = 'buffer' }
-  },
-  view = {
-    entries = {name = 'wildmenu', separator = '|' }
-  },
-})
-
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    { name = 'cmdline' }
-  })
-})
--- Setup lspconfig.
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
--- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-require('lspconfig')['tsserver'].setup {
-  capabilities = capabilities
-}
-require('lspconfig')['sumneko_lua'].setup {
-  capabilities = capabilities
-}
 
 require('orgmode').setup_ts_grammar()
 require'nvim-treesitter.configs'.setup {
@@ -524,27 +655,169 @@ require'nvim-treesitter.configs'.setup {
     incremental_selection = {
         enable = false,
     },
-    ensure_installed = {'javascript', 'typescript', 'tsx', 'org'}
+    indent = {
+      enable = true
+    },
+    ensure_installed = {'javascript', 'typescript', 'tsx', 'org', 'lua', 'vim', 'help'},
+    playground = {
+    enable = true,
+    disable = {},
+    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+    persist_queries = false, -- Whether the query persists across vim sessions
+    keybindings = {
+      toggle_query_editor = 'o',
+      toggle_hl_groups = 'i',
+      toggle_injected_languages = 't',
+      toggle_anonymous_nodes = 'a',
+      toggle_language_display = 'I',
+      focus_language = 'f',
+      unfocus_language = 'F',
+      update = 'R',
+      goto_node = '<cr>',
+      show_help = '?',
+    },
   }
+  }
+require'treesitter-context'.setup {
+  enable = true
+}
+require('template-string').setup({
+  filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' }, -- filetypes where the plugin is active
+  jsx_brackets = true, -- should add brackets to jsx attributes
+})
+require('regexplainer').setup({
+  mappings = {
+    toggle = '<leader>gr',
+    show = 'gS',
+    hide = 'gH',
+    show_split = 'gP',
+    show_popup = 'gU',
+  },
+})
+require('Comment').setup()
+require("autoclose").setup({
+  options = {
+    disabled_filetypes = { "text", "markdown" },
+  },
+})
+vim.keymap.set('n', '<esc>', '<cmd>RegexplainerHide<cr>')
 
 local dap = require('dap')
-dap.adapters.node2 = {
-  type = "executable",
-  command = "node",
-  args = { os.getenv('HOME') .. "./code/vscode-node-debug2/out/src/nodeDebug.js" },
-}
-dap.configurations.javascriptreact = {
-  {
-    type = "node2",
-    request = "attach",
-    program = "${file}",
-    cwd = vim.fn.getcwd(),
-    sourceMaps = true,
-    protocol = "inspector",
-    console = "integratedTerminal",
-    port = 35000
+local dapui = require('dapui')
+dap.defaults.fallback.terminal_win_cmd = '20split new'
+dap.listeners.after.event_breakpoint["dapui_config"] = function()
+	dapui.open()
+end
+
+dap.listeners.before.event_exited["dapui_config"] = function()
+	dapui.close()
+end
+vim.api.nvim_set_hl(0, "blue",   { fg = "#3d59a1" })
+vim.api.nvim_set_hl(0, "red",   { fg = "#BF616A" })
+vim.api.nvim_set_hl(0, "green",  { fg = "#9ece6a" })
+vim.api.nvim_set_hl(0, "yellow", { fg = "#FFFF00" })
+vim.api.nvim_set_hl(0, "orange", { fg = "#f09000" })
+vim.fn.sign_define('DapBreakpoint', {text='⚫', texthl='red', linehl='', numhl=''})
+vim.fn.sign_define('DapStopped', { text='⧁', texthl='green',  linehl='DapBreakpoint', numhl='DapBreakpoint' })
+
+vim.keymap.set("n", 'd<leader>b', dap.toggle_breakpoint)
+vim.keymap.set("n", 'd<leader>k', dap.continue)
+vim.keymap.set("n", "<leader>dc", dapui.close)
+--[[dapui.setup({
+    layouts = {
+        {
+            elements = {
+                "console",
+            },
+            size = 7,
+            position = "bottom",
+        },
+        {
+            elements = {
+                -- Elements can be strings or table with id and size keys.
+                { id = "scopes", size = 0.25 },
+                "watches",
+            },
+            size = 40,
+            position = "left",
+        }
+    },
+})]]--
+require("dapui").setup({
+  icons = { expanded = "▾", collapsed = "▸" },
+  mappings = {
+    -- Use a table to apply multiple mappings
+    expand = { "<CR>", "<2-LeftMouse>" },
+    open = "o",
+    remove = "d",
+    edit = "e",
+    repl = "r",
   },
+  floating = {
+    max_height = nil, -- These can be integers or a float between 0 and 1.
+    max_width = nil, -- Floats will be treated as percentage of your screen.
+    border = "single", -- Border style. Can be "single", "double" or "rounded"
+    mappings = {
+      close = { "q", "<Esc>" },
+    },
+  },
+  windows = { indent = 1 },
+  layouts = {
+    {
+      elements = {
+        'scopes',
+        'breakpoints',
+        'stacks',
+      },
+      size = 40,
+      position = 'left',
+    },
+    {
+      elements = {
+        'repl',
+        'console',
+      },
+      size = 10,
+      position = 'bottom',
+    },
+  },
+})
+require("dap-vscode-js").setup({
+  debugger_path = "/Users/toakley/code/vscode-js-debug/",
+  adapters = { 'pwa-node' }
+})
+local jestDebugConfig = {
+
 }
+for _, language in ipairs({ "typescript", "javascript", "javascriptreact", "typescriptreact" }) do
+  dap.configurations[language] = {
+    {
+      name = "Debug Jest Tests",
+      type = "pwa-node",
+      request = "launch",
+      -- trace = true, -- include debugger info
+      runtimeExecutable = "node",
+      runtimeArgs = {
+        "./node_modules/jest/bin/jest.js",
+        "--runInBand",
+      },
+      rootPath = "${workspaceFolder}",
+      cwd = "${workspaceFolder}",
+      console = "integratedTerminal",
+    },
+    --[[{
+      name = "React native",
+      type = "pwa-node",
+      request = "attach",
+      program = "${file}",
+      cwd = vim.fn.getcwd(),
+      sourceMaps = true,
+      protocol = "inspector",
+      console = "integratedTerminal",
+      port = 35000,
+    }--]]
+  }
+end
 
 require('orgmode').setup{
   org_agenda_files = {'~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/*'},
@@ -553,7 +826,38 @@ require('orgmode').setup{
 
 vim.keymap.set("n", "K", require("lspsaga.hover").render_hover_doc, { silent = true })
 
+require('litee.lib').setup()
+require('litee.gh').setup()
+
+local neotest = require("neotest")
+neotest.setup({
+  adapters = {
+    require('neotest-jest')({
+      --jestCommand = "jest --watch ",
+    }),
+  }
+})
+local bufopts = { noremap=true, silent=true, buffer=bufnr }
+vim.keymap.set("n", "t<C-n>", neotest.run.run, bufopts)
+vim.keymap.set("n", "t<C-f>", neotest.run.run, bufopts)
+vim.keymap.set("n", "t<C-k>", neotest.output.open, bufopts)
+vim.keymap.set("n", "t[t", function() neotest.jump.next({ status = 'failed' }) end)
+vim.keymap.set("n", "t]t", function() neotest.jump.prev({ status = 'failed' }) end)
+vim.keymap.set("n", "t<C-d>", function()
+  neotest.run.run({ strategy = 'dap' })
+  dapui.open()
+end, bufopts)
+
 EOF
+
+augroup import_cost_auto_run
+  autocmd!
+  autocmd BufEnter *.js,*.jsx,*.ts,*.tsx ImportCost
+augroup END
+let g:blamer_enabled = 1
+let g:blamer_show_in_visual_modes = 0
+let g:blamer_show_in_insert_modes = 0
+let g:blamer_delay = 500
 
 nnoremap <silent> <Leader>K :call Dasht(dasht#cursor_search_terms())<Return>
 let g:dasht_filetype_docsets = {} " filetype => list of docset name regexp

@@ -17,11 +17,14 @@ cask "sequel-pro"
 cask "db-browser-for-sqlite"
 cask "openscad"
 
+brew "pam-reattach"
+
 brew "docker"
 brew "docker-compose"
 brew "nvm"
 brew "yarn"
 brew "watchman"
+brew "lua-language-server"
 
 brew "pyenv"
 brew "openssl"
