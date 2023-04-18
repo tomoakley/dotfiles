@@ -619,7 +619,7 @@ lspconfig.rescriptlsp.setup{
   capabilites = capabilites
 }
 
-lspconfig.sumneko_lua.setup {
+lspconfig.lua_ls.setup {
   settings = {
     Lua = {
       runtime = {
@@ -665,7 +665,7 @@ require'nvim-treesitter.configs'.setup {
     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- Whether the query persists across vim sessions
     keybindings = {
-      toggle_query_editor = 'o',
+      toggle_server_editor = 'o',
       toggle_hl_groups = 'i',
       toggle_injected_languages = 't',
       toggle_anonymous_nodes = 'a',
@@ -789,12 +789,17 @@ require("dap-vscode-js").setup({
 local jestDebugConfig = {
 
 }
+dap.adapters.node2 = {
+  type = "executable",
+  command = "export runtimeVersion=14 node",
+  args = { "/Users/tomoakley/code/vscode-node-debug2/out/src/nodeDebug.js" },
+}
 for _, language in ipairs({ "typescript", "javascript", "javascriptreact", "typescriptreact" }) do
   dap.configurations[language] = {
     {
-      name = "Debug Jest Tests",
       type = "pwa-node",
       request = "launch",
+      name = "Debug Jest Tests",
       -- trace = true, -- include debugger info
       runtimeExecutable = "node",
       runtimeArgs = {
@@ -804,10 +809,11 @@ for _, language in ipairs({ "typescript", "javascript", "javascriptreact", "type
       rootPath = "${workspaceFolder}",
       cwd = "${workspaceFolder}",
       console = "integratedTerminal",
+      internalConsoleOptions = "neverOpen",
     },
-    --[[{
+    {
       name = "React native",
-      type = "pwa-node",
+      type = "node2",
       request = "attach",
       program = "${file}",
       cwd = vim.fn.getcwd(),
@@ -815,8 +821,49 @@ for _, language in ipairs({ "typescript", "javascript", "javascriptreact", "type
       protocol = "inspector",
       console = "integratedTerminal",
       port = 35000,
-    }--]]
-  }
+    },
+}
+end
+dap.configurations.typescriptreact = {
+  {
+    name = "React native",
+    type = "node2",
+    request = "attach",
+    program = "${file}",
+    cwd = vim.fn.getcwd(),
+    sourceMaps = true,
+    protocol = "inspector",
+    console = "integratedTerminal",
+    port = 35000,
+  },
+}
+local dap_status_ok, dap = pcall(require, "dap")
+if not dap_status_ok then
+	return
+end
+
+local dap_ui_status_ok, dapui = pcall(require, "dapui")
+if not dap_ui_status_ok then
+	return
+end
+
+--[[ local dap_vscode_js_status_ok, dap_vscode_js = pcall(require, "dap-vscode-js")
+if not dap_vscode_js_status_ok then
+	return
+end ]]
+
+dapui.setup()
+
+vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+
+-- We need to wait for execution to stop at the first breakpoint before showing the UI to give the source maps time to generate.
+-- If we don't, the UI will close because the source maps haven't generated in time.
+dap.listeners.after.event_breakpoint["dapui_config"] = function()
+  dapui.open()
+end
+
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
 end
 
 require('orgmode').setup{
@@ -845,7 +892,7 @@ vim.keymap.set("n", "t[t", function() neotest.jump.next({ status = 'failed' }) e
 vim.keymap.set("n", "t]t", function() neotest.jump.prev({ status = 'failed' }) end)
 vim.keymap.set("n", "t<C-d>", function()
   neotest.run.run({ strategy = 'dap' })
-  dapui.open()
+  --dapui.open()
 end, bufopts)
 
 EOF
