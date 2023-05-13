@@ -51,7 +51,7 @@ Plug 'm4xshen/autoclose.nvim'
 Plug 'numToStr/Comment.nvim'
 " can be lazy-loaded
 Plug 'nvim-neotest/neotest'
-Plug 'haydenmeade/neotest-jest'
+Plug 'nvim-neotest/neotest-jest'
 "Plug 'voldikss/vim-floaterm'
 Plug 'sunaku/vim-dasht'
 Plug 'janko/vim-test'
@@ -66,6 +66,7 @@ Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
 Plug 'bennypowers/nvim-regexplainer/'
 Plug 'yardnsm/vim-import-cost', { 'do': 'npm install --production' }
 Plug 'nvim-treesitter/playground'
+Plug 'williamboman/mason.nvim', { 'do': ':MasonUpdate' }
 Plug '~/code/nvim-circleci'
 call plug#end()
 
@@ -702,16 +703,23 @@ require("autoclose").setup({
 })
 vim.keymap.set('n', '<esc>', '<cmd>RegexplainerHide<cr>')
 
-local dap = require('dap')
-local dapui = require('dapui')
-dap.defaults.fallback.terminal_win_cmd = '20split new'
-dap.listeners.after.event_breakpoint["dapui_config"] = function()
-	dapui.open()
+-- dap
+local dap_status_ok, dap = pcall(require, "dap")
+if not dap_status_ok then
+	return
 end
 
-dap.listeners.before.event_exited["dapui_config"] = function()
-	dapui.close()
+local dap_ui_status_ok, dapui = pcall(require, "dapui")
+if not dap_ui_status_ok then
+	return
 end
+
+--[[ local dap_vscode_js_status_ok, dap_vscode_js = pcall(require, "dap-vscode-js")
+if not dap_vscode_js_status_ok then
+	return
+end ]]
+
+dap.defaults.fallback.terminal_win_cmd = '20split new'
 vim.api.nvim_set_hl(0, "blue",   { fg = "#3d59a1" })
 vim.api.nvim_set_hl(0, "red",   { fg = "#BF616A" })
 vim.api.nvim_set_hl(0, "green",  { fg = "#9ece6a" })
@@ -721,36 +729,31 @@ vim.fn.sign_define('DapBreakpoint', {text='⚫', texthl='red', linehl='', numhl=
 vim.fn.sign_define('DapStopped', { text='⧁', texthl='green',  linehl='DapBreakpoint', numhl='DapBreakpoint' })
 
 vim.keymap.set("n", 'd<leader>b', dap.toggle_breakpoint)
-vim.keymap.set("n", 'd<leader>k', dap.continue)
-vim.keymap.set("n", "<leader>dc", dapui.close)
---[[dapui.setup({
-    layouts = {
-        {
-            elements = {
-                "console",
-            },
-            size = 7,
-            position = "bottom",
-        },
-        {
-            elements = {
-                -- Elements can be strings or table with id and size keys.
-                { id = "scopes", size = 0.25 },
-                "watches",
-            },
-            size = 40,
-            position = "left",
-        }
-    },
-})]]--
-require("dapui").setup({
+vim.keymap.set("n", 'd<leader>c', dap.continue)
+vim.keymap.set("n", "d<leader>n", dap.step_over)
+vim.keymap.set("n", "d<leader>i", dap.step_into)
+vim.keymap.set("n", "d<leader>o", dap.step_out)
+vim.keymap.set("n", "d<leader>C", dap.clear_breakpoints)
+vim.keymap.set("n", "d<leader>k", dapui.eval)
+vim.keymap.set("n", "d<leader>t", dapui.toggle)
+--[[ ["<M-w>"] = dapui.elements.watches.add,
+["<M-m>"] = dapui.float_element,
+["<M-v>"] = function()
+  dapui.float_element("scopes")
+end,
+["<M-r>"] = function()
+  dapui.float_element("repl")
+end, ]]
+
+dapui.setup({
   icons = { expanded = "▾", collapsed = "▸" },
   mappings = {
     -- Use a table to apply multiple mappings
-    expand = { "<CR>", "<2-LeftMouse>" },
+    expand = { "<CR>" },
     open = "o",
     remove = "d",
     edit = "e",
+    toggle = "t",
     repl = "r",
   },
   floating = {
@@ -765,11 +768,11 @@ require("dapui").setup({
   layouts = {
     {
       elements = {
-        'scopes',
-        'breakpoints',
         'stacks',
+        'breakpoints',
+        'scopes',
       },
-      size = 40,
+      size = 70,
       position = 'left',
     },
     {
@@ -782,18 +785,17 @@ require("dapui").setup({
     },
   },
 })
-require("dap-vscode-js").setup({
-  debugger_path = "/Users/toakley/code/vscode-js-debug/",
-  adapters = { 'pwa-node' }
-})
-local jestDebugConfig = {
 
-}
-dap.adapters.node2 = {
-  type = "executable",
-  command = "export runtimeVersion=14 node",
-  args = { "/Users/tomoakley/code/vscode-node-debug2/out/src/nodeDebug.js" },
-}
+local path_status_ok, path = pcall(require, "mason-core.path")
+if not path_status_ok then
+	return
+end
+
+require('dap-vscode-js').setup({
+  debugger_executable = '/Users/toakley/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js',
+  adapters = { 'pwa-node' },
+})
+
 for _, language in ipairs({ "typescript", "javascript", "javascriptreact", "typescriptreact" }) do
   dap.configurations[language] = {
     {
@@ -810,10 +812,11 @@ for _, language in ipairs({ "typescript", "javascript", "javascriptreact", "type
       cwd = "${workspaceFolder}",
       console = "integratedTerminal",
       internalConsoleOptions = "neverOpen",
+      sourceMaps = true
     },
     {
       name = "React native",
-      type = "node2",
+      type = "pwa-node",
       request = "attach",
       program = "${file}",
       cwd = vim.fn.getcwd(),
@@ -824,35 +827,6 @@ for _, language in ipairs({ "typescript", "javascript", "javascriptreact", "type
     },
 }
 end
-dap.configurations.typescriptreact = {
-  {
-    name = "React native",
-    type = "node2",
-    request = "attach",
-    program = "${file}",
-    cwd = vim.fn.getcwd(),
-    sourceMaps = true,
-    protocol = "inspector",
-    console = "integratedTerminal",
-    port = 35000,
-  },
-}
-local dap_status_ok, dap = pcall(require, "dap")
-if not dap_status_ok then
-	return
-end
-
-local dap_ui_status_ok, dapui = pcall(require, "dapui")
-if not dap_ui_status_ok then
-	return
-end
-
---[[ local dap_vscode_js_status_ok, dap_vscode_js = pcall(require, "dap-vscode-js")
-if not dap_vscode_js_status_ok then
-	return
-end ]]
-
-dapui.setup()
 
 vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
 
@@ -863,6 +837,9 @@ dap.listeners.after.event_breakpoint["dapui_config"] = function()
 end
 
 dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
   dapui.close()
 end
 
@@ -882,7 +859,10 @@ neotest.setup({
     require('neotest-jest')({
       --jestCommand = "jest --watch ",
     }),
-  }
+  },
+  quickfix = {
+    open = false,
+  },
 })
 local bufopts = { noremap=true, silent=true, buffer=bufnr }
 vim.keymap.set("n", "t<C-n>", neotest.run.run, bufopts)
@@ -894,6 +874,16 @@ vim.keymap.set("n", "t<C-d>", function()
   neotest.run.run({ strategy = 'dap' })
   --dapui.open()
 end, bufopts)
+
+require("mason").setup({
+  ui = {
+    icons = {
+      package_installed = "✓",
+      package_pending = "➜",
+      package_uninstalled = "✗"
+    }
+  }
+})
 
 EOF
 
