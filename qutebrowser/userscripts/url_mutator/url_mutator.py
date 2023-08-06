@@ -45,13 +45,13 @@ def mutator(url, conf = "config.toml"):
     return final_url
 
 def qutebrowser_run():
-    conf = sys.argv[1]
-    qute_command = sys.argv[2]
+    conf = "./config.toml"
+    qute_command = sys.argv[1]
     # URL is everything after other args, allows for search queries without quotes
-    for thing in sys.argv[3:]:
+    for thing in sys.argv[2:]:
         if " " in thing:
             sys.argv[sys.argv.index(thing)] = '"' + thing + '"'
-    url = ' '.join(sys.argv[3:])
+    url = ' '.join(sys.argv[2:])
     final_url = mutator(url, conf)
     with open(os.environ["QUTE_FIFO"], "a") as output:
         output.write(qute_command + " " + final_url)
