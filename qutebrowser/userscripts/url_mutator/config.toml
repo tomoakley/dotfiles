@@ -20,10 +20,11 @@ out_url = 'https://yewtu.be/|2|' # when the in_url pattern is found, change it t
 ignore_pattern = '' # patterns that match the in_url pattern to ignore. leave empty '' if you don't want to ignore any patterns.
 percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
 
-# mutate reddit.com URLs to old.reddit.com
+# mutate reddit.com URLs to safereddit.com
 [mutator.reddit]
 in_url = '(https?\:\/\/)?.*?reddit\.com(.*)' # this one changes reddit.com URLs (http or https)
-out_url = 'https://old.reddit.com|2|' # to old.reddit.com.
+#out_url = 'https://old.reddit.com|2|' # to old.reddit.com.
+out_url = 'https://safereddit.com|2|' # to safereddit.com
 ignore_pattern = 'https?\:\/\/out\.reddit\.com.*' # ignore out.reddit.com links, in order to prevent them from being redirected, as reddit tracks all outbound links and so redirecting them will prevent you from opening them.
 percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
 
@@ -45,6 +46,36 @@ percent_decode = '' # indexes to parse percent endcoding before building out_url
 [mutator.google]
 in_url = '(https?\:\/\/)?.*?google.co.*\/(.*)'
 out_url = 'https://whoogle.click/|2|'
+ignore_pattern = ''
+percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
+
+[mutator.medium]
+in_url = '(https?\:\/\/)?.*?medium.com\/(.*)'
+out_url = 'https://scribe.rip/|2|'
+ignore_pattern = ''
+percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
+
+[mutator.googlebang]
+in_url = '([\!]g+\s)(.*)'
+out_url = 'https://whoogle.no-logs.com/search?q=|2|'
+ignore_pattern = ''
+percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
+
+[mutator.youtubebang]
+in_url = '([\!]yt+\s)(.*)'
+out_url = 'http://yewtu.be/search?q=|2|'
+ignore_pattern = ''
+percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
+
+[mutator.redditbang]
+in_url = '([\!]sr+\s)(.*)'
+out_url = 'http://safereddit.com/r/|2|'
+ignore_pattern = ''
+percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
+
+[mutator.twitterbang]
+in_url = '([\!]tw+\s)(.*)'
+out_url = 'https://nitter.net/|2|'
 ignore_pattern = ''
 percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
 

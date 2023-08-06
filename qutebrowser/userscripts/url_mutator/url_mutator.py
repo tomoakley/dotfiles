@@ -5,6 +5,9 @@ import re
 import os
 import sys
 from urllib.parse import unquote as unquote
+from pathlib import Path
+
+HOME_DIR = str(Path().home())
 
 # just reads the configuration file
 def read_conf(conf_file):
@@ -45,7 +48,7 @@ def mutator(url, conf = "config.toml"):
     return final_url
 
 def qutebrowser_run():
-    conf = "./config.toml"
+    conf = HOME_DIR + "/.qutebrowser/userscripts/url_mutator/config.toml"
     qute_command = sys.argv[1]
     # URL is everything after other args, allows for search queries without quotes
     for thing in sys.argv[2:]:
