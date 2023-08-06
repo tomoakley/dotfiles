@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+session="AppleMusic"
+tmux has-session -t $session 2>/dev/null
+if [ $? != 0 ]; then
+  tmux new-session -d -s $session
+  tmux display-message 'Starting new Apple Music instance....'
+  tmux split-window -v -t 'AppleMusic' -c "#{pane_current_path}"
+  tmux send-keys -t $session.1 "am np" ENTER
+  tmux send-keys -t $session.2 "am play -p" ENTER
+  sleep 2
+fi
+
+CURRENT_WINDOW_INDEX=$(tmux display -pt "${TMUX_PANE}" '#{window_index} #{pane_index} #{session_name}' | awk '{ print $3":"$1"."$2 }')
+NEW_WINDOW_INDEX=$(tmux display -pt "${TMUX_PANE}" '#{window_index} #{pane_index} #{session_name}' | awk '{ print $1"."$2+1 }')
+CURRENT_WINDOW_NAME=$(tmux display -pt "${TMUX_PANE}" '#{window_name}')
+
+# ensure Apple Music session has a window to keep session alive
+tmux new-window -t $sessionbdb = buku.BukuDb(dbfile='temp.db'p3)
+
+if [[ "$CURRENT_WINDOW_NAME" == "AppleMusic" ]]; then
+  tmux move-pane -h -s $NEW_WINDOW_INDEX -t "AppleMusic:1.1"
+  tmux move-pane -h -s $NEW_WINDOW_INDEX -t "AppleMusic:1.2"
+else
+  # move apple music panes into current session
+  tmux move-pane -h -s $session:1.1 -t $CURRENT_WINDOW_INDEX
+  tmux move-pane -v -s $session:1.1 -t $NEW_WINDOW_INDEX
+  tmux rename-window -t $NEW_WINDOW_INDEX AppleMusic
+fi

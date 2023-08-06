@@ -35,6 +35,7 @@ brew "zlib"
 brew "leiningen"
 
 brew "weechat"
+brew "tut"
 brew "neovim"
 brew "tmux"
 brew "dotbot"

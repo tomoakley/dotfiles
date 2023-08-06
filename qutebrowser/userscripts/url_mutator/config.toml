@@ -1,0 +1,50 @@
+# this is a TOML document
+# this document is a configuration for URL Mutator, a userscript for Qutebrowser
+
+# these are global configuration options, they apply to the behavior of the script when called
+[global]
+# there is nothing here, but the block is reserved in the event that global options are implemented
+
+# these are the configured mutators. for every mutator, a new [mutator.x] entry must be added in [mutator].
+# the in_url and ignore_pattern patterns must be written in valid regex, and in single quotes per TOML spec to be taken as literal strings.
+# parts of in_url expressions you want to save to use in the mutated URL must be surrounded with parentheses.
+# the out_url must be the URL to mutate to, with placeholders for parts of the unmutated URL (that you put in parentheses) you want to insert. The placeholders are integers surrounded by pipes,
+# with the integer matching the index of the in_url expression you want to insert, iterating from 1
+# parentheses are valid regex, so there may be times you put things in parentheses you do not want to use in the mutated URL. These will have an index also. You can ignore these by not using their index number.
+# "percent_decode" must be a string literal, comma delimited list of numbers corresponding to the in_url indexes you want to percent decode.
+[mutator]
+# mutate youtube URLs to invidious URLs
+[mutator.youtube]
+in_url = '(https?\:\/\/)?.*?youtu.*\..*\/(.*)' # regex pattern of URL to change. this example changes youtube.com, youtu.be, m.youtube.com, with http or https, or no protocol prefix as well.
+out_url = 'https://yewtu.be/|2|' # when the in_url pattern is found, change it to this.
+ignore_pattern = '' # patterns that match the in_url pattern to ignore. leave empty '' if you don't want to ignore any patterns.
+percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
+
+# mutate reddit.com URLs to old.reddit.com
+[mutator.reddit]
+in_url = '(https?\:\/\/)?.*?reddit\.com(.*)' # this one changes reddit.com URLs (http or https)
+out_url = 'https://old.reddit.com|2|' # to old.reddit.com.
+ignore_pattern = 'https?\:\/\/out\.reddit\.com.*' # ignore out.reddit.com links, in order to prevent them from being redirected, as reddit tracks all outbound links and so redirecting them will prevent you from opening them.
+percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
+
+# bypass reddit outboind tracking
+[mutator.outreddit]
+in_url = '(https?\:\/\/)?out\.reddit\.com(.*)url=(.*)\&.*' # this one pulls out the target URL from out.reddit.com URLs
+out_url = '|3|' # the out URL is just the URL out.reddit.com redirects to
+ignore_pattern = ''
+percent_decode = '3' # percent decode the URL so you can actually go to it
+
+# mutate twitter URLs to nitter URLs
+[mutator.twitter]
+in_url = '(https?\:\/\/)?.*?t(witter)?.co.*\/(.*)'
+out_url = 'https://nitter.net/|3|'
+ignore_pattern = ''
+percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
+
+# mutate google URLs to whoogle URLs
+[mutator.google]
+in_url = '(https?\:\/\/)?.*?google.co.*\/(.*)'
+out_url = 'https://whoogle.click/|2|'
+ignore_pattern = ''
+percent_decode = '' # indexes to parse percent endcoding before building out_url, leave ampty if you don't want to percent decode anything.
+

@@ -80,3 +80,10 @@ git clone https://github.com/tomoakley/buku-bookmarks ~/.local/share/buku/
 # symlink userscripts to Qutebrowser data directory, run buku-get to import buku bookmarks into qb
 ln -s ~/dotfiles/qutebrowser/userscripts ~/Library/Application\ Support/qutebrowser/userscripts
 ~/dotfiles/qutebrowser/userscripts/buku-get
+
+git clone https://github.com/mcthomas/Apple-Music-CLI-Player
+cd Apple-Music-CLI-Player/src
+chmod +x am.sh
+mv am.sh /usr/local/bin/am
+fd ../../
+rm -rf Apple-Music-CLI-Player
