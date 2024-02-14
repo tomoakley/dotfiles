@@ -24,10 +24,12 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make', 'branch': 'main'}
+Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-context'
 Plug 'neovim/nvim-lspconfig'
-Plug 'glepnir/lspsaga.nvim', {'branch': 'main'}
+Plug 'jose-elias-alvarez/null-ls.nvim'
+"Plug 'glepnir/lspsaga.nvim', {'branch': 'main'}
 "Plug 'jose-elias-alvarez/nvim-lsp-ts-utils', {'branch': 'main'}
 Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
@@ -47,7 +49,8 @@ Plug 'rmehri01/onenord.nvim', { 'branch': 'main' }
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'unblevable/quick-scope'
 Plug 'antoinemadec/FixCursorHold.nvim'
-Plug 'm4xshen/autoclose.nvim'
+"Plug 'm4xshen/autoclose.nvim'
+Plug 'windwp/nvim-autopairs'
 Plug 'numToStr/Comment.nvim'
 " can be lazy-loaded
 Plug 'nvim-neotest/neotest'
@@ -67,7 +70,9 @@ Plug 'bennypowers/nvim-regexplainer/'
 Plug 'yardnsm/vim-import-cost', { 'do': 'npm install --production' }
 Plug 'nvim-treesitter/playground'
 Plug 'williamboman/mason.nvim', { 'do': ':MasonUpdate' }
+Plug 'pwntester/octo.nvim'
 Plug '~/code/nvim-circleci'
+Plug 'xbase-lab/xbase', { 'do': 'make install' }
 call plug#end()
 
 " Enable Syntax highlighting
@@ -338,6 +343,11 @@ require("toggleterm").setup{
     guibg = 'NONE',
     ctermbg ="NONE"
   },
+  auto_scroll = false,
+  start_in_insert = false,
+  on_open = function(term)
+    vim.cmd("startinsert!")
+  end,
   direction = 'horizontal',
   persist_mode = false,
   highlights = {
@@ -369,6 +379,9 @@ require('telescope').setup({
           ["<C-r>"] = require('telescope.actions').delete_buffer,
         }
       }
+    },
+    lsp_references = {
+      theme = "dropdown"
     }
   },
   extensions = {
@@ -383,17 +396,26 @@ require('telescope').setup({
       override_file_sorter = true,     -- override the file sorter
       case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
                                        -- the default case_mode is "smart_case"
+    },
+    ["ui-select"] = {
+      require("telescope.themes").get_dropdown {
+        -- even more opts
+      }
     }
   },
   defaults = {
     file_ignore_patterns = {"ios/Pods", ".yarn/", ".git"},
     dynamic_preview_title = true,
-    path_display = {"truncate"}
+    path_display = {"truncate"},
+    layout_config = {
+      prompt_position = "top"
+   }
   },
 })
 require('telescope').load_extension('fzf')
 require("telescope").load_extension("file_browser")
 require("telescope").load_extension("git_worktree")
+require("telescope").load_extension("ui-select")
 require("telescope").load_extension("circleci")
 --vnoremap <leader>gs "zy <cmd>Telescope live_grep default_text=<C-r>z<cr>
 
@@ -437,6 +459,7 @@ local on_attach = function(client, bufnr)
     vim.cmd("command! LspCodeAction lua vim.lsp.buf.code_action()")
     vim.cmd("command! LspHover lua vim.lsp.buf.hover()")
     vim.cmd("command! LspRename lua vim.lsp.buf.rename()")
+    vim.cmd("command! LspDocSyms lua require('telescope.builtin').lsp_document_symbols()")
     vim.cmd("command! LspRefs lua require('telescope.builtin').lsp_references()")
     vim.cmd("command! LspDiags lua require('telescope.builtin').diagnostics()")
     vim.cmd("command! LspTypeDef lua vim.lsp.buf.type_definition()")
@@ -459,6 +482,7 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "<Leader>a", ":LspDiagLine<CR>", bufopts)
     vim.keymap.set("i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>", bufopts)
     vim.keymap.set("n", "<space>pr", ":LspFormatting<CR>", bufopts)
+    vim.keymap.set("n", "gds", ":LspDocSyms<CR>", bufopts)
     if client.server_capabilities.document_formatting then
         vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)")
     end
@@ -534,6 +558,21 @@ local opt = vim.opt
 
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
+
+-- Hide Javascript imports by default.
+-- Refs: https://www.reddit.com/r/neovim/comments/seq0q1/plugin_request_autofolding_file_imports_using/
+--[[ vim.api.nvim_create_autocmd("FileType",
+  {
+    pattern = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    callback = function()
+      vim.opt_local.foldlevelstart = 19
+      vim.opt_local.foldlevel = 19
+      vim.opt_local.foldexpr =
+      "v:lnum==1?'>1':getline(v:lnum)=~'import'?1:nvim_treesitter#foldexpr()"
+    end,
+    group = gib_autogroup
+  }) ]]
+
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline('/', {
   mapping = cmp.mapping.preset.cmdline({
@@ -580,9 +619,23 @@ lspconfig.tsserver.setup({
     end,
     capabilites = capabilites
 })
-lspconfig.eslint.setup({})
+lspconfig.eslint.setup({
+  --[[ on_attach = function(client, bufnr)
+    client.server_capabilities.document_formatting = true
+    client.server_capabilities.document_range_formatting = true
+    vim.api.nvim_create_autocmd("BufWritePre", { callback = function() vim.lsp.buf.format() end })
+  end, ]]
+  capabilites = capabilites
+})
 vim.cmd("autocmd BufWritePre *.ts,*.tsx,*.js,*.jsx EslintFixAll")
-lspconfig.sourcekit.setup{}
+--[[ lspconfig.sourcekit.setup{
+  cmd = {"xcrun", "sourcekit-lsp", "--log-level", "error" },
+  filetypes = { "swift", "c", "cpp", "objective-c", "objective-cpp", "objc", "objcpp" },
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+  end,
+  capabilites = capabilites
+} ]]
 
 local circleciYamlPath = '/Users/toakley/Downloads/circleci-yamlls'
 if not configs.circleciYamlls then
@@ -641,10 +694,13 @@ lspconfig.lua_ls.setup {
       },
     },
   },
-  capabilites = capabilites
+  capabilites = capabilites,
+  on_attach = function(client, bufnr)
+      on_attach(client, bufnr)
+  end,
 }
 
---require("null-ls").setup({})
+require("null-ls").setup({})
 --lspconfig["null-ls"].setup({ on_attach = on_attach })
 
 require('orgmode').setup_ts_grammar()
@@ -659,7 +715,7 @@ require'nvim-treesitter.configs'.setup {
     indent = {
       enable = true
     },
-    ensure_installed = {'javascript', 'typescript', 'tsx', 'org', 'lua', 'vim', 'help'},
+    ensure_installed = {'javascript', 'typescript', 'tsx', 'org', 'lua', 'vim', 'help', 'swift'},
     playground = {
     enable = true,
     disable = {},
@@ -696,11 +752,14 @@ require('regexplainer').setup({
   },
 })
 require('Comment').setup()
-require("autoclose").setup({
+require("nvim-autopairs").setup {
+  disabled_filetypes = {"txt", "md", "org"}
+}
+--[[ require("autoclose").setup({
   options = {
-    disabled_filetypes = { "text", "markdown" },
+    disabled_filetypes = { "text", "markdown", "org" },
   },
-})
+}) ]]
 vim.keymap.set('n', '<esc>', '<cmd>RegexplainerHide<cr>')
 
 -- dap
@@ -825,6 +884,17 @@ for _, language in ipairs({ "typescript", "javascript", "javascriptreact", "type
       console = "integratedTerminal",
       port = 35000,
     },
+    {
+      name = "Debug iOS Hermes - Experimental",
+      -- type = "reactnativedirect",
+      type = "pwa-node",
+      request = "launch",
+      platform = "ios",
+      cwd = "${workspaceFolder}",
+      sourceMaps = true,
+      console = "integratedTerminal",
+      port = 35000,
+    }
 }
 end
 
@@ -848,7 +918,7 @@ require('orgmode').setup{
   org_default_notes_file = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/inbox.org'
 }
 
-vim.keymap.set("n", "K", require("lspsaga.hover").render_hover_doc, { silent = true })
+--vim.keymap.set("n", "K", require("lspsaga.hover").render_hover_doc, { silent = true })
 
 require('litee.lib').setup()
 require('litee.gh').setup()
@@ -885,12 +955,26 @@ require("mason").setup({
   }
 })
 
+require"octo".setup()
+require'xbase'.setup({
+  log_level = vim.log.levels.DEBUG,
+  lspconfig.sourcekit.setup{
+    cmd = {"xcrun", "sourcekit-lsp", "--log-level", "error" },
+    filetypes = { "swift", "c", "cpp", "objective-c", "objective-cpp", "objc", "objcpp" },
+    on_attach = function(client, bufnr)
+      on_attach(client, bufnr)
+    end,
+    capabilites = capabilites,
+    root_pattern = require ("lspconfig").util.root_pattern("Package.swift", "Sources", "xcodeproj", ".git"),
+  }
+})
+
 EOF
 
-augroup import_cost_auto_run
-  autocmd!
-  autocmd BufEnter *.js,*.jsx,*.ts,*.tsx ImportCost
-augroup END
+" augroup import_cost_auto_run
+"   autocmd!
+"   autocmd BufEnter *.js,*.jsx,*.ts,*.tsx ImportCost
+" augroup END
 let g:blamer_enabled = 1
 let g:blamer_show_in_visual_modes = 0
 let g:blamer_show_in_insert_modes = 0

@@ -150,6 +150,9 @@ config.set('content.local_content_can_access_remote_urls', True, 'file:///Users/
 # Type: Bool
 config.set('content.local_content_can_access_file_urls', False, 'file:///Users/toakley/Library/Application%20Support/qutebrowser/userscripts/*')
 
+# Silence errors while loading resources (due to pihole blocking tracking/ads)
+config.set('content.tls.certificate_errors', 'block')
+
 # Where to show the downloaded files.
 # Type: VerticalPosition
 # Valid values:
@@ -588,8 +591,6 @@ config.bind(',p', 'spawn --userscript 1password')
 config.bind(',r', 'spawn --userscript readability/readability-js')
 config.bind(',s', 'spawn --userscript safari')
 config.bind('<Ctrl+t>', 'config-cycle tabs.show never always')
-config.bind('O', 'set-cmd-text -s :sp -u um "open -t"')
-config.bind('o', 'set-cmd-text -s :sp -u um "open"')
 config.bind('yo', 'yank inline [{title}]({url})]')
 
 # Bindings for insert mode
