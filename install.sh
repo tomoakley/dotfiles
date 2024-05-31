@@ -87,3 +87,8 @@ chmod +x am.sh
 mv am.sh /usr/local/bin/am
 fd ../../
 rm -rf Apple-Music-CLI-Player
+
+# gh cli
+gh extension install dlvhdr/gh-dash
+
+ln -s ~/dotfiles/gh-dash ~/.config/gh-dash
