@@ -605,4 +605,7 @@ config.bind('<Ctrl+h>', 'fake-key <Backspace>', mode='insert')
 # Add Nord theme
 config.source('nord-qutebrowser.py')
 
+# redirects
+config.source('redirects.py')
+
 config.load_autoconfig(False)

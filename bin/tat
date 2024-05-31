@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+CURRENT_USER_ID="$(/usr/bin/id -g)"
+# Assume this is absolute path
+TMUX_SOCKET_DIR="${TMUX_TMPDIR:-/tmp}/tmux-$CURRENT_USER_ID"
+
+if [[ ! -d $TMUX_SOCKET_DIR ]]; then
+    echo "No tmux directory found at $TMUX_SOCKET_DIR." 1>&2
+    exit 1
+fi
+
+TMUX_SESSION_NAME="$1"
+shift
+if [[ -z ${1+x} ]]; then
+    TMUX_SOCKET_PATHS=("$TMUX_SOCKET_DIR"/*)
+else
+    TMUX_SOCKET_PATHS=("$TMUX_SOCKET_DIR/$1")
+fi
+
+success=no
+
+for maybe_socket_path in "${TMUX_SOCKET_PATHS[@]}"; do
+    echo -n "Trying attach to session \"$TMUX_SESSION_NAME\" on socket \"$maybe_socket_path\"..."
+    tmux -S "$maybe_socket_path" attach -t "$TMUX_SESSION_NAME" 2>&1 && {
+        echo "Attached."
+        success=yes
+        break
+    }
+done
+
+if [[ $success != "yes" ]]; then
+    echo "No sessions found."
+    exit 1
+fi
+exit 0

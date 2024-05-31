@@ -16,7 +16,7 @@ NEW_WINDOW_INDEX=$(tmux display -pt "${TMUX_PANE}" '#{window_index} #{pane_index
 CURRENT_WINDOW_NAME=$(tmux display -pt "${TMUX_PANE}" '#{window_name}')
 
 # ensure Apple Music session has a window to keep session alive
-tmux new-window -t $sessionbdb = buku.BukuDb(dbfile='temp.db'p3)
+tmux new-window -t $session
 
 if [[ "$CURRENT_WINDOW_NAME" == "AppleMusic" ]]; then
   tmux move-pane -h -s $NEW_WINDOW_INDEX -t "AppleMusic:1.1"

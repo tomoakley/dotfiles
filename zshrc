@@ -63,3 +63,7 @@ if [ -e /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tomo
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export PATH="/opt/homebrew/opt/libressl/bin:$PATH"
+export PATH=$PATH:$HOME/.maestro/bin
+
+# flashlight
+export PATH="$PATH:$HOME/.flashlight/bin"

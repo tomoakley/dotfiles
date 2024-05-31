@@ -16,11 +16,12 @@ set noswapfile
 call plug#begin('~/.config/nvim')
 "Plug 'maxmellon/vim-jsx-pretty'
 Plug 'nvim-lualine/lualine.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
+Plug 'nvim-tree/nvim-web-devicons'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'adelarsq/vim-matchit'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-neotest/nvim-nio'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make', 'branch': 'main'}
@@ -35,6 +36,7 @@ Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
 Plug 'hrsh7th/nvim-cmp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
+Plug 'hrsh7th/cmp-omni', {'branch': 'main'},
 Plug 'hrsh7th/cmp-path', {'branch': 'main'}
 Plug 'hrsh7th/cmp-cmdline', {'branch': 'main'}
 Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*', 'do': 'make install_jsregexp'}
@@ -61,19 +63,27 @@ Plug 'janko/vim-test'
 Plug 'metakirby5/codi.vim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
-Plug 'mxsdev/nvim-dap-vscode-js'
+Plug 'mxsdev/nvim-dap-vscode-js', { 'branch': 'start-debugging', 'do': 'npm install --legacy-peer-deps && npx gulp dapDebugServer' }
 Plug 'nvim-orgmode/orgmode'
 Plug 'ldelossa/litee.nvim'
 Plug 'ldelossa/gh.nvim'
+Plug 'pwntester/octo.nvim'
 Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
 Plug 'bennypowers/nvim-regexplainer/'
-Plug 'yardnsm/vim-import-cost', { 'do': 'npm install --production' }
+"Plug 'yardnsm/vim-import-cost', { 'do': 'npm install --production' }
 Plug 'nvim-treesitter/playground'
 Plug 'williamboman/mason.nvim', { 'do': ':MasonUpdate' }
 Plug 'pwntester/octo.nvim'
 Plug '~/code/nvim-circleci'
 Plug 'xbase-lab/xbase', { 'do': 'make install' }
+Plug 'folke/noice.nvim'
+Plug 'MunifTanjim/nui.nvim'
 call plug#end()
+
+augroup my_plugin_reload
+    autocmd!
+    autocmd BufWritePost ~/code/nvim-circleci/*.lua :call plug#load('nvim-circleci')
+augroup END
 
 " Enable Syntax highlighting
 syntax on
@@ -129,6 +139,7 @@ set modeline
 set ruler
 " Show file title in terminal tab
 set title
+set cmdheight=0
 
 " Set relative line numbers if we can...
 if exists("+relativenumber")
@@ -330,9 +341,7 @@ local cmp = require("cmp")
 local lspkind = require('lspkind')
 local circleci = require('nvim-circleci')
 
-circleci.setup{
-  project_slug = 'gh/mediaingenuity/Account.NativeApp'
-}
+require'nvim-web-devicons'.setup()
 
 require("toggleterm").setup{
   open_mapping = '<leader>/',
@@ -366,7 +375,41 @@ require('onenord').setup({
   fade_nc = true -- fade non-active split
 })
 require('lualine').setup({
-  options = { theme = 'onenord' }
+  options = { theme = 'onenord' },
+  --[[ sections = {
+    lualine_x = {
+      {
+        require("noice").api.status.message.get_hl,
+        cond = require("noice").api.status.message.has,
+      },
+      {
+        require("noice").api.status.command.get,
+        cond = require("noice").api.status.command.has,
+        color = { fg = "#ff9e64" },
+      },
+      {
+        require("noice").api.status.mode.get,
+        cond = require("noice").api.status.mode.has,
+        color = { fg = "#ff9e64" },
+      },
+      {
+        require("noice").api.status.search.get,
+        cond = require("noice").api.status.search.has,
+        color = { fg = "#ff9e64" },
+      },
+    },
+  } --]]
+})
+vim.api.nvim_set_keymap("n", "<Leader>s", "", {
+    callback = function()
+        vim.opt.laststatus = 0
+        local statusline = vim.o.statusline
+
+        require("lualine").hide({
+            place = { "statusline" },
+            unhide = statusline == "" or statusline == "%#Normal#",
+        })
+    end,
 })
 require('telescope').setup({
   pickers = {
@@ -374,6 +417,10 @@ require('telescope').setup({
       mappings = {
         n = {
           ["<C-r>"] = require('telescope.actions').delete_buffer,
+          ["<C-q>"] = function(bufnr)
+            actions.smart_send_to_qflist(bufnr)
+            require("telescope.builtin").quickfix()
+          end,
         },
         i = {
           ["<C-r>"] = require('telescope.actions').delete_buffer,
@@ -413,10 +460,11 @@ require('telescope').setup({
   },
 })
 require('telescope').load_extension('fzf')
+-- require('telescope').load_extension('fzy_native')
 require("telescope").load_extension("file_browser")
 require("telescope").load_extension("git_worktree")
 require("telescope").load_extension("ui-select")
-require("telescope").load_extension("circleci")
+-- require("telescope").load_extension("circleci")
 --vnoremap <leader>gs "zy <cmd>Telescope live_grep default_text=<C-r>z<cr>
 
 local telescopeBuiltIn = require('telescope.builtin')
@@ -450,6 +498,7 @@ vim.api.nvim_set_keymap(
   ":lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>",
   { noremap = true, silent = true }
 )
+
 
 local on_attach = function(client, bufnr)
     local bufopts = { noremap=true, silent=true, buffer=bufnr }
@@ -493,6 +542,7 @@ local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
 end
+
 
 cmp.setup {
   snippet = {
@@ -539,6 +589,7 @@ cmp.setup {
            buffer   = "[buf]",
            nvim_lsp = "[LSP]",
            path     = "[path]",
+           omni = "[omni]"
         },
      },
   },
@@ -547,7 +598,8 @@ cmp.setup {
      { name = "nvim_lsp"},
      { name = "path" },
      { name = "buffer" , keyword_length = 5},
-     { name = "luasnip" }
+     { name = "luasnip" },
+     { name = 'omni', option = { disable_omnifuncs = { 'v:lua.vim.lsp.omnifunc' } } }
   },
   experimental = {
      ghost_text = true
@@ -572,6 +624,21 @@ opt.foldexpr = "nvim_treesitter#foldexpr()"
     end,
     group = gib_autogroup
   }) ]]
+
+require('lspconfig').jsonls.setup {
+  settings = {
+    json = {
+      schemas = {
+        {
+          fileMatch = {"package.json"},
+          url = "https://json.schemastore.org/package.json"
+        }
+      },
+      validate = { enable = true },
+      format = { enable = true }
+    },
+  }
+}
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline('/', {
@@ -628,30 +695,24 @@ lspconfig.eslint.setup({
   capabilites = capabilites
 })
 vim.cmd("autocmd BufWritePre *.ts,*.tsx,*.js,*.jsx EslintFixAll")
---[[ lspconfig.sourcekit.setup{
-  cmd = {"xcrun", "sourcekit-lsp", "--log-level", "error" },
+lspconfig.sourcekit.setup{
+  cmd = {"sourcekit-lsp", "--log-level", "error", "--stdio" },
   filetypes = { "swift", "c", "cpp", "objective-c", "objective-cpp", "objc", "objcpp" },
   on_attach = function(client, bufnr)
     on_attach(client, bufnr)
   end,
   capabilites = capabilites
-} ]]
+}
 
-local circleciYamlPath = '/Users/toakley/Downloads/circleci-yamlls'
-if not configs.circleciYamlls then
-  configs.circleciYamlls = {
-    default_config = {
-      cmd = { circleciYamlPath };
-      filetypes = { "yaml", "yml"};
+circleci.setup{
+  lsp = {
+    enable = true,
+    config = {
+      on_attach = on_attach,
+      enable_yaml = true
     }
   }
-end
-
-lspconfig.circleciYamlls.setup({
-  cmd = {
-    circleciYamlPath
-  },
-})
+}
 
 local rescriptLspPath = '/Users/toakley/.config/nvim/vim-rescript/server/out/server.js'
 if not configs.rescriptlsp then
@@ -864,7 +925,7 @@ for _, language in ipairs({ "typescript", "javascript", "javascriptreact", "type
       -- trace = true, -- include debugger info
       runtimeExecutable = "node",
       runtimeArgs = {
-        "./node_modules/jest/bin/jest.js",
+        "./node_modules/jest/.bin/jest.js",
         "--runInBand",
       },
       rootPath = "${workspaceFolder}",
@@ -912,16 +973,30 @@ end
 dap.listeners.before.event_terminated["dapui_config"] = function()
   dapui.close()
 end
+function getBranch()
+  local handle = io.popen("git rev-parse --abbrev-ref HEAD")
+  local result = handle:read("*a"); handle:close()
+  print(result)
+  return result
+end
 
 require('orgmode').setup{
   org_agenda_files = {'~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/*'},
-  org_default_notes_file = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/inbox.org'
+  org_default_notes_file = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/inbox.org',
+  org_capture_templates = {
+    T = {
+      description = 'Todo',
+      template = '* TODO %a\n %u',
+      target = '~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/inbox.org'
+    }
+  }
 }
 
 --vim.keymap.set("n", "K", require("lspsaga.hover").render_hover_doc, { silent = true })
 
-require('litee.lib').setup()
-require('litee.gh').setup()
+-- require('litee.lib').setup()
+-- require('litee.gh').setup()
+require"octo".setup()
 
 local neotest = require("neotest")
 neotest.setup({
@@ -967,6 +1042,36 @@ require'xbase'.setup({
     capabilites = capabilites,
     root_pattern = require ("lspconfig").util.root_pattern("Package.swift", "Sources", "xcodeproj", ".git"),
   }
+})
+
+lspconfig.opts = { servers = { sourcekit = { cmd = {"sourcekit-lsp" } } } }
+
+require("noice").setup({
+  cmdline = {
+    enabled = true,
+    view = "cmdline", -- Ensure this is set to "cmdline"
+    opts = {},
+    format = {
+      cmdline = { pattern = "^:", icon = "", lang = "vim" },
+      -- other formats...
+    },
+ },
+  lsp = {
+    -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+    override = {
+      ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+      ["vim.lsp.util.stylize_markdown"] = true,
+      ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+    },
+  },
+  -- you can enable a preset for easier configuration
+  presets = {
+    bottom_search = true, -- use a classic bottom cmdline for search
+    command_palette = true, -- position the cmdline and popupmenu together
+    long_message_to_split = true, -- long messages will be sent to a split
+    inc_rename = false, -- enables an input dialog for inc-rename.nvim
+    lsp_doc_border = false, -- add a border to hover docs and signature help
+  },
 })
 
 EOF
