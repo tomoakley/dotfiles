@@ -3,6 +3,7 @@ from urllib.parse import urljoin
 from PyQt6.QtCore import QUrl
 import operator
 import subprocess
+import re
 
 o = operator.methodcaller
 s = 'setHost'
@@ -85,8 +86,14 @@ redirMap = {
 }
 
 appMap = {
-    "github.com/mediaingenuity/Account.NativeApp/pulls": githubToAlacritty,
+    r"[https:\/\/]?github\.com\/[a-zA-Z0-9].+\/pulls": githubToAlacritty,
 }
+
+def appRegexMap(url):
+    for pattern, method in appMap.items():
+        if re.match(pattern, url):
+            return method
+    return
 
 def f(info: i.Request):
     if (info.resource_type != i.ResourceType.main_frame or
@@ -96,7 +103,7 @@ def f(info: i.Request):
     redir = redirMap.get(url.host())
     if redir is not None and redir(url) is not False:
         info.redirect(url)
-    app = appMap.get(url.host() + url.path())
+    app = appRegexMap(url.host() + url.path())
     if app is not None:
          app(url)
 
