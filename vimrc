@@ -996,7 +996,7 @@ require('orgmode').setup{
 
 -- require('litee.lib').setup()
 -- require('litee.gh').setup()
-require"octo".setup()
+require"octo".setup({ enable_builtin = true })
 
 local neotest = require("neotest")
 neotest.setup({
