@@ -73,7 +73,6 @@ Plug 'bennypowers/nvim-regexplainer/'
 "Plug 'yardnsm/vim-import-cost', { 'do': 'npm install --production' }
 Plug 'nvim-treesitter/playground'
 Plug 'williamboman/mason.nvim', { 'do': ':MasonUpdate' }
-Plug 'pwntester/octo.nvim'
 Plug '~/code/nvim-circleci'
 Plug 'xbase-lab/xbase', { 'do': 'make install' }
 Plug 'folke/noice.nvim'
@@ -996,7 +995,10 @@ require('orgmode').setup{
 
 -- require('litee.lib').setup()
 -- require('litee.gh').setup()
-require"octo".setup({ enable_builtin = true })
+require"octo".setup({
+  use_local_fs = true,
+  enable_builtin = true
+})
 
 local neotest = require("neotest")
 neotest.setup({

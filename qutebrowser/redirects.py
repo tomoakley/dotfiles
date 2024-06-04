@@ -86,7 +86,7 @@ redirMap = {
 }
 
 appMap = {
-    r"[https]?github\.com\/[a-zA-Z0-9].+\/[pulls|pull\/\d+]+": githubToAlacritty,
+    r"[https]?github\.com\/[a-zA-Z0-9].+\/pull[s]?[\/[\d]*]?": githubToAlacritty,
 }
 
 def appRegexMap(url):
