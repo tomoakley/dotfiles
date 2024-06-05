@@ -12,7 +12,7 @@ i = interceptor
 def githubToAlacritty (url: QUrl) -> bool:
     p = subprocess.Popen(
         [
-            '/Users/toakley/.qutebrowser/gh-nvim.sh',
+            '/Users/toakley/.qutebrowser/octo-nvim.sh',
             str(url)
         ],
         stdout=subprocess.PIPE,
