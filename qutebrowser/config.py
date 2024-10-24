@@ -142,6 +142,8 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 # Type: Bool
 config.set('content.javascript.enabled', True, 'qute://*/*')
 
+config.set('content.javascript.clipboard', 'access')
+
 # Allow locally loaded documents to access remote URLs.
 # Type: Bool
 config.set('content.local_content_can_access_remote_urls', True, 'file:///Users/toakley/Library/Application%20Support/qutebrowser/userscripts/*')
@@ -152,6 +154,8 @@ config.set('content.local_content_can_access_file_urls', False, 'file:///Users/t
 
 # Silence errors while loading resources (due to pihole blocking tracking/ads)
 config.set('content.tls.certificate_errors', 'block')
+
+#config.set("window.hide_decoration", True)
 
 # Where to show the downloaded files.
 # Type: VerticalPosition
@@ -592,6 +596,7 @@ config.bind(',r', 'spawn --userscript readability/readability-js')
 config.bind(',s', 'spawn --userscript safari')
 config.bind('<Ctrl+t>', 'config-cycle tabs.show never always')
 config.bind('yo', 'yank inline [{title}]({url})]')
+config.bind(',m', 'spawn --userscript view_in_mpv')
 
 # Bindings for insert mode
 config.bind('<Alt+b>', 'fake-key <Ctrl-Left>', mode='insert')

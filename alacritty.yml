@@ -70,7 +70,7 @@ font:
   # Normal (roman) font face
   normal:
     family: "MesloLGS NF"
-    #style: Regular
+    style: Regular
 
   # Bold font face
   #bold:

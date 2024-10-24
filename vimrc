@@ -54,6 +54,7 @@ Plug 'antoinemadec/FixCursorHold.nvim'
 "Plug 'm4xshen/autoclose.nvim'
 Plug 'windwp/nvim-autopairs'
 Plug 'numToStr/Comment.nvim'
+Plug 'leath-dub/snipe.nvim'
 " can be lazy-loaded
 Plug 'nvim-neotest/neotest'
 Plug 'nvim-neotest/neotest-jest'
@@ -74,7 +75,10 @@ Plug 'bennypowers/nvim-regexplainer/'
 Plug 'nvim-treesitter/playground'
 Plug 'williamboman/mason.nvim', { 'do': ':MasonUpdate' }
 Plug '~/code/nvim-circleci'
-Plug 'xbase-lab/xbase', { 'do': 'make install' }
+Plug '~/code/idb.nvim'
+Plug '~/code/phind.nvim2'
+" Plug 'xbase-lab/xbase', { 'do': 'make install' }
+Plug 'wojciech-kulik/xcodebuild.nvim', { 'do': 'make install' }
 Plug 'folke/noice.nvim'
 Plug 'MunifTanjim/nui.nvim'
 call plug#end()
@@ -339,6 +343,7 @@ local configs = require("lspconfig.configs")
 local cmp = require("cmp")
 local lspkind = require('lspkind')
 local circleci = require('nvim-circleci')
+local idb = require("nvim-idb")
 
 require'nvim-web-devicons'.setup()
 
@@ -498,6 +503,17 @@ vim.api.nvim_set_keymap(
   { noremap = true, silent = true }
 )
 
+local snipe = require('snipe')
+snipe.setup({
+  sort = "last",
+  hints = {
+    dictionary = "sadlewcmpghio"
+  },
+  navigate = {
+    cancel_snipe = "f"
+  }
+})
+vim.keymap.set("n", "<space>f", snipe.open_buffer_menu)
 
 local on_attach = function(client, bufnr)
     local bufopts = { noremap=true, silent=true, buffer=bufnr }
@@ -517,6 +533,7 @@ local on_attach = function(client, bufnr)
     vim.cmd("command! LspDiagLine lua vim.diagnostic.open_float(nil, { focus = false })")
     vim.cmd("command! LspSignatureHelp lua vim.lsp.buf.signature_help()")
     vim.keymap.set("n", "gd", ":LspDef<CR>", bufopts)
+    vim.keymap.set('n', 'gdS', '<c-w>v<cmd>lua vim.lsp.buf.definition()<CR>', bufopts)
     vim.keymap.set('n', 'gD', ':LspDec<CR>', bufopts)
     vim.keymap.set("n", "gi", ':LspImplementation<CR>', bufopts)
     vim.keymap.set("n", 'gr', ':LspRefs<CR>', bufopts)
@@ -664,23 +681,14 @@ cmp.setup.cmdline(':', {
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-lspconfig.tsserver.setup({
+lspconfig.vtsls.setup({
     on_attach = function(client, bufnr)
         local bufopts = { noremap=true, silent=true, buffer=bufnr }
         client.server_capabilities.document_formatting = false
         client.server_capabilities.document_range_formatting = false
-        --[[local ts_utils = require("nvim-lsp-ts-utils")
-        ts_utils.setup({
-            eslint_bin = "eslint_d",
-            eslint_enable_diagnostics = true,
-            eslint_enable_code_actions = true,
-            enable_formatting = true,
-            formatter = "prettierd",
-        })
-        ts_utils.setup_client(client)]]--
-        vim.keymap.set("n", "gs", ":TSLspOrganize<CR>", bufopts)
+        --[[ vim.keymap.set("n", "gs", ":TSLspOrganize<CR>", bufopts)
         vim.keymap.set("n", "gi", ":TSLspRenameFile<CR>", bufopts)
-        vim.keymap.set("n", "go", ":TSLspImportAll<CR>", bufopts)
+        vim.keymap.set("n", "go", ":TSLspImportAll<CR>", bufopts) ]]
         on_attach(client, bufnr)
     end,
     capabilites = capabilites
@@ -763,7 +771,6 @@ lspconfig.lua_ls.setup {
 require("null-ls").setup({})
 --lspconfig["null-ls"].setup({ on_attach = on_attach })
 
-require('orgmode').setup_ts_grammar()
 require'nvim-treesitter.configs'.setup {
     highlight = {
         enable = true,
@@ -962,16 +969,56 @@ vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiagnosticSignErro
 
 -- We need to wait for execution to stop at the first breakpoint before showing the UI to give the source maps time to generate.
 -- If we don't, the UI will close because the source maps haven't generated in time.
-dap.listeners.after.event_breakpoint["dapui_config"] = function()
+
+local debug_win = nil
+local debug_tab = nil
+local debug_tabnr = nil
+
+local function open_in_tab()
+  if debug_win and vim.api.nvim_win_is_valid(debug_win) then
+    vim.api.nvim_set_current_win(debug_win)
+    return
+  end
+
+  vim.cmd('tabedit %')
+  debug_win = vim.fn.win_getid()
+  debug_tab = vim.api.nvim_win_get_tabpage(debug_win)
+  debug_tabnr = vim.api.nvim_tabpage_get_number(debug_tab)
+
   dapui.open()
 end
 
+local function close_tab()
+  dapui.close()
+
+  if debug_tab and vim.api.nvim_tabpage_is_valid(debug_tab) then
+    vim.api.nvim_exec('tabclose ' .. debug_tabnr, false)
+  end
+
+  debug_win = nil
+  debug_tab = nil
+  debug_tabnr = nil
+end
+
+dap.listeners.after.event_breakpoint["dapui_config"] = function()
+  --dapui.open()
+  open_in_tab()
+end
+
+dap.listeners.after.event_initialized['dapui_config'] = function()
+  open_in_tab()
+end
+
 dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
+  --dapui.close()
+  close_tab()
 end
+
 dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
+  --dapui.close()
+  close_tab()
 end
+
 function getBranch()
   local handle = io.popen("git rev-parse --abbrev-ref HEAD")
   local result = handle:read("*a"); handle:close()
@@ -1032,8 +1079,10 @@ require("mason").setup({
   }
 })
 
-require"octo".setup()
-require'xbase'.setup({
+require("xcodebuild").setup({
+    -- put some options here or leave it empty to use default settings
+})
+--[[ require'xbase'.setup({
   log_level = vim.log.levels.DEBUG,
   lspconfig.sourcekit.setup{
     cmd = {"xcrun", "sourcekit-lsp", "--log-level", "error" },
@@ -1044,11 +1093,13 @@ require'xbase'.setup({
     capabilites = capabilites,
     root_pattern = require ("lspconfig").util.root_pattern("Package.swift", "Sources", "xcodeproj", ".git"),
   }
-})
+}) ]]
+idb.setup()
+vim.keymap.set("n", "<leader>I", ":IDBStartSession<CR>", { noremap = true })
 
 lspconfig.opts = { servers = { sourcekit = { cmd = {"sourcekit-lsp" } } } }
 
-require("noice").setup({
+--[[ require("noice").setup({
   cmdline = {
     enabled = true,
     view = "cmdline", -- Ensure this is set to "cmdline"
@@ -1074,7 +1125,7 @@ require("noice").setup({
     inc_rename = false, -- enables an input dialog for inc-rename.nvim
     lsp_doc_border = false, -- add a border to hover docs and signature help
   },
-})
+}) ]]
 
 EOF
 
@@ -1087,7 +1138,7 @@ let g:blamer_show_in_visual_modes = 0
 let g:blamer_show_in_insert_modes = 0
 let g:blamer_delay = 500
 
-nnoremap <silent> <Leader>K :call Dasht(dasht#cursor_search_terms())<Return>
+"nnoremap <silent> <Leader>K :call Dasht(dasht#cursor_search_terms())<Return>
 let g:dasht_filetype_docsets = {} " filetype => list of docset name regexp
 let g:dasht_filetype_docsets['typescriptreact'] = ['typescript', 'javascript', 'react', 'nodejs']
 let g:dasht_filetype_docsets['javascript'] = ['javascript', 'react', 'nodejs']
