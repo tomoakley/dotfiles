@@ -14,12 +14,10 @@ set noswapfile
 
 " Plugins, managed by vim-plug
 call plug#begin('~/.config/nvim')
-"Plug 'maxmellon/vim-jsx-pretty'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'adelarsq/vim-matchit'
-Plug 'skywind3000/asyncrun.vim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-neotest/nvim-nio'
 Plug 'nvim-telescope/telescope.nvim'
@@ -29,13 +27,9 @@ Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-context'
 Plug 'neovim/nvim-lspconfig'
-Plug 'jose-elias-alvarez/null-ls.nvim'
-"Plug 'glepnir/lspsaga.nvim', {'branch': 'main'}
-"Plug 'jose-elias-alvarez/nvim-lsp-ts-utils', {'branch': 'main'}
 Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
 Plug 'hrsh7th/nvim-cmp', {'branch': 'main'}
-Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-omni', {'branch': 'main'},
 Plug 'hrsh7th/cmp-path', {'branch': 'main'}
 Plug 'hrsh7th/cmp-cmdline', {'branch': 'main'}
@@ -45,41 +39,33 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'axelvc/template-string.nvim'
 Plug 'ThePrimeagen/git-worktree.nvim'
-"Plug 'eslint/eslint'
 Plug 'tpope/vim-surround'
 Plug 'rmehri01/onenord.nvim', { 'branch': 'main' }
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'unblevable/quick-scope'
 Plug 'antoinemadec/FixCursorHold.nvim'
-"Plug 'm4xshen/autoclose.nvim'
 Plug 'windwp/nvim-autopairs'
 Plug 'numToStr/Comment.nvim'
 Plug 'leath-dub/snipe.nvim'
 " can be lazy-loaded
 Plug 'nvim-neotest/neotest'
 Plug 'nvim-neotest/neotest-jest'
-"Plug 'voldikss/vim-floaterm'
 Plug 'sunaku/vim-dasht'
-Plug 'janko/vim-test'
 Plug 'metakirby5/codi.vim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'mxsdev/nvim-dap-vscode-js', { 'branch': 'start-debugging', 'do': 'npm install --legacy-peer-deps && npx gulp dapDebugServer' }
 Plug 'nvim-orgmode/orgmode'
-Plug 'ldelossa/litee.nvim'
-Plug 'ldelossa/gh.nvim'
 Plug 'pwntester/octo.nvim'
 Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
 Plug 'bennypowers/nvim-regexplainer/'
-"Plug 'yardnsm/vim-import-cost', { 'do': 'npm install --production' }
 Plug 'nvim-treesitter/playground'
 Plug 'williamboman/mason.nvim', { 'do': ':MasonUpdate' }
 Plug '~/code/nvim-circleci'
 Plug '~/code/idb.nvim'
 Plug '~/code/phind.nvim2'
-" Plug 'xbase-lab/xbase', { 'do': 'make install' }
 Plug 'wojciech-kulik/xcodebuild.nvim', { 'do': 'make install' }
-Plug 'folke/noice.nvim'
+" Plug 'folke/noice.nvim'
 Plug 'MunifTanjim/nui.nvim'
 call plug#end()
 
@@ -99,13 +85,6 @@ filetype plugin on
 " Set relevant filetypes
 au BufRead,BufNewFile *.scss set filetype=scss
 au BufRead,BufNewFile *.md set filetype=markdown
-
-" set wildignore values (mainly for Command-T)
-"set wildignore=*.o,*.obj,node_modules/**
-"set wildignore+=*/tmp/*,*.so,*.swp,*.zip,solr/**,log/**,*.psd,*.PSD,.git/**,.gitkeep,.gems/**
-"set wildignore+=*.ico,*.ICO,backup/**,*.sql,*.dump,*.tmp,*.min.js,Gemfile.lock
-"set wildignore+=*.png,*.PNG,*.JPG,*.jpg,*.JPEG,*.jpeg,*.GIF,*.gif,*.pdf,*.PDF
-"set wildignore+=vendor/**,coverage/**,tmp/**,rdoc/**,*.BACKUP.*,*.BASE.*,*.LOCAL.*,*.REMOTE.*,.sass-cache/**
 
 " Tabs, indentation and lines
 filetype plugin indent on
@@ -257,83 +236,6 @@ highlight clear SignColumn
 highlight link SignColumn CursorColumn
 
 autocmd BufWritePre * :%s/\s\+$//e " remove trailing spaces on save
-
-" vim-test config and mappings
-let test#strategy = "neovim"
-let test#neovim#term_position = "vert botright 30"
-let g:test#runner_commands = ['Jest']
-" mappings replaced by neotest
-"nmap <silent> t<C-n> :TestNearest<CR>
-"nmap <silent> t<C-f> :TestFile <CR>
-"nmap <silent> t<C-s> :TestSuite<CR>
-"nmap <silent> t<C-l> :TestLast<CR>
-"nmap <silent> t<C-g> :TestVisit<CR>
-"nmap <silent> t<C-w> :Jest --watch<CR>
-
-let test#javascript#jest#options = "--color=always --watchAll=false"
-let g:asyncrun_open = 1
-nnoremap [q :cprevious<CR>
-nnoremap ]q :cnext<CR>
-nnoremap [Q :cfirst<CR>
-nnoremap ]Q :clast<CR>
-
-" TERMINAL DRAWER {{{
-    " depends on: CLEAN UI and Terminal Behavior
-    " nnoremap <silent><leader>/           :call ToggleTerminalDrawer()<CR>
-    " tnoremap <silent><leader>/ <C-\><C-n>:call ToggleTerminalDrawer()<CR>
-
-    " let g:terminal_drawer = { 'win_id': v:null, 'buffer_id': v:null }
-    " function! ToggleTerminalDrawer() abort
-      " if win_gotoid(g:terminal_drawer.win_id)
-        " hide
-        " set laststatus=2 showmode ruler
-      " else
-        "if g:terminal_drawer.buffer_id && bufexists(str2nr(g:terminal_drawer.buffer_id)) == 1
-        "  execute 'botright sbuffer' . g:terminal_drawer.buffer_id
-        "  exec 'normal! i'
-        "else
-        "  botright call term_start($SHELL, {'exit_cb': 'JW_on_term_exit'})
-        "  let g:terminal_drawer.buffer_id = bufnr("%")
-        "endif
-       " botright new
-        " if g:terminal_drawer.buffer_id && bufexists(str2nr(g:terminal_drawer.buffer_id)) == 1
-            " exec "buffer" g:terminal_drawer.buffer_id
-            " call RemoveEmptyBuffers()
-        " else
-            " call termopen($SHELL, {"detach": 0})
-            " let g:terminal_drawer.buffer_id = bufnr("")
-        " endif
-
-        " exec "resize" float2nr(&lines * 0.25)
-        " exec 'normal! i'
-        " setlocal laststatus=0 noshowmode noruler nonumber norelativenumber
-        " setlocal nobuflisted
-        " let g:terminal_drawer.win_id = win_getid()
-
-      " endif
-    " endfunction
-
-" function! JW_on_term_exit(a, b)
-    " normal bw!
-" endfunction
-
-" function! RemoveEmptyBuffers()
-    " let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")')
-    " if !empty(buffers)
-        " silent exe 'bw ' . join(buffers, ' ')
-    " endif
-" endfunction
-
-function! QuickTerminal(cmd) abort
-  let l:script = matchstr(a:cmd, '\v([a-z]*)(:)@=')
-  let l:command = 'yarn ' . l:script
-  echo l:command
-  botright call termopen(l:command, {"detach": 0})
-  au BufLeave <buffer> wincmd p
-  nnoremap <buffer> <Enter> :q<CR>
-  redraw
-  echo "Press <Enter> to exit terminal (<Ctrl-C> first if command is still running)"
-endfunction
 
 set nofoldenable
 
@@ -768,7 +670,6 @@ lspconfig.lua_ls.setup {
   end,
 }
 
-require("null-ls").setup({})
 --lspconfig["null-ls"].setup({ on_attach = on_attach })
 
 require'nvim-treesitter.configs'.setup {
@@ -1038,10 +939,6 @@ require('orgmode').setup{
   }
 }
 
---vim.keymap.set("n", "K", require("lspsaga.hover").render_hover_doc, { silent = true })
-
--- require('litee.lib').setup()
--- require('litee.gh').setup()
 require"octo".setup({
   use_local_fs = true,
   enable_builtin = true
@@ -1128,15 +1025,6 @@ lspconfig.opts = { servers = { sourcekit = { cmd = {"sourcekit-lsp" } } } }
 }) ]]
 
 EOF
-
-" augroup import_cost_auto_run
-"   autocmd!
-"   autocmd BufEnter *.js,*.jsx,*.ts,*.tsx ImportCost
-" augroup END
-let g:blamer_enabled = 1
-let g:blamer_show_in_visual_modes = 0
-let g:blamer_show_in_insert_modes = 0
-let g:blamer_delay = 500
 
 "nnoremap <silent> <Leader>K :call Dasht(dasht#cursor_search_terms())<Return>
 let g:dasht_filetype_docsets = {} " filetype => list of docset name regexp
