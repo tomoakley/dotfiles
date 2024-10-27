@@ -115,7 +115,4 @@ vim.cmd([[
 
   " y(ank) in n(vim) will copy to clipboard and p(ut) will paste
   set clipboard=unnamed
-
-  " reload vim config with ctrl-r c
-  map <C-r>c :source $MYVIMRC<CR>
 ]])
