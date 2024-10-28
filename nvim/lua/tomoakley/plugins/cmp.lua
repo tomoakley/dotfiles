@@ -7,7 +7,6 @@ return {
     'hrsh7th/cmp-omni',
     {
       "L3MON4D3/LuaSnip",
-      tag = "v1.*",
       build = "make install_jsregexp"
     },
     "onsails/lspkind-nvim",

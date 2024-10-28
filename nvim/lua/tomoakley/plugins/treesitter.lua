@@ -14,6 +14,7 @@ local treesitter_plugins = {
               enable = true,
               additional_vim_regex_highlighting = {'org'},
           },
+          sync_install = true,
           incremental_selection = {
               enable = false,
           },

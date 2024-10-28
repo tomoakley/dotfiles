@@ -12,5 +12,10 @@ return {
   "kien/rainbow_parentheses.vim",
   "unblevable/quick-scope",
 
-  "wojciech-kulik/xcodebuild.nvim"
+  {
+    "wojciech-kulik/xcodebuild.nvim",
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+    }
+  }
 }
