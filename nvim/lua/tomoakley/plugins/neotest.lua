@@ -16,6 +16,13 @@ return {
       quickfix = {
         open = false,
       },
+      diagnostic = {
+        enabled = true,
+      },
+      status = {
+        virtual_text = true,
+        signs = true,
+      },
     })
 
     local bufopts = { noremap=true, silent=true, buffer=bufnr }

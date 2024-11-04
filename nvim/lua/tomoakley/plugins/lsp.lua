@@ -50,11 +50,20 @@ return {
       })
 
       lspconfig.eslint.setup({
-        --[[ on_attach = function(client, bufnr)
-          client.server_capabilities.document_formatting = true
+        on_attach = function(client, bufnr)
+          --[[ client.server_capabilities.document_formatting = true
           client.server_capabilities.document_range_formatting = true
-          vim.api.nvim_create_autocmd("BufWritePre", { callback = function() vim.lsp.buf.format() end })
-        end, ]]
+          vim.api.nvim_create_autocmd("BufWritePre", { callback = function() vim.lsp.buf.format() end }) ]]
+          if client.server_capabilities.document_formatting then
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              buffer = bufnr,
+              callback = function()
+                vim.lsp.buf.formatting_sync(nil, 1000)
+              end
+            })
+        --vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)")
+          end
+        end,
         capabilites = capabilities
       })
 

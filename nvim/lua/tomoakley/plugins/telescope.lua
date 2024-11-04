@@ -1,23 +1,17 @@
-local telescope_plugins = {
-  {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons"
-    }
-  },
-  {
-    "nvim-telescope/telescope-ui-select.nvim"
-  },
-  {
-    "nvim-telescope/telescope-fzf-native.nvim",
-    build = "make",
-  },
+return {
   {
     "nvim-telescope/telescope.nvim",
     dependencies = {
-        "nvim-lua/plenary.nvim"
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
+      },
+      "nvim-telescope/telescope-file-browser.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
+      "nvim-telescope/telescope-frecency.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons",
+      "nvim-lua/plenary.nvim"
     },
     config = function ()
       local telescope = require('telescope')
@@ -53,6 +47,7 @@ local telescope_plugins = {
             hijack_netrw = true,
           },
           fzf = {
+            ignore_current_buffer = true,
             fuzzy = true,                    -- false will only do exact matching
             override_generic_sorter = true,  -- override the generic sorter
             override_file_sorter = true,     -- override the file sorter
@@ -78,13 +73,24 @@ local telescope_plugins = {
       telescope.load_extension("file_browser")
       telescope.load_extension("git_worktree")
       telescope.load_extension("ui-select")
+      telescope.load_extension("frecency")
       telescope.load_extension("circleci")
       --vnoremap <leader>gs "zy <cmd>Telescope live_grep default_text=<C-r>z<cr>
 
       vim.keymap.set('n', '<C-p>', function()
         telescopeBuiltIn.find_files({ hidden = true })
       end, {})
-      vim.keymap.set('n', '<leader>b', telescopeBuiltIn.buffers, {})
+      vim.keymap.set('n', '<leader>b', function()
+        telescopeBuiltIn.buffers(require('telescope.themes').get_dropdown{
+          previewer = false,
+          sort_lastused = true,
+          ignore_current_buffer = true,
+       }
+       --[[ {
+          ',
+          previewer = false
+        } ]])
+      end, {})
       vim.keymap.set('n', '<leader>gg', telescopeBuiltIn.live_grep, {})
       vim.keymap.set('n', '<leader>gs', function()
         telescopeBuiltIn.grep_string(require('telescope.themes').get_cursor())
@@ -112,7 +118,5 @@ local telescope_plugins = {
         { noremap = true, silent = true }
       )
     end
-  }
+  },
 }
-
-return telescope_plugins

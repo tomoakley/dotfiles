@@ -46,7 +46,7 @@ map('i', '˚', ':m .-2<CR>==gi', { noremap = true })
 map('v', '˚', ':m .-2<CR>==gv', { noremap = true })
 
 -- Switch between last two files
-map({'n', 'i'}, '<space><space>', '<C-^>', { noremap = true })
+map('n', '<space><space>', '<C-^>', { noremap = true })
 
 -- mapping for copy to clipboard from yank
 map({'v', 'n'}, '<leader>p', "\"+p")

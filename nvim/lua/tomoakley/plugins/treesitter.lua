@@ -50,6 +50,14 @@ local treesitter_plugins = {
       context.setup {
         enable = true
       }
+      --[[ vim.api.nvim_create_autocmd({ "DiagnosticChanged" }, {
+        callback = function()
+          if context.enabled() then
+            context.disable()
+            context.enable()
+          end
+        end,
+      }) ]]
     end
   }
 }

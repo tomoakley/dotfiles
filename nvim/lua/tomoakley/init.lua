@@ -37,7 +37,7 @@ local autocmd = vim.api.nvim_create_autocmd
 
 autocmd('LspAttach', {
   callback = function(args)
-    local bufopts = { noremap=true, silent=true, buffer=args.bufnr }
+    local bufopts = { noremap=true, silent=true, buffer=args.buf }
     vim.cmd("command! LspDef lua vim.lsp.buf.definition()")
     vim.cmd("command! LspDec lua vim.lsp.buf.declaration()")
     vim.cmd("command! LspFormatting lua vim.lsp.buf.formatting()")
@@ -69,15 +69,6 @@ autocmd('LspAttach', {
     vim.keymap.set("i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>", bufopts)
     vim.keymap.set("n", "<space>pr", ":LspFormatting<CR>", bufopts)
     vim.keymap.set("n", "gds", ":LspDocSyms<CR>", bufopts)
-    --[[ if args.client.server_capabilities.document_formatting then
-        autocmd("BufWritePre", {
-          buffer = args.bufnr,
-          callback = function()
-            vim.lsp.buf.formatting_sync(nil, 1000)
-          end
-        })
-        --vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)")
-    end ]]
   end
 })
 
