@@ -1,27 +1,29 @@
 #!/usr/bin/env bash
 
 session="Slack"
+command="cd ~/.weechat; docker run -it -v ~/.weechat:/home/user/.weechat weechat-with-websocket"
 tmux has-session -t $session 2>/dev/null
 if [ $? != 0 ]; then
   tmux new-session -d -s $session
 fi
 
+
 # check weechat is running, if not, start it
-if [ -z "$(tmux list-panes -a -F "#{pane_current_command}" | grep weechat)" ]; then
+if [ -z "$(tmux list-panes -a -F "#{pane_title}" | grep "cd ~/.weechat")" ]; then
   tmux display-message 'Starting new weechat instance....'
-  tmux send-keys -t $session.1 "export WEECHAT_HOME=~/.weechat/; export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES; weechat" ENTER
+  tmux send-keys -t $session.1 "$command" ENTER
   sleep 2
 fi
 
 # figure out where weechat is and print {session_name}:{window_index}.{pane_index}
-WEECHAT_PANE=$(tmux list-panes -a -F "#{pane_current_command} #{window_index} #{pane_index} #{session_name}" | grep weechat | awk '{ print $4":"$2"."$3 }' | xargs)
+WEECHAT_PANE=$(tmux list-panes -a -F "#{pane_title}; #{session_name}:#{window_index}.#{pane_index}" | grep "cd ~/.weechat" | awk -F ' ; ' '{print $2}')
 
 # weechat process/pane exists
 if [ -n "$WEECHAT_PANE" ]; then
 
   # check if weechat is running in the current session
   CURRENT_SESSION_NAME=$(tmux display -pt "${TMUX_PANE}" '#{session_name}')
-  IS_WEECHAT_IN_CURRENT_SESSION=$(tmux list-panes -a -F "#{pane_current_command} #{session_name}" | grep weechat | awk -v cwn="$CURRENT_SESSION_NAME" '{ if ($2 == cwn) { print "true" } }' | xargs)
+  IS_WEECHAT_IN_CURRENT_SESSION=$(tmux list-panes -a -F "#{pane_title}; #{session_name}" | grep "cd ~/.weechat" | awk -F ' ; ' -v cwn="$CURRENT_SESSION_NAME" '{ if ($2 == cwn) { print "true" } }' | xargs)
 
   # get the current window index
   CURRENT_WINDOW_INDEX=$(tmux display -pt "${TMUX_PANE}" '#{window_index} #{pane_index} #{session_name}' | awk '{ print $3":"$1"."$2 }')
