@@ -22,14 +22,19 @@ def githubToAlacritty (url: QUrl) -> bool:
     print(out)
     return True
 
-def farside(url: QUrl, i) -> bool:
-    url.setHost('farside.link')
+def createUrl(url: QUrl, newUrl, i) -> bool:
+    url.setHost(newUrl)
     p = url.path().strip('/')
     url.setPath(urljoin(i, p))
     return True
 
+
+def farside(url: QUrl, i) -> bool:
+    createUrl(url, 'farside.link', i)
+    return True
+
 def nitter(url: QUrl) -> bool:
-    return farside(url, '/nitter/')
+    return createUrl(url, 'nitter.poast.org', '/')
 def rimgo(url: QUrl) -> bool:
     return farside(url, '/rimgo/')
 def scribe(url: QUrl) -> bool:
@@ -64,6 +69,7 @@ redirMap = {
     "youtube.com": invid,
     "www.youtube.com": invid,
 
+    "x.com": nitter,
     "twitter.com": nitter,
     "mobile.twitter.com": nitter,
 
@@ -79,8 +85,8 @@ redirMap = {
     "www.fandom.com": breezewiki,
     "genius.com" : dumb,
     "stackoverflow.com" : anonymousoverflow,
-    "google.com": whoogle,
-    "www.google.com": whoogle,
+    #"google.com": whoogle,
+    #"www.google.com": whoogle,
 
     "tumblr.com" : o(s, 'splashblr.fly.dev'),
 }
