@@ -5,7 +5,6 @@ tap "homebrew/services"
 
 cask "qutebrowser"
 # cask "alacritty" # only installs intel binary
-cask "react-native-debugger"
 cask "1password"
 cask "1password-cli"
 cask "android-studio"
@@ -21,7 +20,6 @@ brew "pam-reattach"
 
 brew "docker"
 brew "docker-compose"
-brew "nvm"
 brew "yarn"
 brew "watchman"
 brew "lua-language-server"

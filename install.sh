@@ -29,10 +29,6 @@ sudo codesign --force --deep --sign - /Applications/Alacritty.app
 ## Install packages from brewfile
 brew bundle
 
-## setup nvm and node versions
-mkdir ~/.nvm/
-chmod +x /usr/local/opt/nvm/nvm.sh
-
 ## setup fnm and node version
 curl -fsSL https://fnm.vercel.app/install | bash
 fnm install 20
