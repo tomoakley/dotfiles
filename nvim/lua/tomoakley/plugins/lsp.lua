@@ -68,18 +68,31 @@ return {
       })
 
       lspconfig.sourcekit.setup{
-        cmd = {"sourcekit-lsp", "--log-level", "error", "--stdio" },
-        filetypes = { "swift", "c", "cpp", "objective-c", "objective-cpp", "objc", "objcpp" },
-        capabilites = capabilities
+        capabilities = {
+            workspace = {
+                didChangeWatchedFiles = {
+                    dynamicRegistration = true,
+                },
+            },
+        },
       }
-
-      lspconfig.opts = {
-        servers = {
-          sourcekit = {
-            cmd = {"sourcekit-lsp" }
-          }
-        }
-      }
+    local swift_lsp = vim.api.nvim_create_augroup("swift_lsp", { clear = true })
+ vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "swift" },
+  callback = function()
+   local root_dir = vim.fs.dirname(vim.fs.find({
+    "Package.swift",
+    ".git",
+   }, { upward = true })[1])
+   local client = vim.lsp.start({
+    name = "sourcekit-lsp",
+    cmd = { "sourcekit-lsp" },
+    root_dir = root_dir,
+   })
+   vim.lsp.buf_attach_client(0, client)
+  end,
+  group = swift_lsp,
+ })
 
       local rescriptLspPath = '/Users/toakley/.config/nvim/vim-rescript/server/out/server.js'
       if not configs.rescriptlsp then

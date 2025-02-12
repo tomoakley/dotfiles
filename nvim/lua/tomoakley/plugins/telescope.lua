@@ -8,8 +8,7 @@ return {
       },
       "nvim-telescope/telescope-file-browser.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
-      "nvim-telescope/telescope-frecency.nvim",
-      "nvim-lua/plenary.nvim",
+      --"nvim-telescope/telescope-frecency.nvim",
       "nvim-tree/nvim-web-devicons",
       "nvim-lua/plenary.nvim"
     },
@@ -73,8 +72,8 @@ return {
       telescope.load_extension("file_browser")
       telescope.load_extension("git_worktree")
       telescope.load_extension("ui-select")
-      telescope.load_extension("frecency")
-      telescope.load_extension("circleci")
+      --telescope.load_extension("frecency")
+      --telescope.load_extension("circleci")
       --vnoremap <leader>gs "zy <cmd>Telescope live_grep default_text=<C-r>z<cr>
 
       vim.keymap.set('n', '<C-p>', function()

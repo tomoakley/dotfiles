@@ -8,13 +8,17 @@ cask "qutebrowser"
 cask "1password"
 cask "1password-cli"
 cask "android-studio"
+cask "android-platform-tools"
 cask "hammerspoon"
 cask "alfred"
 cask "google-chrome"
 cask "steermouse"
 cask "sequel-pro"
 cask "db-browser-for-sqlite"
+cask "orbstack"
+cask "xcodes"
 cask "openscad"
+cask "ultimaker-cura"
 
 brew "pam-reattach"
 
@@ -47,6 +51,7 @@ brew "choose-gui"
 brew "pandoc"
 brew "gh"
 brew "scrcpy"
+brew "circleci"
 
 mas "Meeter for Zoom, Teams & Co", id: 1510445899
 mas "Bear", id: 1091189122
