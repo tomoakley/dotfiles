@@ -33,12 +33,14 @@ brew bundle
 mkdir ~/.nvm/
 chmod +x /usr/local/opt/nvm/nvm.sh
 
-nvm install 12
-nvm use 12
-nvm alias default 10
+## setup fnm and node version
+curl -fsSL https://fnm.vercel.app/install | bash
+fnm install 20
+fnm use 20
 
 # install global npm packages
-npm i -g typescript typescript-language-server
+#npm i -g typescript typescript-language-server
+npm i -g @vtsls/language-server
 npm i -g readability-cli
 npm i -g @sloansparger/bear
 npm i -g vscode-langservers-extracted
