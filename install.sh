@@ -59,11 +59,6 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 chmod +x ~/.tmux/plugins/tpm/scripts/update_plugin.sh
 ~/.tmux/plugins/tpm/scripts/update_plugin.sh
 
-# install vimplug and then install the plugins
-sh -c 'curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-nvim +'PlugInstall --sync' +qa
-
 # get Meslo font. These need installing manually
 cd ~/Downloads && {
     curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Regular.ttf'
