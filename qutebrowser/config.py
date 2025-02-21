@@ -171,7 +171,7 @@ c.downloads.position = 'top'
 # `{line0}`: Same as `{line}`, but starting from index 0. * `{column0}`:
 # Same as `{column}`, but starting from index 0.
 # Type: ShellCommand
-c.editor.command = ['nvim', '-f', '{file}', '-c', 'normal {line}G{column0}l']
+c.editor.command = ['open', '-a', 'alacritty', '&&', 'tmux', 'send-keys', "'nvim {file} '", "Enter"]
 
 # Padding (in pixels) around text for tabs.
 # Type: Padding
@@ -586,6 +586,9 @@ c.fonts.tabs.selected = '14pt default_family'
 # Font used for unselected tabs.
 # Type: Font
 c.fonts.tabs.unselected = '14pt default_family'
+
+c.url.searchengines = { 'DEFAULT': 'https://kagi.com/search?q={}' }
+c.url.start_pages = ['https://kagi.com']
 
 # Bindings for normal mode
 config.bind(',b', 'spawn --userscript buku-add')

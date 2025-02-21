@@ -1,6 +1,7 @@
 return {
   "nvim-neotest/neotest",
   dependencies = {
+    'thenbe/neotest-playwright',
     "nvim-neotest/neotest-jest",
     "nvim-neotest/nvim-nio"
   },
@@ -11,6 +12,12 @@ return {
       adapters = {
         require('neotest-jest')({
           --jestCommand = "jest --watch ",
+        }),
+        require('neotest-playwright').adapter({
+          options = {
+            persist_project_selection = true,
+            enable_dynamic_test_discovery = true,
+          },
         }),
       },
       quickfix = {

@@ -24,3 +24,5 @@ alias ba="buku -a" # alias to add buku bookmark
 alias baf='f() { buku -a $1 favourites --title $2 };f'
 
 alias ab='echo "Refreshing antibody plugins..."; antibody bundle < ~/.zsh/zsh_plugins.txt > ~/.zsh/zsh_plugins.sh; source ~/.zshrc'
+
+alias cpsh='code-push-standalone'
