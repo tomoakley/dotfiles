@@ -12,6 +12,19 @@ function openApp(name)
   end
 end
 
+local function convertSlackUrl(url)
+  return url:gsub("^https://app.slack.com/client/(%w+)/(%w+)?open=start_huddle$", "slack://join-huddle\\?team=%1\\&id=%2")
+end
+
+hs.urlevent.httpCallback = function(_, _, _, url, _)
+  local isSlackHuddleUrl = url:match("^https://app.slack.com/client/.+?/?open=start_huddle$")
+  if isSlackHuddleUrl then
+    local converted = convertSlackUrl(url)
+    local command = "open -a safari " .. converted
+    hs.execute(command)
+  end
+end
+
 hs.hotkey.bind({"ctrl"}, "3", function()
   replacedApp = hs.application.frontmostApplication():name()
   openApp("Alacritty.app")
