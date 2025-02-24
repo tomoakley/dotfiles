@@ -4,6 +4,9 @@
 #if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 #  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 #fi
+#
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="robbyrussell"
 
 # only check once per day for cached .zcompdump file to see if it must be regenerated
 # https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-2308206
@@ -19,9 +22,10 @@ export MUSIC_APP="iTunes"
 # set env vars for critiq.vim to be able to talk to GitHub
 #export GH_USER=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "GITHUB_USERNAME")
 #export GH_PASS=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "GITHUB_TOKEN")
-export GITHUB_TOKEN=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "github.com")
+#export GITHUB_TOKEN=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "github.com")
 
 # source antibody plugins
+source $HOMEBREW_PREFIX/opt/antidote/share/antidote/antidote.zsh
 source ~/.zsh/zsh_plugins.sh
 
 source ~/.zsh/aliases
@@ -46,18 +50,19 @@ dcleanup() {
     docker volume rm $(docker volume ls -qf dangling=true)
 }
 
-if command -v pyenv 1>/dev/null 2>&1; then
-  export PYENV_ROOT="$HOME/.pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
-  eval "$(pyenv init --path)"
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-fi
+# if command -v pyenv 1>/dev/null 2>&1; then
+#   export PYENV_ROOT="$HOME/.pyenv"
+#   export PATH="$PYENV_ROOT/bin:$PATH"
+#   export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
+#   eval "$(pyenv init --path)"
+#   eval "$(pyenv init -)"
+#   eval "$(pyenv virtualenv-init -)"
+# fi
 
 #zprof # bottom of .zshrc
 
 # To customize prompt, run `p10k configure` or edit ~/.zsh/p10k.zsh.
+POWERLEVEL9K_CONFIG_FILE=~/.zsh/p10k.zsh
 [[ ! -f ~/.zsh/p10k.zsh ]] || source ~/.zsh/p10k.zsh
 if [ -e /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tomoakley/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 

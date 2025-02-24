@@ -5,12 +5,6 @@
 # General UI?UX settings #
 ##########################
 
-# Set hostname (hex of MVB9APPS)
-sudo scutil --set ComputerName "0x4d56423941505053"
-sudo scutil --set HostName "0x4d56423941505053"
-sudo scutil --set LocalHostName "0x4d56423941505053"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "0x4d56423941505053"
-
 # Disable the sound effects on boot
 #sudo nvram SystemAudioVolume=" "
 

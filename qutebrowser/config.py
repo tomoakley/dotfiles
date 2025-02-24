@@ -561,7 +561,7 @@ c.colors.tabs.pinned.selected.even.bg = '#859900'
 # font setting, it's replaced with the fonts listed here. If set to an
 # empty value, a system-specific monospace default is used.
 # Type: List of Font, or Font
-c.fonts.default_family = ['Fira Code', 'monospace']
+c.fonts.default_family = ['MesloLGS NF', 'monospace']
 
 # Font used in the completion widget.
 # Type: Font

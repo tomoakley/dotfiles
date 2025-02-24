@@ -7,13 +7,13 @@
 - link:
     ~/.tmux.conf: tmux.conf
     ~/.vimrc: vimrc
-    ~/.config/nvim/init.vim: nvim/init.vim
+    ~/.config/nvim: nvim
     ~/.zshrc: zshrc
     ~/.zsh: zsh
     ~/.fzf.zsh: zsh/configs/fzf.zsh
     ~/.gitignore_global: git/.gitignore_global
     ~/.hammerspoon: hammerspoon/
-    ~/.alacritty.yml: alacritty.yml
+    ~/.config/alacritty.toml: alacritty.toml
     ~/.local/bin: bin
     ~/.qutebrowser: qutebrowser
     ~/.config/weechat: weechat
