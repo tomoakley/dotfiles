@@ -4,15 +4,17 @@ from PyQt6.QtCore import QUrl
 import operator
 import subprocess
 import re
+import os
 
 o = operator.methodcaller
 s = 'setHost'
 i = interceptor
 
 def githubToAlacritty (url: QUrl) -> bool:
+    home_dir = os.path.expanduser("~")
     p = subprocess.Popen(
         [
-            '/Users/toakley/.qutebrowser/octo-nvim.sh',
+            f"{home_dir}/.qutebrowser/octo-nvim.sh",
             str(url)
         ],
         stdout=subprocess.PIPE,

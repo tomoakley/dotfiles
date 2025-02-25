@@ -1,3 +1,4 @@
+# build first: docker build -t weechat-with-websocket .
 FROM weechat/weechat:latest
 
 USER root

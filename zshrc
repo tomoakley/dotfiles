@@ -20,13 +20,11 @@ compinit -C
 export MUSIC_APP="iTunes"
 
 # set env vars for critiq.vim to be able to talk to GitHub
-#export GH_USER=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "GITHUB_USERNAME")
-#export GH_PASS=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "GITHUB_TOKEN")
-#export GITHUB_TOKEN=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "github.com")
+export GITHUB_TOKEN=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "github.com")
 
 # source antibody plugins
 source $HOMEBREW_PREFIX/opt/antidote/share/antidote/antidote.zsh
-source ~/.zsh/zsh_plugins.sh
+antidote load ~/.zsh/zsh_plugins.txt
 
 source ~/.zsh/aliases
 source ~/.zsh/configs/ohmyzsh.zsh

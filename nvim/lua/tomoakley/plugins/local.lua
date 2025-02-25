@@ -1,5 +1,5 @@
 return {
-  {
+  --[[ {
     "idb",
     dir = "~/code/idb.nvim",
     config = function() end,
@@ -17,6 +17,5 @@ return {
       }
 
     end
-  }
-
+  } ]]
 }

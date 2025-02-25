@@ -1,34 +1,34 @@
 #!/usr/bin/env bash
 
-## Install Homebrew
-#sudo chown -R $(whoami):admin /usr/local
-#/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-#brew doctor
-#brew update
+# Install Homebrew
+sudo chown -R $(whoami):admin /usr/local
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew doctor
+brew update
 
-#echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-#eval "$(/opt/homebrew/bin/brew shellenv)"
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-## Install packages from brewfile
-#brew bundle
+# Install packages from brewfile
+brew bundle
 
-## setup fnm and node version
-#curl -fsSL https://fnm.vercel.app/install | bash
-#fnm install 20
-#fnm use 20
+# setup fnm and node version
+curl -fsSL https://fnm.vercel.app/install | bash
+fnm install 20
+fnm use 20
 
 # install global npm packages
-#npm i -g typescript typescript-language-server
-#npm i -g @vtsls/language-server
-#npm i -g readability-cli
-#npm i -g @sloansparger/bear
-#npm i -g vscode-langservers-extracted
+npm i -g typescript typescript-language-server
+npm i -g @vtsls/language-server
+npm i -g readability-cli
+npm i -g @sloansparger/bear
+npm i -g vscode-langservers-extracted
 
 ## setup dotfiles correctly
-#dotbot -c install.conf.yaml
+dotbot -c install.conf.yaml
 
 # install ohmyzsh
-#sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # generate antibody zsh plugins shell file
 antidote bundle < ~/.zsh/zsh_plugins.txt > ~/.zsh/zsh_plugins.sh
@@ -65,6 +65,10 @@ fd ../../
 rm -rf Apple-Music-CLI-Player
 
 # gh cli
+echo '//npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+@mediaingenuity:registry=https://npm.pkg.github.com/' >> ~/.npmrc
+
+gh auth login
 gh extension install dlvhdr/gh-dash
 
 ln -s ~/dotfiles/gh-dash ~/.config/gh-dash

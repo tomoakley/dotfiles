@@ -11,6 +11,8 @@ cask "android-studio"
 cask "android-platform-tools"
 cask "hammerspoon"
 cask "alfred"
+cask "spacelauncher"
+cask "homerow"
 cask "google-chrome"
 cask "steermouse"
 #cask "sequel-pro"
@@ -35,6 +37,7 @@ brew "sqlite3"
 brew "xz"
 brew "zlib"
 brew "leiningen"
+brew "awscli"
 
 brew "fzf"
 brew "weechat"
@@ -54,7 +57,6 @@ brew "gh"
 brew "scrcpy"
 brew "circleci"
 
-mas "Meeter for Zoom, Teams & Co", id: 1510445899
 mas "Bear", id: 1091189122
 mas "ToothFairy", id: 1191449274
 mas "Vimari", id: 1480933944

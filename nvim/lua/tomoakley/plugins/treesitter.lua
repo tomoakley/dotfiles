@@ -21,7 +21,7 @@ local treesitter_plugins = {
           indent = {
             enable = true
           },
-          ensure_installed = {'javascript', 'typescript', 'tsx', 'org', 'lua', 'vim'},
+          ensure_installed = {'javascript', 'typescript', 'tsx', 'lua', 'vim'},
           playground = {
           enable = true,
           disable = {},
