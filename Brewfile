@@ -19,6 +19,7 @@ cask "steermouse"
 cask "db-browser-for-sqlite"
 cask "orbstack"
 cask "xcodes"
+cask "choosy"
 cask "openscad"
 cask "ultimaker-cura"
 

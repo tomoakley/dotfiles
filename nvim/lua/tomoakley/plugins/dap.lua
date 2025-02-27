@@ -87,7 +87,7 @@ return {
     })
 
     require('dap-vscode-js').setup({
-      debugger_executable = '/Users/toakley/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js',
+      debugger_executable = '/Users/tomoakley/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js',
       adapters = { 'pwa-node' },
     })
 
