@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 
-QT_URL=$1 # PyQt6.QtCore.QUrl('https://github.com/owner/repo/pulls')
-URL=$(echo $QT_URL | sed -n 's/^.*'\''\(.*\)'\''.*$/\1/p') # extract url out of above string
+# todo:
+# - custom bindings for octo
+# - open individual PRs in the same tmux window
+# - binding to return to previously active tmux session/window
+
+URL=$1
+
+# if launching from Qutebrowser, do this to extract URL out of the $QT_URL variable which looks like # PyQt6.QtCore.QUrl('https://github.com/owner/repo/pulls')
+if [[ $URL =~ ^PyQt6\.QtCore\.QUrl\('.*'\)$ ]]; then
+  URL=$(echo "$URL" | sed -n 's/^.*'\''\(.*\)'\''.*$/\1/p')
+fi
 
 REPO=$(echo "$URL" | awk -F/ '{print $5}')
 PATH_TO_REPO=~/code/$REPO

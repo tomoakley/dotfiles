@@ -25,7 +25,24 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
   end
 end
 
-hs.hotkey.bind({"ctrl"}, "3", function()
+hs.urlevent.httpCallback = function(_, _, _, url, _)
+  local pattern = "^https?://?github%.com/[%w%._%-]+/[%w%._%-]+/pulls?/?(%d*)$"
+  local match = string.match(url, pattern)
+  if match ~= nil then
+    local task = hs.task.new(
+      "/Users/tomoakley/.qutebrowser/octo-nvim.sh",
+      function ()
+      end,
+      {url}
+    )
+    task:start()
+  else
+    local task = hs.task.new("/opt/homebrew/bin/qutebrowser", nil, {"--target", "tab", url})
+    task:start()
+  end
+end
+
+--[[ hs.hotkey.bind({"ctrl"}, "3", function()
   replacedApp = hs.application.frontmostApplication():name()
   openApp("Alacritty.app")
 end)
@@ -45,7 +62,7 @@ hs.hotkey.bind({"ctrl"}, "5", function()
   local currentApp = hs.application.frontmostApplication():name()
   openApp(replacedApp)
   replacedApp = currentApp
-end)
+end) ]]
 
 function reloadConfig(files)
     doReload = false
