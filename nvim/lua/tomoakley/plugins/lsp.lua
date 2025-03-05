@@ -54,6 +54,8 @@ return {
           --[[ client.server_capabilities.document_formatting = true
           client.server_capabilities.document_range_formatting = true
           vim.api.nvim_create_autocmd("BufWritePre", { callback = function() vim.lsp.buf.format() end }) ]]
+          client.server_capabilities.documentFormattingProvider = true
+          client.server_capabilities.document_formatting = true
           if client.server_capabilities.document_formatting then
             vim.api.nvim_create_autocmd("BufWritePre", {
               buffer = bufnr,

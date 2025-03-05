@@ -42,26 +42,43 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
   end
 end
 
---[[ hs.hotkey.bind({"ctrl"}, "3", function()
+--[[ local appShortcutBindings = {
+  {"3", "Alacritty"},
+  {"4", "Qutebrowser"}
+}
+
+for i, tuple in ipairs(appShortcutBindings) do
+  local binding, app = tuple[1], tuple[2]
+  hs.hotkey.bind({"ctrl"}, binding, function()
+    if replacedApp ~= nil and replacedApp ~= app then
+      openApp(replacedApp..".app")
+      replacedApp = nil
+    end
+    replacedApp = hs.application.frontmostApplication():name()
+    openApp(app..".app")
+  end)
+end ]]
+
+hs.hotkey.bind({"ctrl"}, "3", function()
+  if replacedApp ~= nil and replacedApp ~= "Alacritty" then
+    openApp(replacedApp..".app")
+  end
   replacedApp = hs.application.frontmostApplication():name()
   openApp("Alacritty.app")
 end)
 
-hs.hotkey.bind({"ctrl"}, "2", function()
-  replacedApp = hs.application.frontmostApplication():name()
+hs.hotkey.bind({"ctrl"}, "4", function()
+  if replacedApp ~= nil and replacedApp ~= "Qutebrowser" then
+    openApp(replacedApp..".app")
+  end
+    replacedApp = hs.application.frontmostApplication():name()
   openApp("Qutebrowser.app")
 end)
 
-hs.hotkey.bind({"ctrl"}, "4", function()
+--[[ hs.hotkey.bind({"ctrl"}, "4", function()
   replacedApp = hs.application.frontmostApplication():name()
   openApp("Simulator.app")
   hs.eventtap.keyStroke({"fn"}, "F9")
-end)
-
-hs.hotkey.bind({"ctrl"}, "5", function()
-  local currentApp = hs.application.frontmostApplication():name()
-  openApp(replacedApp)
-  replacedApp = currentApp
 end) ]]
 
 function reloadConfig(files)
