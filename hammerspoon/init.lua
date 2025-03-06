@@ -25,10 +25,19 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
   end
 end
 
+local domainsToOpenInSafari = { "notion.so", "figma.com", "sentry.io" }
+
+local function urlMatchesPattern(domain, urlTable)
+  for _, item in ipairs(urlTable) do
+    if  domain == item then
+      return true
+    end
+  end
+  return false
+end
+
 hs.urlevent.httpCallback = function(_, _, _, url, _)
-  local pattern = "^https?://?github%.com/[%w%._%-]+/[%w%._%-]+/pulls?/?(%d*)$"
-  local match = string.match(url, pattern)
-  if match ~= nil then
+  if string.match(url, "^https?://?github%.com/[%w%._%-]+/[%w%._%-]+/pulls?/?(%d*)$") ~= nil then
     local task = hs.task.new(
       "/Users/tomoakley/.qutebrowser/octo-nvim.sh",
       function ()
@@ -36,28 +45,14 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
       {url}
     )
     task:start()
+  elseif urlMatchesPattern(string.match(url, '[%w%.]*%.(%w+%.%w+)'), domainsToOpenInSafari) then
+    local task = hs.task.new("/usr/bin/open", nil, {"-a /Applications/Safari.app", url})
+    task:start()
   else
     local task = hs.task.new("/opt/homebrew/bin/qutebrowser", nil, {"--target", "tab", url})
     task:start()
   end
 end
-
---[[ local appShortcutBindings = {
-  {"3", "Alacritty"},
-  {"4", "Qutebrowser"}
-}
-
-for i, tuple in ipairs(appShortcutBindings) do
-  local binding, app = tuple[1], tuple[2]
-  hs.hotkey.bind({"ctrl"}, binding, function()
-    if replacedApp ~= nil and replacedApp ~= app then
-      openApp(replacedApp..".app")
-      replacedApp = nil
-    end
-    replacedApp = hs.application.frontmostApplication():name()
-    openApp(app..".app")
-  end)
-end ]]
 
 hs.hotkey.bind({"ctrl"}, "3", function()
   if replacedApp ~= nil and replacedApp ~= "Alacritty" then
