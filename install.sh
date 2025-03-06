@@ -66,7 +66,7 @@ fd ../../
 rm -rf Apple-Music-CLI-Player
 
 # gh cli
-echo '//npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+echo '//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 @mediaingenuity:registry=https://npm.pkg.github.com/' >> ~/.npmrc
 
 gh auth login
