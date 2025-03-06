@@ -82,4 +82,4 @@ end
 -- Set up the menu bar item
 menuBarItem:setTitle("🌐")
 menuBarItem:setClickCallback(toggleWebView)
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", toggleWebView)
+hs.hotkey.bind({"cmd", "alt"}, "K", toggleWebView)
