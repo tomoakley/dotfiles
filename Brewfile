@@ -2,6 +2,7 @@ tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
 tap "homebrew/services"
+tap "homebrew/cask-fonts"
 
 cask "qutebrowser"
 cask "alacritty"
@@ -20,6 +21,7 @@ cask "orbstack"
 cask "xcodes"
 cask "openscad"
 cask "ultimaker-cura"
+cask "font-melsolg-nerd-font"
 
 brew "pam-reattach"
 

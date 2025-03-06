@@ -39,12 +39,13 @@ chmod +x ~/.tmux/plugins/tpm/scripts/update_plugin.sh
 ~/.tmux/plugins/tpm/scripts/update_plugin.sh
 
 # get Meslo font. These need installing manually
-cd ~/Downloads && {
-    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Regular.ttf'
-    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Bold.ttf'
-    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Italic.ttf'
-    curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Bold Italic.ttf'
-    cd -; }
+# now done via homebrew but left here in case
+# cd ~/Downloads && {
+#     curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Regular.ttf'
+#     curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Bold.ttf'
+#     curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Italic.ttf'
+#     curl -O 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS NF Bold Italic.ttf'
+#     cd -; }
 
 # set some better macos defaults
 chmod +x macos.sh
