@@ -1,3 +1,4 @@
+require("vim-mode")
 require("menubar")
 require("bindings")
 require("url")

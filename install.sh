@@ -73,3 +73,6 @@ gh auth login
 gh extension install dlvhdr/gh-dash
 
 ln -s ~/dotfiles/gh-dash ~/.config/gh-dash
+
+# install Hammerspoon spoons
+git clone https://github.com/dbalatero/VimMode.spoon ~/code/dotfiles/hammerspoon/Spoons/VimMode.spoon
