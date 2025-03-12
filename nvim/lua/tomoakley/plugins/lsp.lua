@@ -60,7 +60,7 @@ return {
             vim.api.nvim_create_autocmd("BufWritePre", {
               buffer = bufnr,
               callback = function()
-                vim.lsp.buf.format({ async = false })
+                vim.lsp.buf.format({ async = true })
               end
             })
             --vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)")

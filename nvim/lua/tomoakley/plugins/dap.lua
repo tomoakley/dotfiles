@@ -120,6 +120,16 @@ return {
           console = "integratedTerminal",
           port = 35000,
         },
+        {
+          type = "chrome",
+          request = "attach",
+          program = "${file}",
+          cwd = vim.fn.getcwd(),
+          sourceMaps = true,
+          protocol = "inspector",
+          port = 9222,
+          webRoot = "${workspaceFolder}"
+        }
     }
     end
 
