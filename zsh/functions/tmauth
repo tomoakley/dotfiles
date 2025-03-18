@@ -1,0 +1,48 @@
+function tmauth() {
+  TYPE=
+  EMAIL=
+  if [[ $1 == *"@"* ]]; then
+    EMAIL=$1
+    TYPE=$2
+  else
+    EMAIL=$2
+    TYPE=$1
+  fi
+  HOST=$3
+
+  if [[ -z $EMAIL ]]; then
+    HOST=$2
+    if [[ $HOST == "ci" ]]; then
+      EMAIL="tomo@tm.com"
+    else
+      EMAIL="t@t.co"
+    fi
+  fi
+
+  COMMAND=
+
+  if [[ $TYPE == "m" ]]; then
+     COMMAND="magiclink-login"
+  fi
+
+  if [[ $TYPE == "p" ]]; then
+    command="passcode-login"
+  fi
+
+  OUTPUT=$(COMPOSE_FILE=~/code/account/docker-compose.yml dcr --rm --remove-orphans $COMMAND $EMAIL $HOST)
+
+  if [[ $? -eq 1 ]]; then
+    echo $OUTPUT
+    return 1
+  fi
+
+  if [[ $TYPE == "m" ]]; then
+    open -a safari $OUTPUT
+    return 0
+  fi
+
+  if [[ $TYPE == "p" ]]; then
+    echo $OUTPUT | pbcopy
+    return 0
+  fi
+}
