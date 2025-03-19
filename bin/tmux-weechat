@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 session="Slack"
-command="docker run -it -v ~/.config/weechat:/home/user/.weechat weechat-with-websocket"
+command="docker run -it --name weechat -v ~/.config/weechat:/home/user/.weechat weechat-with-websocket"
 tmux has-session -t $session 2>/dev/null
 if [ $? != 0 ]; then
   tmux new-session -d -s $session -c "~/.config/weechat"
