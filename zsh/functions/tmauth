@@ -26,7 +26,7 @@ function tmauth() {
   fi
 
   if [[ $TYPE == "p" ]]; then
-    command="passcode-login"
+    COMMAND="passcode-login"
   fi
 
   OUTPUT=$(COMPOSE_FILE=~/code/account/docker-compose.yml dcr --rm --remove-orphans $COMMAND $EMAIL $HOST)
@@ -37,11 +37,13 @@ function tmauth() {
   fi
 
   if [[ $TYPE == "m" ]]; then
-    open -a safari $OUTPUT
+    echo "MagicLink: $OUTPUT"
+    open $OUTPUT
     return 0
   fi
 
   if [[ $TYPE == "p" ]]; then
+    echo "Passcode: $OUTPUT"
     echo $OUTPUT | pbcopy
     return 0
   fi
