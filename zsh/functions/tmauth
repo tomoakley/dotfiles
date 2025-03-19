@@ -19,6 +19,10 @@ function tmauth() {
     fi
   fi
 
+  if [[ -z $HOST ]]; then
+    HOST="localhost"
+  fi
+
   COMMAND=
 
   if [[ $TYPE == "m" ]]; then

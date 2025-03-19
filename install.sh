@@ -23,6 +23,7 @@ npm i -g @vtsls/language-server
 npm i -g readability-cli
 npm i -g @sloansparger/bear
 npm i -g vscode-langservers-extracted
+npm i -g bash-language-server
 
 ## setup dotfiles correctly
 dotbot -c install.conf.yaml
