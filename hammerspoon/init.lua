@@ -2,6 +2,7 @@ require("vim-mode")
 require("menubar")
 require("bindings")
 require("url")
+require("window")
 
 function reloadConfig(files)
     doReload = false

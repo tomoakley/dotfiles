@@ -11,8 +11,8 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
   end
 end
 
-local domainsToOpenInSafari = { "notion.so", "figma.com", "sentry.io" }
-local domainsToOpenInChrome = { "google.com" }
+local domainsToOpenInSafari = { "notion.so", "figma.com", "sentry.io", "localhost:9001" }
+local domainsToOpenInChrome = { "docs.google.com" }
 
 local function urlMatchesPattern(domain, urlTable)
   for _, item in ipairs(urlTable) do
@@ -32,13 +32,12 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
       {url}
     )
     task:start()
-  elseif urlMatchesPattern(string.match(url, '[%w%.]*%.(%w+%.%w+)'), domainsToOpenInSafari) then
-    local task = hs.task.new("/usr/bin/open", nil, {"-a /Applications/Safari.app", url})
-    task:start()
-  elseif urlMatchesPattern(string.match(url, '[%w%.]*%.(%w+%.%w+)'), domainsToOpenInChrome) then
-    print(url)
-    local task = hs.task.new("/usr/bin/open", nil, {"-a '/Applications/Google Chrome.app'", url})
-    task:start()
+  elseif urlMatchesPattern(string.match(url, "://([^/]+)"), domainsToOpenInSafari) then
+    local command = "open -a safari " .. url
+    hs.execute(command)
+  elseif urlMatchesPattern(string.match(url, "://([^/]+)"), domainsToOpenInChrome) then
+    local command = "open -a '/Applications/Google Chrome.app' " .. url
+    hs.execute(command)
   else
     local task = hs.task.new("/opt/homebrew/bin/qutebrowser", nil, {"--target", "tab", url})
     task:start()
