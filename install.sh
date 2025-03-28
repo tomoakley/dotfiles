@@ -15,6 +15,12 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # Install packages from brewfile
 brew bundle
 
+## setup dotfiles correctly
+rm ~/.zshrc
+mkdir ~/config
+dotbot -c install.conf.yaml
+source ~/.zshrc
+
 # setup fnm and node version
 curl -fsSL https://fnm.vercel.app/install | bash
 fnm install 20
@@ -28,8 +34,6 @@ npm i -g @sloansparger/bear
 npm i -g vscode-langservers-extracted
 npm i -g bash-language-server
 
-## setup dotfiles correctly
-dotbot -c install.conf.yaml
 
 # install ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -73,7 +77,7 @@ if $IS_TM; then
 # gh cli
   echo '//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
   @mediaingenuity:registry=https://npm.pkg.github.com/' >> ~/.npmrc
-end
+fi
 
 gh auth login
 gh extension install dlvhdr/gh-dash

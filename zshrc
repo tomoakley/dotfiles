@@ -16,11 +16,15 @@ for dump in ~/.zcompdump(N.mh+24); do
 done
 compinit -C
 
+export IS_TM=$([[ -d "/Applications/Perimeter 81.app" ]] && echo true || echo false)
+
 # set tmux-spotify to use Apple Music instead of Spotify
 export MUSIC_APP="iTunes"
 
 # set env vars for critiq.vim to be able to talk to GitHub
-export GITHUB_TOKEN=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "github.com")
+if $IS_TM; then
+  export GITHUB_TOKEN=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "github.com")
+fi
 
 # source antibody plugins
 source $HOMEBREW_PREFIX/opt/antidote/share/antidote/antidote.zsh

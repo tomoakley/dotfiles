@@ -23,7 +23,7 @@ cask "orbstack"
 cask "xcodes"
 cask "openscad"
 cask "ultimaker-cura"
-cask "font-melsolg-nerd-font"
+cask "font-melso-lg-nerd-font"
 cask "appcleaner"
 
 #brew "pam-reattach"
@@ -41,7 +41,7 @@ brew "readline"
 #brew "sqlite3"
 #brew "xz"
 #brew "zlib"
-brew "awscli" && is_tm
+brew "awscli" if is_tm
 
 brew "fzf"
 #brew "weechat"
@@ -59,7 +59,7 @@ brew "ripgrep"
 brew "pandoc"
 brew "gh"
 brew "scrcpy"
-brew "circleci" && is_tm
+brew "circleci" if is_tm
 
 #mas "Bear", id: 1091189122
 #mas "ToothFairy", id: 1191449274
