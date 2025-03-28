@@ -1,20 +1,20 @@
 # Squash and rebase commits on a branch
-function grbom() {
+function grboms() {
   BRANCH=$(git branch --show-current)
   if [[ "$BRANCH" == "master" ]]; then
     echo "You're on the master branch, switch to a feature branch."
-    return
+    return 1
   fi
-  if [[ "$*" == "" ]]; then
-    echo "Exiting due to empty commit message. Usage: grbom \"commit message\""
-    return
+  if [[ "$1" == "" ]]; then
+    echo "Exiting due to empty commit message. Usage: grboms \"commit message\""
+    return 1
   fi
-  COMMIT_NUM=$(($(git rev-list origin/master.. --count)))
+  COMMIT_NUM=$(git rev-list origin/master.. --count)
+  echo "commits since master: $COMMIT_NUM"
   sh -c "git reset --soft HEAD~$COMMIT_NUM"
   sh -c "git add ."
-  sh -c "git commit -m \"$*\""
-  sh -c "git fetch origin"
-  sh -c "yarn"
+  sh -c "git commit -m \"$1\""
+  sh -c "git fetch --all"
   sh -c "git rebase origin/master"
 }
 
