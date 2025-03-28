@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+
+IS_TM=$([[ -d "/Applications/Perimeter 81.app" ]] && echo true || echo false)
+
 # Install Homebrew
 sudo chown -R $(whoami):admin /usr/local
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -53,22 +56,24 @@ chmod +x macos.sh
 ./macos.sh
 
 # clone (private) buku bookmarks db
-git clone https://github.com/tomoakley/buku-bookmarks ~/.local/share/buku/
+#git clone https://github.com/tomoakley/buku-bookmarks ~/.local/share/buku/
 
 # symlink userscripts to Qutebrowser data directory, run buku-get to import buku bookmarks into qb
 ln -s ~/dotfiles/qutebrowser/userscripts ~/Library/Application\ Support/qutebrowser/userscripts
-~/dotfiles/qutebrowser/userscripts/buku-get
+#~/dotfiles/qutebrowser/userscripts/buku-get
 
-git clone https://github.com/mcthomas/Apple-Music-CLI-Player
-cd Apple-Music-CLI-Player/src
-chmod +x am.sh
-mv am.sh /usr/local/bin/am
-fd ../../
-rm -rf Apple-Music-CLI-Player
+# git clone https://github.com/mcthomas/Apple-Music-CLI-Player
+# cd Apple-Music-CLI-Player/src
+# chmod +x am.sh
+# mv am.sh /usr/local/bin/am
+# fd ../../
+# rm -rf Apple-Music-CLI-Player
 
+if $IS_TM; then
 # gh cli
-echo '//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-@mediaingenuity:registry=https://npm.pkg.github.com/' >> ~/.npmrc
+  echo '//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+  @mediaingenuity:registry=https://npm.pkg.github.com/' >> ~/.npmrc
+end
 
 gh auth login
 gh extension install dlvhdr/gh-dash
