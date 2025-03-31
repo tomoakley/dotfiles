@@ -8,6 +8,11 @@ if [ $? != 0 ]; then
 fi
 
 
+CONTAINER_STATUS=$(docker inspect --format='{{.State.Status}}' 'weechat')
+if [[ $CONTAINER_STATUS == "exited" ]]; then
+  docker rm weechat
+fi
+
 # check weechat is running, if not, start it
 if [ -z "$(tmux list-panes -a -F "#{pane_title}" | grep "~/.config/weechat")" ]; then
   tmux display-message 'Starting new weechat instance....'
