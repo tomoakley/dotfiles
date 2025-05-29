@@ -11,8 +11,34 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
   end
 end
 
-local domainsToOpenInSafari = { "notion.so", "figma.com", "sentry.io", "localhost:9001" }
+local domainsToOpenInSafari = { "notion.so", "figma.com", "sentry.io", "localhost:9001", 'miro.com' }
 local domainsToOpenInChrome = { "docs.google.com" }
+local privacyRedirects = {
+  ["reddit.com"] = "farside.link/libreddit",
+  ["old.reddit.com"] = "farside.link/libreddit",
+  ["twitter.com"] = "nitter.net",
+  ["x.com"] = "nitter.net",
+  ["medium.com"] = "farside.link/scribe",
+  ["youtube.com"] = "farside.link/invidious",
+  ["youtu.be"] = "farside.link/invidious",
+  ["stackoverflow.com"] = "farside.link/anonymousoverflow",
+  ["google.com"] = "farside.link/whoogle",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+  -- [""] = "",
+}
 
 local function urlMatchesPattern(domain, urlTable)
   for _, item in ipairs(urlTable) do
@@ -24,6 +50,7 @@ local function urlMatchesPattern(domain, urlTable)
 end
 
 hs.urlevent.httpCallback = function(_, _, _, url, _)
+  print(url)
   if string.match(url, "^https?://?github%.com/[%w%._%-]+/[%w%._%-]+/pulls?/?(%d*)$") ~= nil then
     local task = hs.task.new(
       "/Users/tomoakley/.qutebrowser/octo-nvim.sh",
@@ -39,6 +66,8 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
     local command = "open -a '/Applications/Google Chrome.app' " .. url
     hs.execute(command)
   else
+    --[[ local privacyRedirectUrl = privacyRedirects[string.match(url, "://([^/]+)")]..url:match("https?://[^/]+(.*)") or url
+    print(privacyRedirectUrl) ]]
     local task = hs.task.new("/opt/homebrew/bin/qutebrowser", nil, {"--target", "tab", url})
     task:start()
   end

@@ -1,8 +1,10 @@
-require("vim-mode")
+--require("vim-mode")
 require("menubar")
 require("bindings")
 require("url")
 require("window")
+require("chrome")
+--require("prs")
 
 function reloadConfig(files)
     doReload = false
