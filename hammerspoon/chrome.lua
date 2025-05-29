@@ -50,13 +50,13 @@ local keyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(e
 
   if flags:containExactly({}) then
       if keyCode == hs.keycodes.map.j then
-        hs.eventtap.keyStroke({}, "down")
+        hs.eventtap.scrollWheel({0, -10}, {}, "line") -- scroll down
+        return true
+      elseif keyCode == hs.keycodes.map.k then
+        hs.eventtap.scrollWheel({0, 10}, {}, "line") -- scroll up
         return true
       elseif keyCode == hs.keycodes.map.o then
         hs.eventtap.keyStroke({"cmd"}, "l")
-        return true
-      elseif keyCode == hs.keycodes.map.k then
-        hs.eventtap.keyStroke({}, "up")
         return true
       elseif keyCode == hs.keycodes.map.d then
         hs.eventtap.keyStroke({"cmd"}, "w")
