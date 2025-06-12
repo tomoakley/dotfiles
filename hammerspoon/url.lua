@@ -6,7 +6,7 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
   local isSlackHuddleUrl = url:match("^https://app.slack.com/client/.+?/?open=start_huddle$")
   if isSlackHuddleUrl then
     local converted = convertSlackUrl(url)
-    local command = "open -a safari " .. converted
+    local command = "open -a chrome" .. converted
     hs.execute(command)
   end
 end
@@ -59,16 +59,16 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
       {url}
     )
     task:start()
-  elseif urlMatchesPattern(string.match(url, "://([^/]+)"), domainsToOpenInSafari) then
+  --[[ elseif urlMatchesPattern(string.match(url, "://([^/]+)"), domainsToOpenInSafari) then
     local command = "open -a safari " .. url
     hs.execute(command)
   elseif urlMatchesPattern(string.match(url, "://([^/]+)"), domainsToOpenInChrome) then
     local command = "open -a '/Applications/Google Chrome.app' " .. url
     hs.execute(command)
   else
-    --[[ local privacyRedirectUrl = privacyRedirects[string.match(url, "://([^/]+)")]..url:match("https?://[^/]+(.*)") or url
-    print(privacyRedirectUrl) ]]
+    local privacyRedirectUrl = privacyRedirects[string.match(url, "://([^/]+)")]..url:match("https?://[^/]+(.*)") or url
+    print(privacyRedirectUrl)
     local task = hs.task.new("/opt/homebrew/bin/qutebrowser", nil, {"--target", "tab", url})
-    task:start()
+    task:start() ]]
   end
 end
