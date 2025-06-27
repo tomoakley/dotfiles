@@ -1,10 +1,30 @@
 prSections:
-- title: My Pull Requests
-  filters: is:open author:@me
-- title: Needs My Review
-  filters: is:open review-requested:@me
-- title: Involved
-  filters: is:open involves:@me -author:@me
+- title: Mine
+  filters: >-
+    is:open
+    author:@me
+    repo:mediaingenuity/Account
+    repo:mediaingenuity/Account.NativeApp
+    repo:mediaingenuity/CreditCards.WebAppNext
+    repo:mediaingenuity/Loans.WebAppNext
+- title: Commented
+  filters: >-
+    commenter:@me
+    is:open
+    repo:mediaingenuity/Account
+    repo:mediaingenuity/Account.NativeApp
+    repo:mediaingenuity/CreditCards.WebAppNext
+    repo:mediaingenuity/Loans.WebAppNext
+- title: Review
+  filters: >-
+    is:open
+    involves:@me
+    review-requested:@me
+    repo:mediaingenuity/Account
+    repo:mediaingenuity/Account.NativeApp
+    repo:mediaingenuity/CreditCards.WebAppNext
+    repo:mediaingenuity/Loans.WebAppNext
+
 issuesSections:
 - title: My Issues
   filters: is:open author:@me
