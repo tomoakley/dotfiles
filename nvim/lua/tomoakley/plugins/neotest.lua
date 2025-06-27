@@ -11,14 +11,15 @@ return {
     neotest.setup({
       adapters = {
         require('neotest-jest')({
-          --jestCommand = "jest --watch ",
+          --jestCommand = require('neotest-jest.jest-util').getJestCommand(vim.fn.expand '%:p:h') .. ' --watch',
         }),
-        require('neotest-playwright').adapter({
+        --[[ require('neotest-playwright').adapter({
           options = {
             persist_project_selection = true,
-            enable_dynamic_test_discovery = true,
+            enable_dynamic_test_discovery = false,
+            preset = "debug"
           },
-        }),
+        }), ]]
       },
       quickfix = {
         open = false,

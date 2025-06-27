@@ -64,6 +64,7 @@ return {
             with_text = true,
             menu = {
                buffer   = "[buf]",
+               codeium = "[ws]",
                nvim_lsp = "[LSP]",
                path     = "[path]",
                omni = "[omni]"
@@ -73,6 +74,7 @@ return {
 
       sources = {
          { name = "nvim_lsp"},
+         { name = "codeium" },
          { name = "path" },
          { name = "buffer" , keyword_length = 5},
          { name = "luasnip" },

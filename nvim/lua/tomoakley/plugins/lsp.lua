@@ -142,6 +142,8 @@ return {
       }
 
       lspconfig.bashls.setup{}
+
     end
+
 }
 
