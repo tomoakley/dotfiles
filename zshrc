@@ -74,3 +74,8 @@ export PATH=$PATH:$HOME/.maestro/bin
 
 # flashlight
 export PATH="$PATH:$HOME/.flashlight/bin"
+
+# >>> CLOI_HISTORY_SETTINGS >>>
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+# <<< CLOI_HISTORY_SETTINGS <<<
