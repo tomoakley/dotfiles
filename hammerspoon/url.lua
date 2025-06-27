@@ -49,6 +49,8 @@ local function urlMatchesPattern(domain, urlTable)
   return false
 end
 
+local isWorkMac = hs.application.infoForBundlePath("/Applications/Perimeter 81.app")
+
 hs.urlevent.httpCallback = function(_, _, _, url, _)
   print(url)
   if string.match(url, "^https?://?github%.com/[%w%._%-]+/[%w%._%-]+/pulls?/?(%d*)$") ~= nil then
@@ -64,11 +66,14 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
     hs.execute(command)
   elseif urlMatchesPattern(string.match(url, "://([^/]+)"), domainsToOpenInChrome) then
     local command = "open -a '/Applications/Google Chrome.app' " .. url
+    hs.execute(command) ]]
+  elseif isWorkMac then
+    local command = "open -a '/Applications/Google Chrome.app' " .. url
     hs.execute(command)
   else
-    local privacyRedirectUrl = privacyRedirects[string.match(url, "://([^/]+)")]..url:match("https?://[^/]+(.*)") or url
-    print(privacyRedirectUrl)
+    --[[ local privacyRedirectUrl = privacyRedirects[string.match(url, "://([^/]+)")]..url:match("https?://[^/]+(.*)") or url
+    print(privacyRedirectUrl) ]]
     local task = hs.task.new("/opt/homebrew/bin/qutebrowser", nil, {"--target", "tab", url})
-    task:start() ]]
+    task:start()
   end
 end

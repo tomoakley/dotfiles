@@ -10,12 +10,12 @@ local function getIsTextFieldFocused()
 
   local role = elem:role()
   print('DEBUG: focused element role: ' .. role)
-  return role == "AXTextField" or role == "AXTextArea" or role == "AXComboBox"
+  return role == "AXTextField" or role == "AXTextArea" or role == "AXComboBox" or role == "AXGroup"
 end
 
 
 -- Create an eventtap for keyDown events
-local keyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
+keyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
   local app = hs.application.frontmostApplication()
   print ('DEBUG: focused app name: ' .. app:name())
   if not app or app:name() ~= chromeAppName then
@@ -83,7 +83,7 @@ local keyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(e
         -- ideally this would be `gg` to match vim but double taps in HS are tricky to detect
         hs.eventtap.keyStroke({"cmd"}, "up")
       end
-end
+  end
 
   return false -- Let other keys through
 end)
