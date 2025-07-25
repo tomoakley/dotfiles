@@ -8,9 +8,9 @@
 URL=$1
 
 # if launching from Qutebrowser, do this to extract URL out of the $QT_URL variable which looks like # PyQt6.QtCore.QUrl('https://github.com/owner/repo/pulls')
-if [[ $URL =~ ^PyQt6\.QtCore\.QUrl\('.*'\)$ ]]; then
-  URL=$(echo "$URL" | sed -n 's/^.*'\''\(.*\)'\''.*$/\1/p')
-fi
+# if [[ $URL =~ ^PyQt6\.QtCore\.QUrl\('.*'\)$ ]]; then
+#URL=$(echo "$URL" | sed -n 's/^.*'\''\(.*\)'\''.*$/\1/p')
+# fi
 
 REPO=$(echo "$URL" | awk -F/ '{print $5}')
 PATH_TO_REPO=~/code/$REPO
@@ -41,6 +41,6 @@ else
   else
     /opt/homebrew/bin/tmux new-window -n "$WINDOW_NAME" -t "$TMUX_SESSION" -c $PATH_TO_REPO
     /opt/homebrew/bin/tmux switch-client -t "=$TMUX_SESSION:=$WINDOW_NAME"
-    /opt/homebrew/bin/tmux send-keys -t "=$TMUX_SESSION:=$WINDOW_NAME" "/opt/homebrew/bin/nvim -c ':silent Octo pr edit $PR_NUMBER'" Enter
+    /opt/homebrew/bin/tmux send-keys -t "=$TMUX_SESSION:=$WINDOW_NAME" "\/opt/homebrew/bin/nvim -c ':silent Octo pr edit $PR_NUMBER'" Enter
   fi
 fi
