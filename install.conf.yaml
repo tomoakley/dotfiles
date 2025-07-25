@@ -17,6 +17,7 @@
     ~/.local/bin: bin
     ~/.qutebrowser: qutebrowser
     ~/.config/weechat: weechat
+    ~/.config/gh-dash: gh-dash
 
 - create:
     - ~/downloads
