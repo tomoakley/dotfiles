@@ -9,7 +9,7 @@ local function getIsTextFieldFocused()
   if not elem then return false end
 
   local role = elem:role()
-  print('DEBUG: focused element role: ' .. role)
+  --print('DEBUG: focused element role: ' .. role)
   return role == "AXTextField" or role == "AXTextArea" or role == "AXComboBox" or role == "AXGroup"
 end
 
@@ -17,7 +17,7 @@ end
 -- Create an eventtap for keyDown events
 keyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
   local app = hs.application.frontmostApplication()
-  print ('DEBUG: focused app name: ' .. app:name())
+  --print ('DEBUG: focused app name: ' .. app:name())
   if not app or app:name() ~= chromeAppName then
     return false -- Don't block the event
   end
