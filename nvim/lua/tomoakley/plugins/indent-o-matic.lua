@@ -1,5 +1,5 @@
 return {
-  "Darazaki/indent-o-matic",
+  --[[ "Darazaki/indent-o-matic",
   config = function()
-  end
+  end ]]
 }

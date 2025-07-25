@@ -25,7 +25,6 @@ vim.cmd([[
   " Tabs, indentation and lines
   filetype plugin indent on
   " 2 spaces please
-  " Should be over-ridden by indent-o-matic plugin
   set expandtab
   set shiftwidth=2
   set softtabstop=2
