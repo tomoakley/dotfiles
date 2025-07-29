@@ -52,7 +52,7 @@ end
 local isWorkMac = hs.application.infoForBundlePath("/Applications/Perimeter 81.app")
 
 hs.urlevent.httpCallback = function(_, _, _, url, _)
-  print(url)
+  --print('DEBUG: Opened URL '..url)
   if string.match(url, "^https?://?github%.com/[%w%._%-]+/[%w%._%-]+/pulls?/?(%d*)$") ~= nil then
     local task = hs.task.new(
       "/Users/tomoakley/.qutebrowser/octo-nvim.sh",
