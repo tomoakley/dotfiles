@@ -1,6 +1,7 @@
 # Squash and rebase commits on a branch
 function grboms() {
   BRANCH=$(git branch --show-current)
+  REBASE_BRANCH="${2:-master}"
   if [[ "$BRANCH" == "master" ]]; then
     echo "You're on the master branch, switch to a feature branch."
     return 1
@@ -15,6 +16,6 @@ function grboms() {
   sh -c "git add ."
   sh -c "git commit -m \"$1\""
   sh -c "git fetch --all"
-  sh -c "git rebase origin/master"
+  sh -c "git rebase origin/"${REBASE_BRANCH}""
 }
 
