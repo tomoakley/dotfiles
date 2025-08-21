@@ -54,5 +54,14 @@ map({'v', 'n'}, '<leader>P', "\"+p")
 map({'v', 'n'}, '<leader>y', "\"+y")
 map({'v', 'n'}, '<leader>Y', "\"+y$")
 
+-- Jumps to matching pair
+map("n", "mm", "%")
+
+-- Selects until matching pair, ex: `vm` - select until matching pair
+map("x", "m", "%")
+
+-- Use with operators, ex: `dm` - delete until matching pair
+map("o", "m", "%")
+
 -- open .vimrc in a split window
 --map('n', '<leader>ev')
