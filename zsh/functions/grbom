@@ -14,7 +14,7 @@ function grboms() {
   echo "commits since master: $COMMIT_NUM"
   sh -c "git reset --soft HEAD~$COMMIT_NUM"
   sh -c "git add ."
-  sh -c "git commit -m \"$1\""
+  sh -c "git commit -m \"$1\" --no-verify"
   sh -c "git fetch --all"
   sh -c "git rebase origin/"${REBASE_BRANCH}""
 }
