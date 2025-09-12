@@ -51,8 +51,19 @@ end
 
 local isWorkMac = hs.application.infoForBundlePath("/Applications/Perimeter 81.app")
 
+local function urlencode(str)
+  if not str then return str end
+  -- convert newlines first
+  str = string.gsub(str, "\n", "\r\n")
+  -- encode anything that isn't unreserved
+  str = string.gsub(str, "[^%w%.%-_~]",
+    function(c)
+      return string.format("%%%02X", string.byte(c))
+    end)
+  return str
+end
+
 hs.urlevent.httpCallback = function(_, _, _, url, _)
-  --print('DEBUG: Opened URL '..url)
   if string.match(url, "^https?://?github%.com/[%w%._%-]+/[%w%._%-]+/pulls?/?(%d*)$") ~= nil then
     local task = hs.task.new(
       "/Users/tomoakley/.qutebrowser/octo-nvim.sh",
@@ -68,7 +79,8 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
     local command = "open -a '/Applications/Google Chrome.app' " .. url
     hs.execute(command) ]]
   elseif isWorkMac then
-    local command = "open -a '/Applications/Google Chrome.app' " .. url
+  print('DEBUG: Opened URL '..urlencode(url))
+    local command =  "open -a '/Applications/Google Chrome.app' '" .. url:gsub("'", "'\\''") .. "'"
     hs.execute(command)
   else
     --[[ local privacyRedirectUrl = privacyRedirects[string.match(url, "://([^/]+)")]..url:match("https?://[^/]+(.*)") or url
