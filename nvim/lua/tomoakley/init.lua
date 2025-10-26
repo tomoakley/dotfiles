@@ -4,7 +4,6 @@ vim.g.maplocalleader = ","
 require('tomoakley.set')
 require('tomoakley.remap')
 
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -35,6 +34,7 @@ require("xcodebuild").setup()
 
 local autocmd = vim.api.nvim_create_autocmd
 
+-- Add command for lspattach and keybindings
 autocmd('LspAttach', {
   callback = function(args)
     local bufopts = { noremap=true, silent=true, buffer=args.buf }
@@ -61,8 +61,8 @@ autocmd('LspAttach', {
     vim.keymap.set("n", "gR", ":LspRename<CR>", bufopts)
     vim.keymap.set("n", "gy", ":LspTypeDef<CR>", bufopts)
     vim.keymap.set("n", "K", ":LspHover<CR>", bufopts)
-    vim.keymap.set("n", "[a", ":LspDiagPrev<CR>", bufopts)
-    vim.keymap.set("n", "]a", ":LspDiagNext<CR>", bufopts)
+    --vim.keymap.set("n", "[d", ":LspDiagPrev<CR>", bufopts) already set
+    --vim.keymap.set("n", "]d", ":LspDiagNext<CR>", bufopts) already set
     vim.keymap.set("n", "ga", ":LspCodeAction<CR>", bufopts)
     vim.keymap.set("n", "<Leader>da", ":LspDiags<CR>", bufopts)
     vim.keymap.set("n", "<Leader>a", ":LspDiagLine<CR>", bufopts)
@@ -72,7 +72,18 @@ autocmd('LspAttach', {
   end
 })
 
+-- run EsLintFixAll on save TS/JS files
 autocmd("BufWritePre", {
   pattern = "*.ts,*.tsx,*.js,*.jsx",
   command = "EslintFixAll"
+})
+
+-- Delete . from arglist
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    -- Check if there's exactly 1 argument and it's "."
+    if vim.fn.argc() == 1 and vim.fn.argv(0) == "." then
+      vim.cmd("argdelete .")
+    end
+  end
 })

@@ -16,6 +16,7 @@ return {
       local telescope = require('telescope')
       local telescopeBuiltIn = require('telescope.builtin')
       local actions = require('telescope.actions')
+      local action_state = require('telescope.actions.state')
       local themes = require('telescope.themes')
 
 
@@ -84,11 +85,18 @@ return {
           previewer = false,
           sort_lastused = true,
           ignore_current_buffer = true,
-       }
-       --[[ {
-          ',
-          previewer = false
-        } ]])
+          attach_mappings = function(prompt_bufnr, map)
+            map('i', '<C-p>', function()
+              local current_picker = action_state.get_current_picker(prompt_bufnr)
+              local prompt = current_picker:_get_prompt()
+
+              actions.close(prompt_bufnr)
+              telescopeBuiltIn.find_files({ default_text = prompt })
+              return true
+            end)
+            return true
+          end
+        })
       end, {})
       vim.keymap.set('n', '<leader>gg', telescopeBuiltIn.live_grep, {})
       vim.keymap.set('n', '<leader>gs', function()
