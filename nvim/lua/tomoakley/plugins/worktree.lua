@@ -1,6 +1,7 @@
 return {
   'polarmutex/git-worktree.nvim',
   config = function ()
+    local git_worktree = require("git-worktree")
     local config = require('git-worktree.config')
     local Hooks = require("git-worktree.hooks")
 
