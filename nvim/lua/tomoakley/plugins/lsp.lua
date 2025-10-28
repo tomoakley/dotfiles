@@ -4,7 +4,7 @@ return {
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
-      local lspconfig = require("lspconfig")
+      local lspconfig = vim.lsp.config
       local configs = require("lspconfig.configs")
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
@@ -22,7 +22,7 @@ return {
           group = gib_autogroup
         }) ]]
 
-      lspconfig.jsonls.setup {
+      vim.lsp.config('jsonls', {
         settings = {
           json = {
             schemas = {
@@ -35,9 +35,10 @@ return {
             format = { enable = true }
           },
         }
-      }
+      })
+      vim.lsp.enable('jsonls')
 
-      lspconfig.vtsls.setup({
+      vim.lsp.config('vtsls', {
           on_attach = function(client, bufnr)
               local bufopts = { noremap=true, silent=true, buffer=bufnr }
               client.server_capabilities.document_formatting = false
@@ -48,8 +49,9 @@ return {
           end,
           capabilites = capabilities
       })
+      vim.lsp.enable('vtsls')
 
-      lspconfig.eslint.setup({
+      vim.lsp.config('eslint', {
         on_attach = function(client, bufnr)
           --[[ client.server_capabilities.document_formatting = true
           client.server_capabilities.document_range_formatting = true
@@ -68,8 +70,9 @@ return {
         end,
         capabilites = capabilities
       })
+      vim.lsp.enable('eslint')
 
-      lspconfig.sourcekit.setup{
+      vim.lsp.config('sourcekit', {
         capabilities = {
             workspace = {
                 didChangeWatchedFiles = {
@@ -77,25 +80,27 @@ return {
                 },
             },
         },
-      }
-    local swift_lsp = vim.api.nvim_create_augroup("swift_lsp", { clear = true })
+      })
+      vim.lsp.enable('sourcekit')
 
-     vim.api.nvim_create_autocmd("FileType", {
-      pattern = { "swift" },
-      callback = function()
-       local root_dir = vim.fs.dirname(vim.fs.find({
-        "Package.swift",
-        ".git",
-       }, { upward = true })[1])
-       local client = vim.lsp.start({
-        name = "sourcekit-lsp",
-        cmd = { "sourcekit-lsp" },
-        root_dir = root_dir,
-       })
-       vim.lsp.buf_attach_client(0, client)
-      end,
-      group = swift_lsp,
-     })
+      local swift_lsp = vim.api.nvim_create_augroup("swift_lsp", { clear = true })
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "swift" },
+        callback = function()
+         local root_dir = vim.fs.dirname(vim.fs.find({
+          "Package.swift",
+          ".git",
+         }, { upward = true })[1])
+         local client = vim.lsp.start({
+          name = "sourcekit-lsp",
+          cmd = { "sourcekit-lsp" },
+          root_dir = root_dir,
+         })
+         vim.lsp.buf_attach_client(0, client)
+        end,
+        group = swift_lsp,
+      })
 
       local rescriptLspPath = '/Users/toakley/.config/nvim/vim-rescript/server/out/server.js'
       if not configs.rescriptlsp then
@@ -103,21 +108,22 @@ return {
           default_config = {
             cmd = {'node', rescriptLspPath, '--stdio'};
             filetypes = {"rescript", "res"};
-            root_dir = lspconfig.util.root_pattern('bsconfig.json');
+            --root_dir = configs.util.root_pattern('bsconfig.json');
             settings = {};
           };
         }
       end
-      lspconfig.rescriptlsp.setup{
+      vim.lsp.config('rescriptlsp', {
         cmd = {
           'node',
           '/Users/toakley/.local/share/nvim/plugged/vim-rescript/server/out/server.js',
           '--stdio'
         },
         capabilites = capabilities
-      }
+      })
+      vim.lsp.enable('rescriptlsp')
 
-      lspconfig.lua_ls.setup {
+      vim.lsp.config('lua_ls', {
         settings = {
           Lua = {
             runtime = {
@@ -139,11 +145,11 @@ return {
           },
         },
         capabilites = capabilities,
-      }
+      })
+      vim.lsp.enable('lua_ls')
 
-      lspconfig.bashls.setup{}
-
+      vim.lsp.config('bashls', {})
+      vim.lsp.enable('bashls')
     end
-
 }
 
