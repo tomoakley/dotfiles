@@ -51,19 +51,20 @@ return {
       })
       vim.lsp.enable('vtsls')
 
+      local base_on_attach = vim.lsp.config.eslint.on_attach
       vim.lsp.config('eslint', {
         on_attach = function(client, bufnr)
           --[[ client.server_capabilities.document_formatting = true
           client.server_capabilities.document_range_formatting = true
           vim.api.nvim_create_autocmd("BufWritePre", { callback = function() vim.lsp.buf.format() end }) ]]
+          if not base_on_attach then return end
+          base_on_attach(client, bufnr)
           client.server_capabilities.documentFormattingProvider = true
           client.server_capabilities.document_formatting = true
           if client.server_capabilities.document_formatting then
             vim.api.nvim_create_autocmd("BufWritePre", {
               buffer = bufnr,
-              callback = function()
-                vim.lsp.buf.format({ async = false, timeout = 1000 })
-              end
+              command = "LspEslintFixAll",
             })
             --vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)")
           end

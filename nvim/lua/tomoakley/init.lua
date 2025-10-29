@@ -72,12 +72,6 @@ autocmd('LspAttach', {
   end
 })
 
--- run EsLintFixAll on save TS/JS files
-autocmd("BufWritePre", {
-  pattern = "*.ts,*.tsx,*.js,*.jsx",
-  command = "EslintFixAll"
-})
-
 -- Delete . from arglist
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
