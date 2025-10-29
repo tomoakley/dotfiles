@@ -19,6 +19,7 @@ return {
     Hooks.register(Hooks.type.CREATE, function (path, prev_path)
       vim.cmd("silent !cp ../main/node_modules .")
       vim.cmd("silent !cp ../main/ios/Pods ./ios/Pods")
+      vim.cmd("silent !cp ../main/.env .")
     end)
 
     Hooks.register(Hooks.type.DELETE, function()
