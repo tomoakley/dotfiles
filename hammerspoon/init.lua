@@ -4,7 +4,9 @@ require("bindings")
 require("url")
 require("window")
 require("chrome")
+require("ms-teams")
 --require("prs")
+--
 
 function reloadConfig(files)
     doReload = false

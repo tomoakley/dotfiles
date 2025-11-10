@@ -15,7 +15,7 @@ end
 
 
 -- Create an eventtap for keyDown events
-keyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
+chromeKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
   local app = hs.application.frontmostApplication()
   --print ('DEBUG: focused app name: ' .. app:name())
   if not app or app:name() ~= chromeAppName then
@@ -88,4 +88,4 @@ keyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
   return false -- Let other keys through
 end)
 
-keyHandler:start()
+chromeKeyHandler:start()
