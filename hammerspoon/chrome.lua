@@ -9,8 +9,8 @@ local function getIsTextFieldFocused()
   if not elem then return false end
 
   local role = elem:role()
-  --print('DEBUG: focused element role: ' .. role)
-  return role == "AXTextField" or role == "AXTextArea" or role == "AXComboBox" or role == "AXGroup"
+  -- print('DEBUG: focused element role: ' .. role)
+  return role == "AXTextField" or role == "AXTextArea" or role == "AXComboBox" or role == "AXGroup" or role == "AXMenuItem"
 end
 
 

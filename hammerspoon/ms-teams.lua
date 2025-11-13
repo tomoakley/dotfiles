@@ -73,6 +73,9 @@ teamsKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(ev
     if keyCode == hs.keycodes.map.i then
         hs.eventtap.keyStroke({"cmd"}, "R")
     end
+    if keyCode == hs.keycodes.map.f then
+      hs.eventtap.keyStroke({"alt", "fn"}, "F9")
+    end
   end
   return false -- Let other keys through
 end)
