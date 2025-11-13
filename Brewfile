@@ -1,4 +1,4 @@
-is_tm = Dir.exist?('/Applications/Perimeter 81.app')
+is_tm = Dir.exist?('/Applications/Microsoft Teams.app')
 
 tap "homebrew/bundle"
 tap "homebrew/cask"

@@ -16,7 +16,7 @@ for dump in ~/.zcompdump(N.mh+24); do
 done
 compinit -C
 
-export IS_TM=$([[ -d "/Applications/Perimeter 81.app" ]] && echo true || echo false)
+export IS_TM=$([[ -d "/Applications/Microsoft Teams.app" ]] && echo true || echo false)
 
 # set tmux-spotify to use Apple Music instead of Spotify
 export MUSIC_APP="iTunes"
@@ -79,3 +79,4 @@ export PATH="$PATH:$HOME/.flashlight/bin"
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 # <<< CLOI_HISTORY_SETTINGS <<<
+eval "$(rbenv init - zsh)"
