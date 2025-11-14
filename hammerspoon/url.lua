@@ -49,7 +49,7 @@ local function urlMatchesPattern(domain, urlTable)
   return false
 end
 
-local isWorkMac = hs.application.infoForBundlePath("/Applications/Perimeter 81.app")
+local isWorkMac = hs.application.infoForBundlePath("/Applications/Microsoft Teams.app")
 
 local function urlencode(str)
   if not str then return str end
@@ -63,7 +63,35 @@ local function urlencode(str)
   return str
 end
 
-hs.urlevent.httpCallback = function(_, _, _, url, _)
+
+local function urldecode(str)
+    -- Replace + with space (common in query strings)
+    str = string.gsub(str, "+", " ")
+
+    -- Replace %XX with the corresponding character
+    str = string.gsub(str, "%%(%x%x)", function(hex)
+        return string.char(tonumber(hex, 16))
+    end)
+
+    return str
+end
+
+local function getURLParam(url, paramName)
+    local parts = hs.http.urlParts(url)
+
+    if parts and parts.query then
+        for pair in string.gmatch(parts.query, "[^&]+") do
+            local key, value = string.match(pair, "([^=]+)=([^=]+)")
+            if key == paramName then
+                return value
+            end
+        end
+    end
+
+    return nil  -- Parameter not found
+end
+
+local function openInOctoNvim(url)
   if string.match(url, "^https?://?github%.com/[%w%._%-]+/[%w%._%-]+/pulls?/?(%d*)$") ~= nil then
     local task = hs.task.new(
       "/Users/tomoakley/.qutebrowser/octo-nvim.sh",
@@ -72,6 +100,15 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
       {url}
     )
     task:start()
+    return true
+  end
+  return false
+end
+
+
+hs.urlevent.httpCallback = function(_, _, _, url, _)
+  if openInOctoNvim(url) then
+    return
   --[[ elseif urlMatchesPattern(string.match(url, "://([^/]+)"), domainsToOpenInSafari) then
     local command = "open -a safari " .. url
     hs.execute(command)
@@ -79,8 +116,15 @@ hs.urlevent.httpCallback = function(_, _, _, url, _)
     local command = "open -a '/Applications/Google Chrome.app' " .. url
     hs.execute(command) ]]
   elseif isWorkMac then
-  print('DEBUG: Opened URL '..urlencode(url))
-    local command =  "open -a '/Applications/Google Chrome.app' '" .. url:gsub("'", "'\\''") .. "'"
+    --print('DEBUG: Opened URL '..urlencode(url))
+    local isTeamsSafeLink = string.find(url, "^" .. 'https://statics.teams.cdn.office.net') ~= nil
+    if isTeamsSafeLink then
+      local actualUrl = getURLParam(url, 'url')
+      if openInOctoNvim(urldecode(actualUrl)) then
+        return
+      end
+    end
+    local command =  "open -a '/Applications/Google Chrome.app' '" ..url:gsub("'", "'\\''") .. "'"
     hs.execute(command)
   else
     --[[ local privacyRedirectUrl = privacyRedirects[string.match(url, "://([^/]+)")]..url:match("https?://[^/]+(.*)") or url
