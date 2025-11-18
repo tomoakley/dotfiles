@@ -82,6 +82,21 @@ chromeKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(e
       elseif keyCode == hs.keycodes.map.g then
         -- ideally this would be `gg` to match vim but double taps in HS are tricky to detect
         hs.eventtap.keyStroke({"cmd"}, "up")
+      elseif keyCode == hs.keycodes.map.b then
+        hs.eventtap.keyStroke({"cmd"}, "l")
+
+        local originalClipboard = hs.pasteboard.getContents()
+        hs.pasteboard.setContents("@bookmarks")
+
+        hs.timer.doAfter(0.01, function()
+          hs.eventtap.keyStroke({"cmd"}, "v")
+
+          hs.timer.doAfter(0.01, function()
+              hs.eventtap.keyStroke({}, "space")
+              hs.pasteboard.setContents(originalClipboard)
+          end)
+        end)
+
       end
   end
 
