@@ -88,10 +88,10 @@ chromeKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(e
         local originalClipboard = hs.pasteboard.getContents()
         hs.pasteboard.setContents("@bookmarks")
 
-        hs.timer.doAfter(0.01, function()
+        hs.timer.doAfter(0.05, function()
           hs.eventtap.keyStroke({"cmd"}, "v")
 
-          hs.timer.doAfter(0.01, function()
+          hs.timer.doAfter(0.05, function()
               hs.eventtap.keyStroke({}, "space")
               hs.pasteboard.setContents(originalClipboard)
           end)
