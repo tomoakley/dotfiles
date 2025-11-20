@@ -13,6 +13,21 @@ local function getIsTextFieldFocused()
   return role == "AXTextField" or role == "AXTextArea" or role == "AXComboBox" or role == "AXGroup" or role == "AXMenuItem"
 end
 
+local function typeBookmarks()
+  hs.eventtap.keyStroke({"cmd"}, "l")
+
+  local originalClipboard = hs.pasteboard.getContents()
+  hs.pasteboard.setContents("@bookmarks")
+
+  hs.timer.doAfter(0.05, function()
+    hs.eventtap.keyStroke({"cmd"}, "v")
+
+    hs.timer.doAfter(0.05, function()
+        hs.eventtap.keyStroke({}, "space")
+        hs.pasteboard.setContents(originalClipboard)
+    end)
+  end)
+end
 
 -- Create an eventtap for keyDown events
 chromeKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
@@ -57,6 +72,9 @@ chromeKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(e
       return true
     elseif keyCode == hs.keycodes.map.g then
       hs.eventtap.keyStroke({"cmd"}, "down")
+    elseif keyCode == hs.keycodes.map.b then
+      hs.eventtap.keyStroke({"cmd"}, "t")
+      typeBookmarks()
     end
   end
 
@@ -83,20 +101,7 @@ chromeKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(e
         -- ideally this would be `gg` to match vim but double taps in HS are tricky to detect
         hs.eventtap.keyStroke({"cmd"}, "up")
       elseif keyCode == hs.keycodes.map.b then
-        hs.eventtap.keyStroke({"cmd"}, "l")
-
-        local originalClipboard = hs.pasteboard.getContents()
-        hs.pasteboard.setContents("@bookmarks")
-
-        hs.timer.doAfter(0.05, function()
-          hs.eventtap.keyStroke({"cmd"}, "v")
-
-          hs.timer.doAfter(0.05, function()
-              hs.eventtap.keyStroke({}, "space")
-              hs.pasteboard.setContents(originalClipboard)
-          end)
-        end)
-
+        typeBookmarks()
       end
   end
 
