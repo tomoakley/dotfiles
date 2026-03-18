@@ -73,6 +73,9 @@ return {
       })
       vim.lsp.enable('eslint')
 
+      vim.lsp.config('swiftlint', {})
+      vim.lsp.enable('swiftlint')
+
       vim.lsp.config('sourcekit', {
         capabilities = {
             workspace = {
@@ -81,8 +84,17 @@ return {
                 },
             },
         },
+        filetypes = { 'swift', 'objc', 'objcpp' },
+        cmd = vim.trim(vim.fn.system("xcrun -f sourcekit-lsp")),
       })
       vim.lsp.enable('sourcekit')
+
+      vim.lsp.config('clangd', {
+        filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
+        cmd = { 'clangd', '--background-index' },
+        capabilites = capabilities
+      })
+      vim.lsp.enable('clangd')
 
       local swift_lsp = vim.api.nvim_create_augroup("swift_lsp", { clear = true })
 
@@ -151,6 +163,8 @@ return {
 
       vim.lsp.config('bashls', {})
       vim.lsp.enable('bashls')
+
+      vim.lsp.enable('copilot')
     end
 }
 
