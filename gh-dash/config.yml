@@ -3,27 +3,27 @@ prSections:
   filters: >-
     is:open
     author:@me
-    repo:mediaingenuity/Account
-    repo:mediaingenuity/Account.NativeApp
-    repo:mediaingenuity/CreditCards.WebAppNext
-    repo:mediaingenuity/Loans.WebAppNext
+    repo:ilg-totallymoney/Account
+    repo:ilg-totallymoney/Account.NativeApp
+    repo:ilg-totallymoney/CreditCards.WebAppNext
+    repo:ilg-totallymoney/Loans.WebAppNext
 - title: Commented
   filters: >-
     commenter:@me
     is:open
-    repo:mediaingenuity/Account
-    repo:mediaingenuity/Account.NativeApp
-    repo:mediaingenuity/CreditCards.WebAppNext
-    repo:mediaingenuity/Loans.WebAppNext
+    repo:ilg-totallymoney/Account
+    repo:ilg-totallymoney/Account.NativeApp
+    repo:ilg-totallymoney/CreditCards.WebAppNext
+    repo:ilg-totallymoney/Loans.WebAppNext
 - title: Review
   filters: >-
     is:open
     involves:@me
     review-requested:@me
-    repo:mediaingenuity/Account
-    repo:mediaingenuity/Account.NativeApp
-    repo:mediaingenuity/CreditCards.WebAppNext
-    repo:mediaingenuity/Loans.WebAppNext
+    repo:ilg-totallymoney/Account
+    repo:ilg-totallymoney/Account.NativeApp
+    repo:ilg-totallymoney/CreditCards.WebAppNext
+    repo:ilg-totallymoney/Loans.WebAppNext
 
 issuesSections:
 - title: My Issues
@@ -66,9 +66,6 @@ defaults:
         width: 20
         hidden: true
   refetchIntervalMinutes: 30
-keybindings:
-  issues: []
-  prs: []
 theme:
   ui:
     table:
