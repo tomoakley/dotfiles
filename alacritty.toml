@@ -199,6 +199,7 @@ multiplier = 3
 decorations = "full"
 dynamic_padding = false
 startup_mode = "FullScreen"
+option_as_alt = "Both"
 
 [window.dimensions]
 columns = 0
