@@ -1,9 +1,9 @@
 --require("vim-mode")
+require("chrome")
 require("menubar")
-require("bindings")
+--require("bindings")
 require("url")
 require("window")
-require("chrome")
 require("ms-teams")
 --require("prs")
 --
@@ -19,6 +19,7 @@ function reloadConfig(files)
         hs.reload()
     end
 end
+
 myWatcher = hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
 hs.alert.show("Config loaded")
 

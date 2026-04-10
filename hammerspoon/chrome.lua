@@ -2,15 +2,16 @@
 local chromeAppName = "Google Chrome"
 
 local function getIsTextFieldFocused()
-  local win = hs.window.focusedWindow()
-  if not win then return false end
+  local app = hs.application.frontmostApplication()
+  local axApplication = hs.axuielement.applicationElement(app)
+  if not axApplication then return false end
+  local focused = axApplication:attributeValue("AXFocusedUIElement")
 
-  local elem = hs.uielement.focusedElement()
-  if not elem then return false end
+  if not focused then return false end
+  local role = focused:attributeValue("AXRole")
 
-  local role = elem:role()
-  -- print('DEBUG: focused element role: ' .. role)
-  return role == "AXTextField" or role == "AXTextArea" or role == "AXComboBox" or role == "AXGroup" or role == "AXMenuItem"
+  --print('DEBUG: focused element role: ' .. role)
+  return role == "AXTextField" or role == "AXTextArea" or role == "AXComboBox" or role == "AXGroup" or role == "AXMenuItem" or role == "AXStaticText"
 end
 
 local function typeBookmarks()
@@ -80,6 +81,7 @@ chromeKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(e
 
   if flags:containExactly({}) then
       if keyCode == hs.keycodes.map.j then
+
         hs.eventtap.scrollWheel({0, -10}, {}, "line") -- scroll down
         return true
       elseif keyCode == hs.keycodes.map.k then
