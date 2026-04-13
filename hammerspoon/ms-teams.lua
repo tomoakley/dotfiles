@@ -9,7 +9,7 @@ local function getFocusedElementRole()
   if not elem then return false end
 
   local role = elem:role()
-  -- print('DEBUG: focused element role: ' .. role)
+  print('DEBUG: focused element role: ' .. role)
   return role
 end
 

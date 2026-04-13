@@ -1,12 +1,9 @@
---require("vim-mode")
+require("vim-mode")
 require("chrome")
 require("menubar")
---require("bindings")
 require("url")
-require("window")
 require("ms-teams")
---require("prs")
---
+require("appWindowSwitcher")
 
 function reloadConfig(files)
     doReload = false

@@ -5,6 +5,8 @@ tap "homebrew/cask"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/cask-fonts"
+tap "jurplel/tap"
+
 
 cask "qutebrowser"
 cask "alacritty"
@@ -25,6 +27,7 @@ cask "openscad"
 cask "ultimaker-cura"
 cask "font-melso-lg-nerd-font"
 cask "appcleaner"
+cask "instant-space-switcher" # https://github.com/jurplel/InstantSpaceSwitcher
 
 #brew "pam-reattach"
 
