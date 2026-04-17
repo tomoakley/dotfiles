@@ -1,4 +1,3 @@
-require("vim-mode")
 require("chrome")
 require("menubar")
 require("url")

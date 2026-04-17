@@ -80,3 +80,6 @@ local keyMap = {
 
 -- Trigger with Option+Space (your "leader key")
 hs.hotkey.bind({'ctrl'}, ',', spoon.RecursiveBinder.recursiveBind(keyMap))
+hs.hotkey.bind({'ctrl'}, '.', function ()
+  hs.execute("sketchybar --bar hidden=toggle", true)
+end)

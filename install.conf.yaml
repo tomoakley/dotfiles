@@ -18,6 +18,8 @@
     ~/.qutebrowser: qutebrowser
     ~/.config/weechat: weechat
     ~/.config/gh-dash: gh-dash
+    ~/.config/sketchybar: sketchybar
+    ~/.config/svim: svim
 
 - create:
     - ~/downloads
