@@ -1,5 +1,8 @@
+-- can I set up a hook that will auto-rerun `yarn dev` for native app sessions?
+-- can I set up a shortcut from the Telescope worktree selector, that will open the worktree in a new tmux window
 return {
   'polarmutex/git-worktree.nvim',
+
   config = function ()
     local git_worktree = require("git-worktree")
     local config = require('git-worktree.config')
@@ -12,6 +15,14 @@ return {
     Hooks.register(Hooks.type.SWITCH, function (path, prev_path)
       vim.notify('Moved from ' .. prev_path .. ' to ' .. path)
       vim.cmd("TermExec cmd='cd " .. path .. "'")
+
+      -- Check if the new worktree is a React Native app
+      local rn_config = prev_path .. "/react-native.config.js"
+      if vim.fn.filereadable(rn_config) == 1 then
+        -- Go to tmux window 2, interrupt current process, cd and run yarn dev
+        vim.fn.system("tmux send-keys -t :2 C-c ENTER")
+        vim.fn.system(string.format("tmux send-keys -t :2 'cd %s && yarn dev' ENTER", path))
+      end
 
       update_on_switch(path, prev_path)
     end)
@@ -80,6 +91,14 @@ return {
                   actions.close(prompt_bufnr)
                   git_worktree.delete_worktree(selection.value.path)
                 end
+              end
+            end)
+
+            map("i", "<C-o>", function()
+              local selection = action_state.get_selected_entry()
+              if selection then
+                actions.close(prompt_bufnr)
+                vim.fn.system(string.format("tmux new-window -c '%s' 'bash -c \"nvim .\"'", selection.value.path))
               end
             end)
 

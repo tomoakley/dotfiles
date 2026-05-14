@@ -115,7 +115,7 @@ return {
       vim.api.nvim_set_keymap(
         "n",
         "<leader>gw",
-        ":lua require('telescope').extensions.git_worktree.git_worktrees()<CR>",
+        ":lua require('telescope').extensions.git_worktree.git_worktree()<CR>",
         { noremap = true, silent = true }
       )
       vim.api.nvim_set_keymap(
