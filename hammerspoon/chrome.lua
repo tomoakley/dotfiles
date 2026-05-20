@@ -79,6 +79,12 @@ chromeKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(e
     end
   end
 
+  if flags:containExactly({"ctrl"}) then
+    if keyCode == hs.keycodes.map.v then
+      hs.eventtap.keyStroke({"cmd", "alt"}, "n")
+    end
+  end
+
   if flags:containExactly({}) then
       if keyCode == hs.keycodes.map.j then
 

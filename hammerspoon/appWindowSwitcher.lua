@@ -4,9 +4,14 @@ spoon.RecursiveBinder.escapeKey = {{}, 'escape'}  -- abort with Escape
 
 local singleKey = spoon.RecursiveBinder.singleKey
 
-local function moveMouseAndFocusWindow()
+local function moveMouseAndFocusWindow(direction)
   local screen = hs.mouse.getCurrentScreen()
-  local nextScreen = screen:next()
+  local nextScreen
+  if direction == "left" then
+    nextScreen = screen:toWest()
+  elseif direction == "right" then
+    nextScreen = screen:toEast()
+  end
   local center = nextScreen:frame().center
   hs.mouse.absolutePosition(center)
   hs.eventtap.leftClick(center)
@@ -62,7 +67,7 @@ appWatcher:start()
 
 local keyMap = {
   [singleKey('h', 'mouse left')] = function()
-    moveMouseAndFocusWindow()
+    moveMouseAndFocusWindow("left")
   end,
   [singleKey('b', 'browser')] = function()
     moveToSpace("Google Chrome")
@@ -74,7 +79,7 @@ local keyMap = {
     moveToSpace("Microsoft Teams")
   end,
   [singleKey('l', 'mouse right')] = function()
-    moveMouseAndFocusWindow()
+    moveMouseAndFocusWindow("right")
   end,
 }
 
