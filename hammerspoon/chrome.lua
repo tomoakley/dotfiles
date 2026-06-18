@@ -110,6 +110,8 @@ chromeKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(e
         hs.eventtap.keyStroke({"cmd"}, "up")
       elseif keyCode == hs.keycodes.map.b then
         typeBookmarks()
+      elseif keyCode == hs.keycodes.map.s then
+        hs.eventtap.keyStroke({"shift", "cmd"}, "a")
       end
   end
 
