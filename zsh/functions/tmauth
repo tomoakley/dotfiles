@@ -44,6 +44,7 @@ function tmauth() {
   if [[ $TYPE == "m" ]]; then
     echo "MagicLink: $OUTPUT"
     open $OUTPUT
+    #echo $OUTPUT | pbcopy
     return 0
   fi
 

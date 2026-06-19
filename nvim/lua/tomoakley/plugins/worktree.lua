@@ -21,7 +21,7 @@ return {
       if vim.fn.filereadable(rn_config) == 1 then
         -- Go to tmux window 2, interrupt current process, cd and run yarn dev
         vim.fn.system("tmux send-keys -t :2 C-c ENTER")
-        vim.fn.system(string.format("tmux send-keys -t :2 'cd %s && yarn dev' ENTER", path))
+        vim.fn.system(string.format("tmux send-keys -t :2.1 'cd %s && yarn dev' ENTER", path))
       end
 
       update_on_switch(path, prev_path)
