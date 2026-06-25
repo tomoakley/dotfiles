@@ -16,7 +16,7 @@ local function enableWebViewHotkeys()
     if #webViewHotkeys == 0 then
         table.insert(webViewHotkeys, hs.hotkey.bind({"cmd"}, "N", function()
             local jsCode = [[
-              var button = document.querySelector('[title="New Thread"]');
+              var button = document.querySelector('[aria-label="New thread"]');
               if (button) {
                   button.click();
               }
@@ -26,7 +26,7 @@ local function enableWebViewHotkeys()
 
         table.insert(webViewHotkeys, hs.hotkey.bind({"cmd"}, "H", function()
             local jsCode = [[
-                var button = document.querySelector("#thread-sidebar-expand")
+                var button = document.querySelector('button[aria-label$="sidebar"]')
                 if (button) {
                     button.click();
                 }
@@ -36,7 +36,7 @@ local function enableWebViewHotkeys()
 
         table.insert(webViewHotkeys, hs.hotkey.bind({"cmd"}, "I", function()
           local frame = webView:frame()
-          local point = hs.geometry.point((frame.x + frame.w/2), (frame.y + frame.h - 30))
+          local point = hs.geometry.point((frame.x + frame.w/2), (frame.y + frame.h - 110))
           hs.eventtap.leftClick(point)
         end))
 
