@@ -21,17 +21,14 @@ export IS_TM=$([[ -d "/Applications/Microsoft Teams.app" ]] && echo true || echo
 # set tmux-spotify to use Apple Music instead of Spotify
 export MUSIC_APP="iTunes"
 
-# ensure GITHUB_TOKEN is unset as it conflicts with GH CLI
-export GITHUB_TOKEN=
-
 if $IS_TM; then
-
   # set token values for ILG/MI packages
   export GH_TOKEN_READ_MI_PACKAGES=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "github.com")
   export GITHUB_TOKEN_ILG=$(security find-generic-password -w -a ${USER} -D "environment variable" -s "ILG github token")
   export GITHUB_TOKEN_ILG_TM=$GITHUB_TOKEN_ILG
   export ILG_GITHUB_TOKEN=$GITHUB_TOKEN_ILG
   export GH_TOKEN_ILG=$GITHUB_TOKEN_ILG
+  export INSCALAR_API_KEY=$(security find-generic-password -w -a ${USER} -D "application password" -s "Inscalar test API key")
 fi
 
 # source antibody plugins
