@@ -3,6 +3,7 @@ require("menubar")
 require("url")
 require("ms-teams")
 require("appWindowSwitcher")
+require("tmux")
 
 function reloadConfig(files)
     doReload = false

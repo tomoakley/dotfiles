@@ -7,6 +7,19 @@ local webView = hs.webview.new({x = 0, y = 0, w = 800, h = 600})
     :level(hs.drawing.windowLevels.modalPanel)
     :closeOnEscape(true)
     :url("https://www.kagi.com/assistant")
+    :policyCallback(function(action, webview, info)
+      if action == "navigationAction" then
+        local navType = info.navigationType
+        local url = info.request and info.request.URL
+
+        -- Let the initial page load through, intercept user-clicked links
+        if navType == "linkActivated" and url then
+          hs.urlevent.openURL(url)
+          return false  -- deny navigation in the webview
+        end
+      end
+      return true  -- allow everything else
+    end)
 
 webView:shadow(true)
 
