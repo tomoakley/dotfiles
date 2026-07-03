@@ -20,6 +20,7 @@
     ~/.config/gh-dash: gh-dash
     ~/.config/sketchybar: sketchybar
     ~/.config/svim: svim
+    ~/.config/sesh/sesh.toml: sesh.toml
 
 - create:
     - ~/downloads

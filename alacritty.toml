@@ -149,6 +149,11 @@ chars = "\u0002["
 key = "Escape"
 mods = "Command"
 
+[[keyboard.bindings]]
+chars = "\u001b[30;6~"
+key = "K"
+mods = "Command"
+
 [colors.bright]
 black = "0x4C566A"
 blue = "0x81A1C1"
