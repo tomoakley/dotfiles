@@ -2,8 +2,9 @@ require("chrome")
 require("menubar")
 require("url")
 require("ms-teams")
-require("appWindowSwitcher")
+--require("appWindowSwitcher")
 require("tmux")
+require("usb-remote")
 
 function reloadConfig(files)
     doReload = false
