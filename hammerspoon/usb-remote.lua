@@ -10,6 +10,7 @@ end ]]
 local edgeSince = nil   -- time the mouse first touched the edge, or nil if not at edge
 local fired = false     -- whether we've already sent SWITCH for this press
 local HOLD_THRESHOLD = 0.3 -- seconds the mouse must stay pinned at the edge
+local activeSide = "left" -- which screen edge the Pico currently has active
 
 local pico = nil              -- confirmed hs.serial object for the Pico
 local lastKnownPath = nil     -- path that worked last time, tried first before rescanning
@@ -37,7 +38,12 @@ local function onPicoData(port, callbackType, message)
     if callbackType == "received" then
         if message then
             io.write(message)
-            if message:match("SWITCHED") then
+            if message:match('"switched"%s*:%s*true') then
+                local side = message:match('"active_side"%s*:%s*"(%a+)"')
+                if side == "left" or side == "right" then
+                    activeSide = side
+                    print("active side now " .. activeSide)
+                end
                 print("resetting")
             end
         end
@@ -152,7 +158,12 @@ mouseWatcherTimer = hs.timer.doEvery(0.1, function()
     local screen = hs.screen.mainScreen()
     local frame = screen:frame()
 
-    local isAtEdge = pos.x <= frame.x + 5
+    local isAtEdge
+    if activeSide == "right" then
+        isAtEdge = pos.x >= frame.x + frame.w - 5
+    else
+        isAtEdge = pos.x <= frame.x + 5
+    end
 
     if isAtEdge then
         if not edgeSince then
