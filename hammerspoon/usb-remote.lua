@@ -144,7 +144,8 @@ retryTimer = hs.timer.doEvery(RETRY_INTERVAL, function()
 end)
 
 -- Monitor mouse position
-hs.timer.doEvery(0.1, function()
+-- Must stay referenced (local at file scope) or Lua's GC will collect it and the timer stops firing.
+mouseWatcherTimer = hs.timer.doEvery(0.1, function()
     if not pico then return end
 
     local pos = hs.mouse.absolutePosition()
@@ -166,3 +167,5 @@ hs.timer.doEvery(0.1, function()
         fired = false
     end
 end)
+
+mouseWatcherTimer:start()
