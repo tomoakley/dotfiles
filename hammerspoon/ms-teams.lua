@@ -26,7 +26,7 @@ teamsKeyHandler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(ev
 
   local elementRole = getFocusedElementRole()
 
-  if elementRole == "AXTextField" or elementRole == "AXTextArea" or elementRole == "AXComboBox" --[[ or elementRole == "AXGroup" ]] then
+  if elementRole == "AXTextField" or elementRole == "AXTextArea" or elementRole == "AXComboBox" or elementRole == "AXStaticText" --[[ or elementRole == "AXGroup" ]] then
     return false
   end
 
